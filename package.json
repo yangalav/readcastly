@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/readcastly/readcastly#readme",
   "dependencies": {
-    "express": "^4.15.2"
+    "express": "^4.15.2",
+    "process-env": "^1.1.0"
   }
 }
