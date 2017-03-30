@@ -30,6 +30,9 @@ app.post('/jsonTest', bodyParser, function(req, res) {
   res.sendStatus(200);
 })
 
-var port = 8999;
-app.listen(port);
-console.log('Readcastly server listening intently on port: ', port, '...yeah, baby!');
+var port = process.env.PORT || 8080;
+app.listen(port, function() {
+  console.log("Readcastly server listening intently on port:", port);
+})
+
+module.exports = app;
