@@ -1,0 +1,17 @@
+{
+  "name": "readcastly",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Viswada Yangala <yangalav@go.stockton.edu>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/readcastly/readcastly",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
