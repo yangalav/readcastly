@@ -1,0 +1,22 @@
+{
+  "name": "readcastly",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/readcastly/readcastly.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/readcastly/readcastly/issues"
+  },
+  "homepage": "https://github.com/readcastly/readcastly#readme",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}
