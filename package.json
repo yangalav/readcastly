@@ -19,5 +19,6 @@
   "dependencies": {
     "express": "^4.15.2",
     "process-env": "^1.1.0"
+    "body-parser": "^1.17.1",
   }
 }
