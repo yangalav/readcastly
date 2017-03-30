@@ -44,7 +44,7 @@ app.listen(port, function() {
 })
 
 module.exports = app;
-// to test; will update
+// to test; will update with the actual endpoint in next user story
 app.get('/', function(req, res) {
   console.log('server.js received GET req at / . Readcastly is on its way to fame & fortune!');
   res.send('We heard your GET req and the diligent Readcastly hamsters are fast at work. All your wildest dreams will soon come true. Stay tuned for more exciting endpoints coming soon to a Postman near you.');
