@@ -11,34 +11,45 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, './client')));
 
-app.post('/requrl/:requrl', function(req, res) {
-  let requrl = req.params.requrl;
-  console.log('server.js POST to requrl. l. 14. req.params.url = ', req.params.requrl);
+// app.post('/requrl/:requrl', function(req, res) {
+//   console.log('server.js, POST to /requrl/:requrl. l. 15: req received.');
+//   let requrl = req.params.requrl;
+//   console.log('server.js POST to requrl. l. 14. req.params.url = ', req.params.requrl);
+
+app.post('/requrl', function(req, res) {
+  console.log('server.js, POST to /requrl/:requrl. l. 15: req received. body = ', req.body);
+  let requrl = req.body.requrl;
+  console.log('server.js POST to requrl. l. 14. requrl = ', requrl);
+
   var objToSaveToDB = {
-    requrl: 'requrl'
+    requrl: requrl
   };
 
-  request({
-    'method': 'GET',
-    'x-api-key': 'KmjXDnLR5Dmtn2IPHQCwONFAFUlaJQpObfJq0AM6',
-    'uri': 'https://mercury.postlight.com/parser?url=' + req.params.requrl,
-    'Content-Type': 'application/json'
-  }, function(error, response, body) {
-    console.log('server.js GET req to Mercury, l. 22. body received = ', body);
-    if(error) {
-      console.log('server.js, GET req to Mercury. error! = ', console.error);
+  var options = { method: 'GET',
+  url: 'https://mercury.postlight.com/parser?url=' + requrl,
+  // qs: { url: 'requrl' },
+  headers:
+   {
+     'x-api-key': 'KmjXDnLR5Dmtn2IPHQCwONFAFUlaJQpObfJq0AM6',
+     'content-type': 'application/json' }
+   };
+
+  request(options, function (error, response, body) {
+    if (error) {console.log('server.js, GET req to Mercury. error! = ',
+      console.error);
       res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
-    }
-    // else {
-    //   objToSaveToDB.
-    //   // saveTextToDB.saveToDB(body);
-    //
-    // }
-  }
-)
+    };
+    console.log('server.js GET req to Mercury, l. 36. body received = ',
+      body);
+    // console.log('server.js GET req to Mercury, l. 38. response = ',
+    //     response); // this is a giant response object
+  });
 
-
-  // res.status(200).send('Got your request to listen to the text of ' + req.params.requrl);
+      //   objToSaveToDB.
+      //   // saveTextToDB.saveToDB(body);
+      //
+      // }
+  res.status(200).send('Got your request to listen to the text of ' + requrl);
 });
 
 // to test; will update with the actual endpoint in next user story
@@ -48,16 +59,16 @@ app.get('/', function(req, res) {
 });
 
 // to test urlParser; will update to add authentication route when we get to that story
-app.post('/login', urlParser, function(req, res) {
-  console.log('server.js l. 16: received POST to /login. Will read it now...');
-  if(req.body === {}) {
-    console.log('server.js l. 18 - urlParser says body is empty on this request: ', req);
-    return res.sendStatus(400);
-  }
-  console.log('server.js l. 21. req.body = ', req.body);
-  console.log('server.js l. 22. req.body.username = ', req.body.username);
-  res.send('Welcome to Readcastly, ' + req.body.username + '! Nice to have you on board.');
-})
+// app.post('/login', urlParser, function(req, res) {
+//   console.log('server.js l. 16: received POST to /login. Will read it now...');
+//   if(req.body === {}) {
+//     console.log('server.js l. 18 - urlParser says body is empty on this request: ', req);
+//     return res.sendStatus(400);
+//   }
+//   console.log('server.js l. 21. req.body = ', req.body);
+//   console.log('server.js l. 22. req.body.username = ', req.body.username);
+//   res.send('Welcome to Readcastly, ' + req.body.username + '! Nice to have you on board.');
+// });
 
 // to test bodyParser for json;
 app.post('/jsonTest', jsonParser, function(req, res) {
@@ -69,13 +80,13 @@ app.post('/jsonTest', jsonParser, function(req, res) {
   }
   console.log('server.js l. 33: req.body should be an obj. body = ', req.body);
   res.sendStatus(200);
-})
+});
 
 var port = process.env.PORT || 8080;
 
 app.listen(port, function() {
   console.log("Readcastly server listening intently on port:", port);
-})
+});
 
 module.exports = app;
 
