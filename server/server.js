@@ -47,12 +47,13 @@ app.post('/requrl', function(req, res) {
       var parsedBody = JSON.parse(body);
 
     objToSaveToDB.title = parsedBody.title;
-    objToSaveToDB.text = parsedBody.content;
+    objToSaveToDB.domain = parsedBody.domain;
     objToSaveToDB.author = parsedBody.author;
     objToSaveToDB.date_published = parsedBody.date_published;
     objToSaveToDB.lead_image_url = parsedBody.lead_image_url;
     objToSaveToDB.excerpt = parsedBody.excerpt;
     objToSaveToDB.word_count = parsedBody.word_count;
+    objToSaveToDB.text = parsedBody.content;
 
     console.log('server.js after GET req to Mercury, l. 55. completed objToSaveToDB = ', objToSaveToDB);
 

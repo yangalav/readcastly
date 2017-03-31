@@ -4,6 +4,6 @@ var saveTextToDB;
 
 module.exports = {
   saveTextToDB: function(dataFromMercury) {
-    console.log('in dbController.js l. 4: this is dataFromMercury received from server.js: ', dataFromMercury);
+    console.log('\n\nin dbController.js l. 4: this is dataFromMercury received from server.js: ', dataFromMercury);
   }
 };
