@@ -10,9 +10,12 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, './client')));
 
 app.post('/requrl/:requrl', function(req, res) {
-  let requrl = req.params.url;
-  console.log('server.js POST to requrl. l. 14. req.params.url = ', req.params.url);
-})
+  let requrl = req.params.requrl;
+  console.log('server.js POST to requrl. l. 14. req.params.url = ', req.params.requrl);
+  res.status(200).send('Got your request to listen to the text of ' + req.params.requrl);
+
+// res.status(200).send('Got your request to listen to the text ');
+});
 
 // to test; will update with the actual endpoint in next user story
 app.get('/', function(req, res) {
