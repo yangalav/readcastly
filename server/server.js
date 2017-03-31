@@ -1,11 +1,18 @@
 var express = require('express');
 var app = express();
+var path = require('path');
 var bodyParser = require('body-parser');
 var urlParser = bodyParser.urlencoded({extended: false});
 var jsonParser = bodyParser.json();
 
 app.use(bodyParser.json());
 
+app.use(express.static(path.join(__dirname, './client')));
+
+app.post('/requrl/:requrl', function(req, res) {
+  let requrl = req.params.url;
+  console.log('server.js POST to requrl. l. 14. req.params.url = ', req.params.url);
+})
 
 // to test; will update with the actual endpoint in next user story
 app.get('/', function(req, res) {
