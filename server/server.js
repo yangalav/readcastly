@@ -1,10 +1,45 @@
 var express = require('express');
 var app = express();
+var path = require('path');
 var bodyParser = require('body-parser');
 var urlParser = bodyParser.urlencoded({extended: false});
 var jsonParser = bodyParser.json();
+var request = require('request');
+// var saveTextToDB = require('./controllers/dbController');
 
 app.use(bodyParser.json());
+
+app.use(express.static(path.join(__dirname, './client')));
+
+app.post('/requrl/:requrl', function(req, res) {
+  let requrl = req.params.requrl;
+  console.log('server.js POST to requrl. l. 14. req.params.url = ', req.params.requrl);
+  var objToSaveToDB = {
+    requrl: 'requrl'
+  };
+
+  request({
+    'method': 'GET',
+    'x-api-key': 'KmjXDnLR5Dmtn2IPHQCwONFAFUlaJQpObfJq0AM6',
+    'uri': 'https://mercury.postlight.com/parser?url=' + req.params.requrl,
+    'Content-Type': 'application/json'
+  }, function(error, response, body) {
+    console.log('server.js GET req to Mercury, l. 22. body received = ', body);
+    if(error) {
+      console.log('server.js, GET req to Mercury. error! = ', console.error);
+      res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
+    }
+    // else {
+    //   objToSaveToDB.
+    //   // saveTextToDB.saveToDB(body);
+    //
+    // }
+  }
+)
+
+
+  // res.status(200).send('Got your request to listen to the text of ' + req.params.requrl);
+});
 
 // to test; will update with the actual endpoint in next user story
 app.get('/', function(req, res) {
@@ -36,34 +71,28 @@ app.post('/jsonTest', jsonParser, function(req, res) {
   res.sendStatus(200);
 })
 
-// to test; will update with the actual endpoint in next user story
-app.get('/', function(req, res) {
-  console.log('server.js received GET req at / . Readcastly is on its way to fame & fortune!');
-  res.send('We heard your GET req and the diligent Readcastly hamsters are fast at work. All your wildest dreams will soon come true. Stay tuned for more exciting endpoints coming soon to a Postman near you.');
-});
-
-// to test urlParser; will update to add authentication route when we get to that story
-app.post('/login', urlParser, function(req, res) {
-  if(!req.body) {
-    console.log('server.js . 17 - urlParser says no body on this request: ', req);
-    return res.sendStatus(400);
-  }
-  res.send('Welcome to Readcastly, ', req.body.username, '! Nice to have you on board.');
-})
-
-// to test bodyParser for json;
-app.post('/jsonTest', bodyParser, function(req, res) {
-  if(!req.body) {
-    console.log('server.js l. 26: jsonTest did not get an object to parse');
-    return res.sendStatus(400);
-  }
-  console.log('server.js l. 29: req.body should be an obj. body = ', req.body);
-  res.sendStatus(200);
-})
-
 var port = process.env.PORT || 8080;
+
 app.listen(port, function() {
-  console.log("Readcastly server listening intently on port: ", port);
+  console.log("Readcastly server listening intently on port:", port);
 })
 
 module.exports = app;
+
+// sample response from Mercury:
+// {
+//   "title": "Building Awesome CMS",
+//   "content": "<div><div><div class=\"section-content\"><div.... more content",
+//   "author": "Jeremy Mack",
+//   "date_published": "2016-10-03T12:48:58.385Z",
+//   "lead_image_url": "https://cdn-images-1.medium.com/max/1200/1*zo51eqdjJ_XSU0D8Vm8P9A.png",
+//   "dek": null,
+//   "next_page_url": null,
+//   "url": "https://trackchanges.postlight.com/building-awesome-cms-f034344d8ed",
+//   "domain": "trackchanges.postlight.com",
+//   "excerpt": "Awesome CMS is…an awesome list of awesome CMSes. It’s on GitHub, so anyone can add to it via a pull request.",
+//   "word_count": 397,
+//   "direction": "ltr",
+//   "total_pages": 1,
+//   "rendered_pages": 1
+// }
