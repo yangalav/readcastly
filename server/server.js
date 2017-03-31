@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var urlParser = bodyParser.urlencoded({extended: false});
 var jsonParser = bodyParser.json();
 var request = require('request');
-// var saveTextToDB = require('./controllers/dbController');
+var sendTextToDB = require('../controllers/dbController');
 
 app.use(bodyParser.json());
 
@@ -16,6 +16,7 @@ app.use(express.static(path.join(__dirname, './client')));
 //   let requrl = req.params.requrl;
 //   console.log('server.js POST to requrl. l. 14. req.params.url = ', req.params.requrl);
 
+// receive POST req of URL user wants to hear; send GET req to Mercury & receive obj w/ parsed data; send to dbController; (will refactor to pull out routes at least)
 app.post('/requrl', function(req, res) {
   console.log('server.js, POST to /requrl. l. 20: req received. body = ', req.body);
   let requrl = req.body.requrl;
@@ -24,7 +25,7 @@ app.post('/requrl', function(req, res) {
   var objToSaveToDB = {
     requrl: requrl
   };
-  console.log('objToSaveToDB = ', objToSaveToDB);
+  // console.log('objToSaveToDB w/ initial value (requrl) = ', objToSaveToDB);
 
   var options = { method: 'GET',
   url: 'https://mercury.postlight.com/parser?url=' + requrl,
@@ -44,8 +45,7 @@ app.post('/requrl', function(req, res) {
       body, 'END OF BODY ###########\n\n');
       console.log('server.js GET req to Mercury, l. 45. Response JSON.parse(body) = ', JSON.parse(body));
       var parsedBody = JSON.parse(body);
-    // console.log('server.js GET req to Mercury, l. 38. response = ',
-    //     response); // this is a giant response object
+
     objToSaveToDB.title = parsedBody.title;
     objToSaveToDB.text = parsedBody.content;
     objToSaveToDB.author = parsedBody.author;
@@ -56,13 +56,10 @@ app.post('/requrl', function(req, res) {
 
     console.log('server.js after GET req to Mercury, l. 55. completed objToSaveToDB = ', objToSaveToDB);
 
-        res.status(200).send('Got your request. Obj we will write to db = ' + objToSaveToDB);
-  });
-      //   // saveTextToDB.saveToDB(body);
-      //
-      // }
-  // res.status(200).send('Got your request to listen to the text of ' + requrl);
+    sendTextToDB.saveTextToDB(objToSaveToDB);
 
+    res.status(200).send('Got your request. Obj we will write to db = ' + objToSaveToDB);
+  });
 });
 
 // to test; will update with the actual endpoint in next user story
