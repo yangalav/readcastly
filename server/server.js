@@ -5,13 +5,9 @@ var urlParser = bodyParser.urlencoded({extended: false});
 var jsonParser = bodyParser.json();
 require('dotenv').config();
 
-var db = require('./dbConfig');
-var Users = require('./database/collections/users');
-var User = require('./database/models/user');
-var Articles = require('./database/collections/articles');
-var Article = require('./database/models/article');
-var Sources = require('./database/collections/sources')
-var Source = require('./database/models/source');
+var articles = require('./database/controllers/articlesController');
+var sources = require('./database/controllers/sourcesController');
+var users = require('./database/controllers/usersController');
 
 
 app.use(bodyParser.json());
