@@ -3,6 +3,16 @@ var app = express();
 var bodyParser = require('body-parser');
 var urlParser = bodyParser.urlencoded({extended: false});
 var jsonParser = bodyParser.json();
+require('dotenv').config();
+
+var db = require('./dbConfig');
+var Users = require('./database/collections/users');
+var User = require('./database/models/user');
+var Articles = require('./database/collections/articles');
+var Article = require('./database/models/article');
+var Sources = require('./database/collections/sources')
+var Source = require('./database/models/source');
+
 
 app.use(bodyParser.json());
 

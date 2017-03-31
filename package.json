@@ -17,8 +17,21 @@
   },
   "homepage": "https://github.com/readcastly/readcastly#readme",
   "dependencies": {
+    "bcrypt": "^1.0.2",
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.1",
+    "bookshelf": "^0.10.3",
+    "dotenv": "^4.0.0",
     "express": "^4.15.2",
-    "process-env": "^1.1.0",
-    "body-parser": "^1.17.1"
+    "knex": "^0.12.9",
+    "process-env": "^1.1.0"
+  },
+  "devDependencies": {
+    "cz-conventional-changelog": "^2.0.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
