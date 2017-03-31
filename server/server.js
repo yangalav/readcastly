@@ -7,6 +7,13 @@ var jsonParser = bodyParser.json();
 var request = require('request');
 var sendTextToDB = require('../controllers/dbController');
 
+require('dotenv').config();
+
+var articles = require('./database/controllers/articlesController');
+var sources = require('./database/controllers/sourcesController');
+var users = require('./database/controllers/usersController');
+
+
 app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, './client')));
@@ -90,13 +97,27 @@ app.post('/jsonTest', jsonParser, function(req, res) {
   }
   console.log('server.js l. 33: req.body should be an obj. body = ', req.body);
   res.sendStatus(200);
+<<<<<<< HEAD
+=======
+})
+
+// to test; will update with the actual endpoint in next user story
+app.get('/', function(req, res) {
+  console.log('server.js received GET req at / . Readcastly is on its way to fame & fortune!');
+  res.send('We heard your GET req and the diligent Readcastly hamsters are fast at work. All your wildest dreams will soon come true. Stay tuned for more exciting endpoints coming soon to a Postman near you.');
+>>>>>>> db-setup
 });
 
 var port = process.env.PORT || 8080;
 
 app.listen(port, function() {
+<<<<<<< HEAD
   console.log("Readcastly server listening intently on port:", port);
 });
+=======
+  console.log("Readcastly server listening intently on port: ", port);
+})
+>>>>>>> db-setup
 
 module.exports = app;
 
