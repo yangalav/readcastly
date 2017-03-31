@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var urlParser = bodyParser.urlencoded({extended: false});
 var jsonParser = bodyParser.json();
 var request = require('request');
-// var saveTextToDB = require('./controllers/dbController');
+var sendTextToDB = require('../controllers/dbController');
 
 app.use(bodyParser.json());
 
@@ -16,14 +16,16 @@ app.use(express.static(path.join(__dirname, './client')));
 //   let requrl = req.params.requrl;
 //   console.log('server.js POST to requrl. l. 14. req.params.url = ', req.params.requrl);
 
+// receive POST req of URL user wants to hear; send GET req to Mercury & receive obj w/ parsed data; send to dbController; (will refactor to pull out routes at least)
 app.post('/requrl', function(req, res) {
-  console.log('server.js, POST to /requrl/:requrl. l. 15: req received. body = ', req.body);
+  console.log('server.js, POST to /requrl. l. 20: req received. body = ', req.body);
   let requrl = req.body.requrl;
   console.log('server.js POST to requrl. l. 14. requrl = ', requrl);
 
   var objToSaveToDB = {
     requrl: requrl
   };
+  // console.log('objToSaveToDB w/ initial value (requrl) = ', objToSaveToDB);
 
   var options = { method: 'GET',
   url: 'https://mercury.postlight.com/parser?url=' + requrl,
@@ -39,17 +41,25 @@ app.post('/requrl', function(req, res) {
       console.error);
       res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
     };
-    console.log('server.js GET req to Mercury, l. 36. body received = ',
-      body);
-    // console.log('server.js GET req to Mercury, l. 38. response = ',
-    //     response); // this is a giant response object
-  });
+    console.log('server.js GET req to Mercury, l. 43. body received = ',
+      body, 'END OF BODY ###########\n\n');
+      console.log('server.js GET req to Mercury, l. 45. Response JSON.parse(body) = ', JSON.parse(body));
+      var parsedBody = JSON.parse(body);
 
-      //   objToSaveToDB.
-      //   // saveTextToDB.saveToDB(body);
-      //
-      // }
-  res.status(200).send('Got your request to listen to the text of ' + requrl);
+    objToSaveToDB.title = parsedBody.title;
+    objToSaveToDB.text = parsedBody.content;
+    objToSaveToDB.author = parsedBody.author;
+    objToSaveToDB.date_published = parsedBody.date_published;
+    objToSaveToDB.lead_image_url = parsedBody.lead_image_url;
+    objToSaveToDB.excerpt = parsedBody.excerpt;
+    objToSaveToDB.word_count = parsedBody.word_count;
+
+    console.log('server.js after GET req to Mercury, l. 55. completed objToSaveToDB = ', objToSaveToDB);
+
+    sendTextToDB.saveTextToDB(objToSaveToDB);
+
+    res.status(200).send('Got your request. Obj we will write to db = ' + objToSaveToDB);
+  });
 });
 
 // to test; will update with the actual endpoint in next user story
