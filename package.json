@@ -49,8 +49,8 @@
     "process-env": "^1.1.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
-    "webpack": "^2.3.2",
-},
+    "webpack": "^2.3.2"
+  },
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
