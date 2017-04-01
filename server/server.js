@@ -67,18 +67,19 @@ app.post('/requrl', function(req, res) {
 
     console.log('server.js after GET req to Mercury, l. 55. completed objToSaveToDB = ');
 
-    var articleCreator = Promise.promisify(Articles.create);
-
     console.log('ARTICLE OBJECT TO BE SAVED TO DB');
 
-    articleCreator(objToSaveToDB)
-      .then(function(userLibrary) {
-        console.log('BACK FROM CONTROLLER!!!');
-        res.status(200).send('USER LIBRARY', userLibrary);
-      })
-      .catch(function(error){
-        console.log('ERROR GETTING INFO BACK FROM DB AFTER CREATING ARTICLE', error);
-      })
+    Articles.create(objToSaveToDB,function(library){
+      console.log('ABOUT TO SEND LIBRARY');
+      res.send(library);
+    })
+      // .then(function(userLibrary) {
+      //   console.log('BACK FROM CONTROLLER!!!');
+      //   res.status(200).send('USER LIBRARY', userLibrary);
+      // })
+      // .catch(function(error){
+      //   console.log('ERROR GETTING INFO BACK FROM DB AFTER CREATING ARTICLE', error);
+      // })
   });
 });
 

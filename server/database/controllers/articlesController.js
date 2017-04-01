@@ -6,16 +6,16 @@ const ArticlesUsers = require('../collections/articles-users');
 const ArticleUser = require('../models/article-user');
 const SourceCon = require('./sourcesController')
 
-exports.create = function(articleData) {
-  new Article({url: articleData.url}).fetch()
+exports.create = function(articleData,callback) {
+  return new Article({url: articleData.url}).fetch()
     .then(function(found) {
       if (found) {
-        new ArticleUser({article_id: found.id,user_id: articleData.user_id}).fetch()
+        return new ArticleUser({article_id: found.id,user_id: articleData.user_id}).fetch()
           .then(function(alsoFound) {
             if (alsoFound) {
               console.log("ARTICLE ALREADY IN USER'S LIBRARY - NEED TO FIGURE OUT HOW TO PASS ERROR UP TO FRONT END");
             } else {
-              ArticlesUsers.create({
+              return ArticlesUsers.create({
                 article_id: found.id,
                 user_id: articleData.user_id
               })
@@ -54,7 +54,7 @@ exports.create = function(articleData) {
               })
               .then(function(entry) {
                 console.log('NEW ARTICLE-USER ENTRY CREATED', entry);
-                return getAll(entry.attributes.user_id);
+                return getAll(entry.attributes.user_id,callback);
               })
               .catch(function(error) {
                 console.log('ERROR CREATING ARTICLE-USER ENTRY OF NEW ARTICLE', error);
@@ -78,14 +78,14 @@ exports.create = function(articleData) {
     })
 };
 
-var getAll = Promise.promisify(function(userId) {
+var getAll = function(userId,callback) {
   console.log('IN GET ALL userID = ',userId);
-  // return db.knex.select('*').from('Articles').join('Articles-Users',({'Articles.id' : 'Articles-Users.article_id'}))./*where({'Articles-Users.user_id': userId})*/whereRaw('Articles-Users.user_id = ?', [userId]);
   return db.knex('Articles')
     .join('Articles-Users','Articles.id','Articles-Users.article_id')
     .where('Articles-Users.user_id','=', userId)
-    .select('*');
-});
+    .select('*')
+    .then(callback);
+};
 
 
 
