@@ -2,8 +2,8 @@ const db = require('../dbConfig');
 const Promise = require('bluebird');
 const Articles = require('../collections/articles');
 const Article = require('../models/article');
-const ArticlesUsers = require('../collections/articles-users');
-const ArticleUser = require('../collections/article-user');
+const ArticlesUsers = require('../collections/articles-users'); // got error because this was 'article-users'
+const ArticleUser = require('../models/article-user'); // got error because this was 'articles-user'
 const SourceCon = require('./sourcesController')
 
 var getSource = Promise.promisify(SourceCon.getSource);
