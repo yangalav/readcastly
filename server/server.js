@@ -1,23 +1,22 @@
 require('dotenv').config();
-var express = require('express');
-var app = express();
-var path = require('path');
-var bodyParser = require('body-parser');
-var urlParser = bodyParser.urlencoded({extended: false});
-var jsonParser = bodyParser.json();
-var request = require('request');
-var sendTextToDB = require('../controllers/dbController');
+const express = require('express');
+const app = express();
+const path = require('path');
+const bodyParser = require('body-parser');
+const urlParser = bodyParser.urlencoded({extended: false});
+const jsonParser = bodyParser.json();
+const request = require('request');
+const sendTextToDB = require('../controllers/dbController');
 
 
-
-var articles = require('./database/controllers/articlesController');
-var sources = require('./database/controllers/sourcesController');
-var users = require('./database/controllers/usersController');
+const articles = require('./database/controllers/articlesController');
+const sources = require('./database/controllers/sourcesController');
+const users = require('./database/controllers/usersController');
 
 
 app.use(bodyParser.json());
 
-app.use(express.static(path.join(__dirname, './client')));
+app.use(express.static(path.join(__dirname, '../client')));
 
 // app.post('/requrl/:requrl', function(req, res) {
 //   console.log('server.js, POST to /requrl/:requrl. l. 15: req received.');
@@ -66,7 +65,7 @@ app.post('/requrl', function(req, res) {
 
     sendTextToDB.saveTextToDB(objToSaveToDB);
 
-    res.status(200).send('Got your request. Obj we will write to db = ' + objToSaveToDB);
+    res.status(200).send('Got your request. Obj we will write to db includes this article text field: ' + objToSaveToDB.text);
   });
 });
 
@@ -100,7 +99,7 @@ app.post('/jsonTest', jsonParser, function(req, res) {
   res.sendStatus(200);
 });
 
-var app = express();
+// there was an extra var app = express();
 var port = process.env.PORT || 8080;
 
 app.listen(port, function() {
