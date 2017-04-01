@@ -6,13 +6,13 @@ var bodyParser = require('body-parser');
 var urlParser = bodyParser.urlencoded({extended: false});
 var jsonParser = bodyParser.json();
 var request = require('request');
-var sendTextToDB = require('../controllers/dbController');
+const Promise = require('bluebird');
+// var sendTextToDB = require('../controllers/dbController');
 
-
-
-var articles = require('./database/controllers/articlesController');
-var sources = require('./database/controllers/sourcesController');
-var users = require('./database/controllers/usersController');
+var Articles = require('./database/controllers/articlesController');
+var Sources = require('./database/controllers/sourcesController');
+var Users = require('./database/controllers/usersController');
+var User = require('./database/models/user');
 
 
 app.use(bodyParser.json());
@@ -31,7 +31,8 @@ app.post('/requrl', function(req, res) {
   console.log('server.js POST to requrl. l. 14. requrl = ', requrl);
 
   var objToSaveToDB = {
-    requrl: requrl
+    url: requrl,
+    created_by: User.user_id
   };
   // console.log('objToSaveToDB w/ initial value (requrl) = ', objToSaveToDB);
 
@@ -40,7 +41,7 @@ app.post('/requrl', function(req, res) {
   // qs: { url: 'requrl' },
   headers:
    {
-     'x-api-key': 'KmjXDnLR5Dmtn2IPHQCwONFAFUlaJQpObfJq0AM6',
+     'x-api-key': process.env.PARSER_KEY || 'KmjXDnLR5Dmtn2IPHQCwONFAFUlaJQpObfJq0AM6',
      'content-type': 'application/json' }
    };
 
@@ -51,22 +52,31 @@ app.post('/requrl', function(req, res) {
     };
     console.log('server.js GET req to Mercury, l. 43. body received = ',
       body, 'END OF BODY ###########\n\n');
-      console.log('server.js GET req to Mercury, l. 45. Response JSON.parse(body) = ', JSON.parse(body));
-      var parsedBody = JSON.parse(body);
+    console.log('server.js GET req to Mercury, l. 45. Response JSON.parse(body) = ', JSON.parse(body));
+    var parsedBody = JSON.parse(body);
 
     objToSaveToDB.title = parsedBody.title;
     objToSaveToDB.text = parsedBody.content;
     objToSaveToDB.author = parsedBody.author;
-    objToSaveToDB.date_published = parsedBody.date_published;
-    objToSaveToDB.lead_image_url = parsedBody.lead_image_url;
+    objToSaveToDB.publication_date = parsedBody.date_published;
+    objToSaveToDB.image = parsedBody.lead_image_url;
     objToSaveToDB.excerpt = parsedBody.excerpt;
     objToSaveToDB.word_count = parsedBody.word_count;
+    objToSaveToDB.est_time = parsedBody.word_count*2;
 
     console.log('server.js after GET req to Mercury, l. 55. completed objToSaveToDB = ', objToSaveToDB);
 
-    sendTextToDB.saveTextToDB(objToSaveToDB);
+    var articleCreator = Promise.promisify(Articles.create);
 
-    res.status(200).send('Got your request. Obj we will write to db = ' + objToSaveToDB);
+    console.log('ARTICLE OBJECT TO BE SAVED TO DB', objToSaveToDB);
+
+    articleCreator(objToSaveToDB)
+      .then(function(userLibrary) {
+        res.status(200).send('USER LIBRARY', userLibrary);
+      })
+      .catch(function(error){
+        console.log('ERROR GETTING INFO BACK FROM DB AFTER CREATING ARTICLE,' error);
+      })
   });
 });
 

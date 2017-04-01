@@ -3,7 +3,7 @@ const Promise = require('bluebird');
 const Articles = require('../collections/articles');
 const Article = require('../models/article');
 const ArticlesUsers = require('../collections/articles-users');
-const ArticleUser = require('../collections/article-user');
+const ArticleUser = require('../models/article-user');
 const SourceCon = require('./sourcesController')
 
 var getSource = Promise.promisify(SourceCon.getSource);
@@ -48,19 +48,35 @@ exports.create = function(articleData) {
               est_time: articleData.est_time,
               created_by: articleData.user_id
             })
-          })
-          .then(function(article) {
-            ArticlesUsers.create({
-              article_id: article.id,
-              user_id: article.created_by
+            .then(function(article) {
+              ArticlesUsers.create({
+                article_id: article.id,
+                user_id: article.created_by
+              })
+              .then(function(entry) {
+                console.log('NEW ARTICLE-USER ENTRY CREATED', entry);
+              })
+              .catch(function(error) {
+                console.log('ERROR CREATING ARTICLE-USER ENTRY OF NEW ARTICLE', error);
+              })
+            })
+            .catch(function(error) {
+              console.log('ERROR CREATING NEW ARTICLE', error);
             })
           })
           .catch(function(error) {
-            console.log('ERROR CREATING NEW ARTICLE', error);
+            console.log('ERROR WITH GETSOURCE FUNCTION', error);
           })
       }
     })
-    .catch(function(error) {
-      console.log('ERROR CHECKING FOR EXISTING ARTICLE', error);
+    .then(function(data) {
+      getAll(articleData.user_id);
     })
-}
+    .catch(function(error) {
+      console.log('ERROR CHECKING URL PASSED IN', error);
+    })
+};
+
+exports.getAll = function(userId) {
+  return db.select('*').from(Articles).join(ArticlesUsers,({ArticlesUsers.article_id:Articles.id})).where({ArticlesUsers.user_id:userId});
+};
