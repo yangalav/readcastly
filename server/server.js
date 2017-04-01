@@ -98,19 +98,13 @@ app.post('/jsonTest', jsonParser, function(req, res) {
   }
   console.log('server.js l. 33: req.body should be an obj. body = ', req.body);
   res.sendStatus(200);
-})
-
-// to test; will update with the actual endpoint in next user story
-app.get('/', function(req, res) {
-  console.log('server.js received GET req at / . Readcastly is on its way to fame & fortune!');
-  res.send('We heard your GET req and the diligent Readcastly hamsters are fast at work. All your wildest dreams will soon come true. Stay tuned for more exciting endpoints coming soon to a Postman near you.');
 });
 
 var app = express();
 var port = process.env.PORT || 8080;
 
-app.listen(port, function () {
-  console.log('Listening on port', port);
-});
+app.listen(port, function() {
+  console.log("Readcastly server listening intently on port: ", port);
+})
 
 module.exports = app;
