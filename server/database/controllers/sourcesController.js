@@ -1,3 +1,32 @@
-var db = require('../dbConfig');
-var Sources = require('../collections/sources');
-var Source = require('../models/source');
+const db = require('../dbConfig');
+const Sources = require('../collections/sources');
+const Source = require('../models/source');
+
+exports.sourceId;
+
+exports.getSource = function(domain) {
+  // Check for existence of source
+  new Source({homepage: domain}).fetch()
+  // If exists grab ID
+  .then(function(found) {
+    if (found) {
+      sourceId = found.id;
+    } else {
+      Sources.create({
+        name: domain,
+        homepage: domain/*,*/
+        /*most_read: TBD,*/
+        /*image: TBD*/
+      })
+      .then(function(newSource) {
+        sourceId = newSource.id;
+      })
+      .catch(function(error) {
+        console.log('ERROR CREATING SOURCE IN ARTICLE CONTROLLER', error);
+      });
+    }
+  })
+  .catch(function(error) {
+    console.log('ERROR GETTING EXISTING SOURCE ID IN ARTICLE CONTROLLER', error);
+  })
+}
