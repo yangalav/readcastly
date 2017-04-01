@@ -1,11 +1,11 @@
-var webpack = require('webpack');
-var path = require('path');
+const webpack = require('webpack');
+const path = require('path');
 
-var config = {
-  entry: './client/components',
+const config = {
+  entry: './client/components/index.js',
   output: {
     path: path.resolve(__dirname, 'client/build'),
-    filename: 'bundle.js',
+    filename: 'app.bundle.js',
   },
   module: {
     rules: [
@@ -14,11 +14,11 @@ var config = {
         exclude: /(node_modules|bower_components)/,
         loader: 'babel-loader',
         options: {
-          presets: ['es2015', 'react']
-        }
-      }
-    ]
-  }
+          presets: ['es2015', 'react'],
+        },
+      },
+    ],
+  },
 };
 
 module.exports = config;
