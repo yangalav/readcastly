@@ -1,3 +1,3 @@
-var db = require('../dbConfig');
-var Users = require('../collections/users');
-var User = require('../models/user');
+const db = require('../dbConfig');
+const Users = require('../collections/users');
+const User = require('../models/user');
