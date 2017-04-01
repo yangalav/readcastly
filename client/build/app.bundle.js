@@ -9448,8 +9448,10 @@ module.exports = ReactPropTypesSecret;
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(52);
 
@@ -9457,13 +9459,177 @@ var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var App = function App() {
-  return _react2.default.createElement(
-    'h1',
-    null,
-    'Hello'
-  );
-};
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// SUBCOMPONENTS below (incl: Title, Transformer, ArticleList, ArticleEntry)
+// will later be separated into their own modules/files 
+
+// Title component
+function Title(props) {
+	return _react2.default.createElement(
+		"h1",
+		null,
+		"Hello, Readcast.ly!"
+	);
+}
+
+// Transformer component (i.e., where users enter links, to have them transformed)
+function Transformer(props) {
+	// =>TODO: button needs onClick attribute, which needs method that handles state
+	return _react2.default.createElement(
+		"div",
+		null,
+		_react2.default.createElement("input", { type: "text", value: "" }),
+		_react2.default.createElement(
+			"button",
+			null,
+			"Convert It"
+		),
+		_react2.default.createElement("hr", null)
+	);
+}
+
+// ArticleList component (i.e., the container for Articles)
+function ArticleList(props) {
+	// Note: This is hard-coded for now
+	// =>TODO: replace code below with code that dynamically iterates over user's article list from server
+	var articles = [];
+	for (var i = 0; i < 5; i++) {
+		articles.push(_react2.default.createElement(ArticleEntry, null));
+	}
+	return _react2.default.createElement(
+		"div",
+		{ className: "article-list" },
+		articles
+	);
+}
+
+// ArticleEntry component (i.e., indiv. Article Entry)
+function ArticleEntry(props) {
+	// =>TODO: replace hard-coded values below with dynamically generated ones
+	var title = "Who is ‘Source D’? The man said to be behind the Trump-Russia dossier’s most salacious claim.";
+	var author = 'Bob Woodward';
+	var publishDate = "2017-03-29T11:32:00.000Z";
+	var sampleImage = "https://img.washingtonpost.com/rf/image_1484w/2010-2019/WashingtonPost/2017/03/20/National-Politics/Images/AP_59952768667.jpg";
+	var source = "www.washingtonpost.com";
+	var excerpt = "The story of Sergei Millian illustrates the challenge confronting the FBI as it seeks to separate fact from fiction.";
+
+	return _react2.default.createElement(
+		"div",
+		{ className: "article-entry" },
+		_react2.default.createElement(
+			"div",
+			{ className: "article-title" },
+			_react2.default.createElement(
+				"span",
+				null,
+				"Title: "
+			),
+			_react2.default.createElement(
+				"span",
+				null,
+				title
+			)
+		),
+		_react2.default.createElement(
+			"div",
+			{ className: "article-author" },
+			_react2.default.createElement(
+				"span",
+				null,
+				"Author: "
+			),
+			_react2.default.createElement(
+				"span",
+				null,
+				author
+			)
+		),
+		_react2.default.createElement(
+			"div",
+			{ className: "article-publishDate" },
+			_react2.default.createElement(
+				"span",
+				null,
+				"Date: "
+			),
+			_react2.default.createElement(
+				"span",
+				null,
+				publishDate
+			)
+		),
+		_react2.default.createElement(
+			"div",
+			{ className: "article-source" },
+			_react2.default.createElement(
+				"span",
+				null,
+				"Source: "
+			),
+			_react2.default.createElement(
+				"span",
+				null,
+				source
+			)
+		),
+		_react2.default.createElement("img", { className: "article-sampleImage", src: sampleImage, height: "42" }),
+		_react2.default.createElement(
+			"div",
+			{ className: "article-excerpt" },
+			_react2.default.createElement(
+				"span",
+				null,
+				"Excerpt: "
+			),
+			_react2.default.createElement(
+				"span",
+				null,
+				excerpt
+			)
+		),
+		_react2.default.createElement("hr", null)
+	);
+}
+
+// 'APP' is a stateful top-level component; it will stay in this file
+
+var App = function (_React$Component) {
+	_inherits(App, _React$Component);
+
+	function App(props) {
+		_classCallCheck(this, App);
+
+		var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+
+		_this.state = {
+			// =>TODO: FILL-IN keys: values
+		};
+		// =>TODO: handle 'this' binding
+		return _this;
+	}
+	// =>TODO: App methods go here
+
+	_createClass(App, [{
+		key: "render",
+		value: function render() {
+
+			return _react2.default.createElement(
+				"div",
+				null,
+				_react2.default.createElement(Title, null),
+				_react2.default.createElement(Transformer, null),
+				_react2.default.createElement(ArticleList, null)
+			);
+		}
+	}]);
+
+	return App;
+}(_react2.default.Component);
 
 exports.default = App;
 
