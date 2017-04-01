@@ -32,7 +32,7 @@ app.post('/requrl', function(req, res) {
 
   var objToSaveToDB = {
     url: requrl,
-    created_by: User.user_id
+    created_by: User.user_id || 99
   };
   // console.log('objToSaveToDB w/ initial value (requrl) = ', objToSaveToDB);
 
@@ -50,9 +50,9 @@ app.post('/requrl', function(req, res) {
       console.error);
       res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
     };
-    console.log('server.js GET req to Mercury, l. 43. body received = ',
-      body, 'END OF BODY ###########\n\n');
-    console.log('server.js GET req to Mercury, l. 45. Response JSON.parse(body) = ', JSON.parse(body));
+    console.log('server.js GET req to Mercury, l. 43. body received DEK = ',
+      body.dek, 'END OF BODY ###########\n\n');
+    console.log('server.js GET req to Mercury, l. 45. Response JSON.parse(body) = ');
     var parsedBody = JSON.parse(body);
 
     objToSaveToDB.title = parsedBody.title;
@@ -63,19 +63,21 @@ app.post('/requrl', function(req, res) {
     objToSaveToDB.excerpt = parsedBody.excerpt;
     objToSaveToDB.word_count = parsedBody.word_count;
     objToSaveToDB.est_time = parsedBody.word_count*2;
+    objToSaveToDB.domain = parsedBody.domain;
 
-    console.log('server.js after GET req to Mercury, l. 55. completed objToSaveToDB = ', objToSaveToDB);
+    console.log('server.js after GET req to Mercury, l. 55. completed objToSaveToDB = ');
 
     var articleCreator = Promise.promisify(Articles.create);
 
-    console.log('ARTICLE OBJECT TO BE SAVED TO DB', objToSaveToDB);
+    console.log('ARTICLE OBJECT TO BE SAVED TO DB');
 
     articleCreator(objToSaveToDB)
       .then(function(userLibrary) {
+        console.log('BACK FROM CONTROLLER!!!');
         res.status(200).send('USER LIBRARY', userLibrary);
       })
       .catch(function(error){
-        console.log('ERROR GETTING INFO BACK FROM DB AFTER CREATING ARTICLE,' error);
+        console.log('ERROR GETTING INFO BACK FROM DB AFTER CREATING ARTICLE', error);
       })
   });
 });
@@ -116,7 +118,7 @@ app.get('/', function(req, res) {
   res.send('We heard your GET req and the diligent Readcastly hamsters are fast at work. All your wildest dreams will soon come true. Stay tuned for more exciting endpoints coming soon to a Postman near you.');
 });
 
-var port = process.env.PORT || 8080;
+var port = process.env.PORT;
 
 app.listen(port, function() {
   console.log("Readcastly server listening intently on port:", port);
