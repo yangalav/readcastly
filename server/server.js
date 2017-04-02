@@ -6,8 +6,6 @@ const bodyParser = require('body-parser');
 const urlParser = bodyParser.urlencoded({extended: false});
 const jsonParser = bodyParser.json();
 const request = require('request');
-const Promise = require('bluebird');
-// var sendTextToDB = require('../controllers/dbController');
 
 const Articles = require('./database/controllers/articlesController');
 const Sources = require('./database/controllers/sourcesController');
@@ -33,52 +31,25 @@ app.post('/requrl', function(req, res) {
     url: requrl,
     user_id: User.user_id || 99
   };
-  // console.log('objToSaveToDB w/ initial value (requrl) = ', objToSaveToDB);
 
-  var options = { method: 'GET',
-  url: 'https://mercury.postlight.com/parser?url=' + requrl,
-  // qs: { url: 'requrl' },
-  headers:
-   {
-     'x-api-key': process.env.PARSER_KEY || 'KmjXDnLR5Dmtn2IPHQCwONFAFUlaJQpObfJq0AM6',
-     'content-type': 'application/json' }
-   };
+  var options = {
+    method: 'GET',
+    url: 'https://mercury.postlight.com/parser?url=' + requrl,
+    headers: {
+      'x-api-key': process.env.PARSER_KEY,
+      'content-type': 'application/json'
+      }
+  };
 
   request(options, function (error, response, body) {
-    if (error) {console.log('server.js, GET req to Mercury. error! = ',
-      console.error);
+    if (error) {console.log('server.js, GET req to Mercury. error! = ', error);
       res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
     };
-    console.log('server.js GET req to Mercury, l. 43. body received DEK = ',
-      body.dek, 'END OF BODY ###########\n\n');
-    console.log('server.js GET req to Mercury, l. 45. Response JSON.parse(body) = ');
     var parsedBody = JSON.parse(body);
-
-    objToSaveToDB.title = parsedBody.title;
-    objToSaveToDB.text = parsedBody.content;
-    objToSaveToDB.author = parsedBody.author;
-    objToSaveToDB.publication_date = parsedBody.date_published;
-    objToSaveToDB.image = parsedBody.lead_image_url;
-    objToSaveToDB.excerpt = parsedBody.excerpt;
-    objToSaveToDB.word_count = parsedBody.word_count;
-    objToSaveToDB.est_time = parsedBody.word_count*2;
-    objToSaveToDB.domain = parsedBody.domain;
-
-    console.log('server.js after GET req to Mercury, l. 55. completed objToSaveToDB = ');
-
-    console.log('ARTICLE OBJECT TO BE SAVED TO DB');
-
+    objBuilder(objToSaveToDB,parsedBody);
     Articles.create(objToSaveToDB,function(library){
-      console.log('ABOUT TO SEND LIBRARY');
       res.send(library);
     })
-      // .then(function(userLibrary) {
-      //   console.log('BACK FROM CONTROLLER!!!');
-      //   res.status(200).send('USER LIBRARY', userLibrary);
-      // })
-      // .catch(function(error){
-      //   console.log('ERROR GETTING INFO BACK FROM DB AFTER CREATING ARTICLE', error);
-      // })
   });
 });
 
@@ -117,5 +88,17 @@ var port = process.env.PORT;
 app.listen(port, function() {
   console.log("Readcastly server listening intently on port: ", port);
 })
+
+var objBuilder = function(obj,source) {
+    obj.title = source.title;
+    obj.text = source.content;
+    obj.author = source.author;
+    obj.publication_date = source.date_published;
+    obj.image = source.lead_image_url;
+    obj.excerpt = source.excerpt;
+    obj.word_count = source.word_count;
+    obj.est_time = source.word_count*2;
+    obj.domain = source.domain;
+}
 
 module.exports = app;
