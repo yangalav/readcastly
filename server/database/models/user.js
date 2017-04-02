@@ -6,11 +6,13 @@ var User = db.Model.extend({
 
   tableName: 'Users',
   hasTimestamps: false,
+  user_id: 0,
   initialize: function() {
     this.on('creating', this.hashPassword);
   },
   comparePassword: function(attemptedPassword, callback) {
     bcrypt.compare(attemptedPassword, this.get('password'), function(err, isMatch) {
+      user_id = this.get('id');
       callback(isMatch);
     });
   },
