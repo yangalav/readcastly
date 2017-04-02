@@ -31,21 +31,24 @@ exports.create = function(articleData,callback) {
     .then(function(entry) {
       return !exactFind ? getAll(entry.attributes.user_id,callback) : console.log('DOWN HERE');
     })
-    .catch(function(error) {
-      console.log('ERROR CHECKING URL PASSED IN', error);
+    .catch(function(error) {console.log('ERROR CHECKING URL PASSED IN', error);
     })
 };
 
 
 
-var getAll = function(userId,callback) {
-  console.log('IN GET ALL userID = ',userId);
-  return db.knex('Articles')
-    .join('Articles-Users','Articles.id','Articles-Users.article_id')
-    .where('Articles-Users.user_id','=', userId)
-    .select('*')
-    .then(callback);
+var exactMatch = function(callback) {
+  exactFind = true;
+  return callback(exactFindMsg);
 };
+
+var linkArticleUser = function(article,articleData) {
+  return ArticlesUsers.create({
+    article_id: article.id,
+    user_id: articleData.user_id
+  })
+};
+
 
 var makeArticle = function(sourceId,articleData) {
   console.log('SOURCE ID === ', sourceId)
@@ -64,15 +67,12 @@ var makeArticle = function(sourceId,articleData) {
   })
 };
 
-var linkArticleUser = function(article,articleData) {
-  return ArticlesUsers.create({
-    article_id: article.id,
-    user_id: articleData.user_id
-  })
-};
-
-var exactMatch = function(callback) {
-  exactFind = true;
-  return callback(exactFindMsg);
+var getAll = function(userId,callback) {
+  console.log('IN GET ALL userID = ',userId);
+  return db.knex('Articles')
+    .join('Articles-Users','Articles.id','Articles-Users.article_id')
+    .where('Articles-Users.user_id','=', userId)
+    .select('*')
+    .then(callback);
 };
 
