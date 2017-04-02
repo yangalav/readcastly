@@ -31,7 +31,7 @@ app.post('/requrl', function(req, res) {
 
   var objToSaveToDB = {
     url: requrl,
-    created_by: User.user_id || 99
+    user_id: User.user_id || 99
   };
   // console.log('objToSaveToDB w/ initial value (requrl) = ', objToSaveToDB);
 
