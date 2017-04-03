@@ -9466,7 +9466,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 // SUBCOMPONENTS below (incl: Title, Transformer, ArticleList, ArticleEntry)
-// will later be separated into their own modules/files 
+// will later be separated into their own modules/files
 
 // Title component
 function Title(props) {
@@ -9591,6 +9591,11 @@ function ArticleEntry(props) {
 				null,
 				excerpt
 			)
+		),
+		_react2.default.createElement(
+			"button",
+			null,
+			"More In fo"
 		),
 		_react2.default.createElement("hr", null)
 	);

@@ -19,6 +19,8 @@
   "dependencies": {
     "babel": "^6.23.0",
     "bcrypt-nodejs": "0.0.3",
+    "bluebird": "^3.5.0",
+    "dotenv": "^4.0.0",
     "eslint-config-airbnb": "^14.1.0",
     "express": "^4.15.2",
     "nodemon": "^1.11.0",
@@ -26,7 +28,8 @@
     "process-env": "^1.1.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "sql": "^0.74.0"
   },
   "devDependencies": {
     "babel-core": "^6.24.0",

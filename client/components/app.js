@@ -2,7 +2,7 @@
 import React from 'react';
 
 // SUBCOMPONENTS below (incl: Title, Transformer, ArticleList, ArticleEntry)
-// will later be separated into their own modules/files 
+// will later be separated into their own modules/files
 
 // Title component
 function Title(props) {
@@ -54,6 +54,7 @@ function ArticleEntry(props) {
 	  	<div className="article-source"><span>Source: </span><span>{source}</span></div>
 	  	<img className="article-sampleImage" src={sampleImage} height="42" />
 	  	<div className="article-excerpt"><span>Excerpt: </span><span>{excerpt}</span></div>
+			<button>More In fo</button>
 	  	<hr/>
 	  </div>
 	);
@@ -83,7 +84,3 @@ class App extends React.Component {
 }
 
 export default App;
-
-
-
-
