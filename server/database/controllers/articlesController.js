@@ -31,8 +31,7 @@ exports.create = function(articleData,callback) {
     .then(function(entry) {
       return !exactFind ? getAll(entry.attributes.user_id,callback) : console.log('DOWN HERE');
     })
-    .catch(function(error) {console.log('ERROR CHECKING URL PASSED IN', error);
-    })
+    .catch(function(error) {console.log('ERROR CHECKING URL PASSED IN', error);})
 };
 
 
@@ -48,7 +47,6 @@ var linkArticleUser = function(article,articleData) {
     user_id: articleData.user_id
   })
 };
-
 
 var makeArticle = function(sourceId,articleData) {
   console.log('SOURCE ID === ', sourceId)
