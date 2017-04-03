@@ -10185,7 +10185,7 @@ var Transformer = function (_React$Component) {
 			// call another method that sends info
 		}
 
-		// =>TODO: button needs onClick attribute, which needs method that handles state
+		// =>TODO: complete the handling of user input
 
 	}, {
 		key: 'render',
@@ -10212,19 +10212,7 @@ var Transformer = function (_React$Component) {
 
 
 function ArticleList(props) {
-	// Note: This is hard-coded for now
-	// =>TODO: replace code below with code that dynamically iterates over user's article list from server
-	// const articles = [];
-	// for (let i = 0; i < 5; i++) {
-	// 	articles.push(<ArticleEntry/>);
-	// }
-	// return (
-	// 	<div className='article-list'>
-	// 		{articles}
-	// 	</div>
-	// );
 	var articles = props.articles;
-	// console.log('ArticleList L-61: articles-- ', articles);
 	return _react2.default.createElement(
 		'div',
 		{ className: 'article-list' },
@@ -10236,15 +10224,9 @@ function ArticleList(props) {
 
 // ArticleEntry component (i.e., indiv. Article Entry)
 function ArticleEntry(props) {
-	// =>TODO: replace hard-coded values below with dynamically generated ones
-<<<<<<< HEAD
-	var title = "Who is ‘Source D’? The man said to be behind the Trump-Russia dossier’s most salacious claim.";
-	var author = 'Bob Woodward';
-	var publishDate = "2017-03-29T11:32:00.000Z";
-	var sampleImage = "https://img.washingtonpost.com/rf/image_1484w/2010-2019/WashingtonPost/2017/03/20/National-Politics/Images/AP_59952768667.jpg";
-	var source = "www.washingtonpost.com";
-	var excerpt = "The story of Sergei Millian illustrates the challenge confronting the FBI as it seeks to separate fact from fiction.";
-	var articleText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+	// const articleText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+	var articleText = props.article.text;
+	var article = props.article;
 
 	// ShowInfo component shows body of parsed article text when 'More Info' button is clicked
 	// (only console.logs for now)
@@ -10252,98 +10234,6 @@ function ArticleEntry(props) {
 		console.log(articleText);
 	}
 
-	return _react2.default.createElement(
-		"div",
-		{ className: "article-entry" },
-		_react2.default.createElement(
-			"div",
-			{ className: "article-title" },
-			_react2.default.createElement(
-				"span",
-				null,
-				"Title: "
-			),
-			_react2.default.createElement(
-				"span",
-				null,
-				title
-			)
-		),
-		_react2.default.createElement(
-			"div",
-			{ className: "article-author" },
-			_react2.default.createElement(
-				"span",
-				null,
-				"Author: "
-			),
-			_react2.default.createElement(
-				"span",
-				null,
-				author
-			)
-		),
-		_react2.default.createElement(
-			"div",
-			{ className: "article-publishDate" },
-			_react2.default.createElement(
-				"span",
-				null,
-				"Date: "
-			),
-			_react2.default.createElement(
-				"span",
-				null,
-				publishDate
-			)
-		),
-		_react2.default.createElement(
-			"div",
-			{ className: "article-source" },
-			_react2.default.createElement(
-				"span",
-				null,
-				"Source: "
-			),
-			_react2.default.createElement(
-				"span",
-				null,
-				source
-			)
-		),
-		_react2.default.createElement("img", { className: "article-sampleImage", src: sampleImage, height: "42" }),
-		_react2.default.createElement(
-			"div",
-			{ className: "article-excerpt" },
-			_react2.default.createElement(
-				"span",
-				null,
-				"Excerpt: "
-			),
-			_react2.default.createElement(
-				"span",
-				null,
-				excerpt
-			)
-		),
-		_react2.default.createElement(
-			"button",
-			{ onClick: ShowInfo },
-			"More Infooooo"
-		),
-		_react2.default.createElement("hr", null)
-	);
-}
-=======
-	// const title = "Who is ‘Source D’? The man said to be behind the Trump-Russia dossier’s most salacious claim.";
-	// const author = 'Bob Woodward';
-	// const publishDate = "2017-03-29T11:32:00.000Z";
-	// const sampleImage = "https://img.washingtonpost.com/rf/image_1484w/2010-2019/WashingtonPost/2017/03/20/National-Politics/Images/AP_59952768667.jpg";
-	// const source = "www.washingtonpost.com";
-	// const excerpt = "The story of Sergei Millian illustrates the challenge confronting the FBI as it seeks to separate fact from fiction.";
-	var article = props.article;
-
-	// console.log('ArticleEntry L83: article: ', article);
 	return _react2.default.createElement(
 		'div',
 		{ className: 'article-entry' },
@@ -10386,7 +10276,7 @@ function ArticleEntry(props) {
 			_react2.default.createElement(
 				'span',
 				null,
-				article.publishDate
+				article.publication_date
 			)
 		),
 		_react2.default.createElement(
@@ -10400,10 +10290,10 @@ function ArticleEntry(props) {
 			_react2.default.createElement(
 				'span',
 				null,
-				article.source
+				article.source_id
 			)
 		),
-		_react2.default.createElement('img', { className: 'article-sampleImage', src: article.sampleImage, height: '42' }),
+		_react2.default.createElement('img', { className: 'article-sampleImage', src: article.image, height: '42' }),
 		_react2.default.createElement(
 			'div',
 			{ className: 'article-excerpt' },
@@ -10417,6 +10307,11 @@ function ArticleEntry(props) {
 				null,
 				article.excerpt
 			)
+		),
+		_react2.default.createElement(
+			'button',
+			{ onClick: ShowInfo },
+			'More Infooooo'
 		),
 		_react2.default.createElement('hr', null)
 	);
@@ -10433,43 +10328,13 @@ var App = function (_React$Component2) {
 		var _this2 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
 		_this2.state = {
-			// =>TODO: FILL-IN keys: values
 			items: [],
-			// [{
-			// 	id: "101",
-			// 	title: "Who is ‘Source D’? The man said to be behind the Trump-Russia dossier’s most salacious claim.",
-			// 	author:'Bob Woodward',
-			// 	publishDate: "2017-03-29T11:32:00.000Z",
-			// 	sampleImage: "https://img.washingtonpost.com/rf/image_1484w/2010-2019/WashingtonPost/2017/03/20/National-Politics/Images/AP_59952768667.jpg",
-			// 	source: "www.washingtonpost.com",
-			// 	excerpt: "The story of Sergei Millian illustrates the challenge confronting the FBI as it seeks to separate fact from fiction."
-			// },
-			// {
-			// 	id: "102",
-			// 	title: "Who is ‘Source D’? The man said to be behind the Trump-Russia dossier’s most salacious claim.",
-			// 	author:'Bob Woodward',
-			// 	publishDate: "2017-03-29T11:32:00.000Z",
-			// 	sampleImage: "https://img.washingtonpost.com/rf/image_1484w/2010-2019/WashingtonPost/2017/03/20/National-Politics/Images/AP_59952768667.jpg",
-			// 	source: "www.washingtonpost.com",
-			// 	excerpt: "The story of Sergei Millian illustrates the challenge confronting the FBI as it seeks to separate fact from fiction."
-			// },
-			// {
-			// 	id: "103",
-			// 	title: "Who is ‘Source D’? The man said to be behind the Trump-Russia dossier’s most salacious claim.",
-			// 	author:'Bob Woodward',
-			// 	publishDate: "2017-03-29T11:32:00.000Z",
-			// 	sampleImage: "https://img.washingtonpost.com/rf/image_1484w/2010-2019/WashingtonPost/2017/03/20/National-Politics/Images/AP_59952768667.jpg",
-			// 	source: "www.washingtonpost.com",
-			// 	excerpt: "The story of Sergei Millian illustrates the challenge confronting the FBI as it seeks to separate fact from fiction."
-			// }],
 			hasErrored: false,
 			isLoading: false
 		};
-		// =>TODO: handle 'this' binding
+		// =>TODO: handle 'this' binding (?)
 		return _this2;
 	}
-	// =>TODO: App methods go here
-
 
 	_createClass(App, [{
 		key: 'getReadingList',
@@ -10479,14 +10344,9 @@ var App = function (_React$Component2) {
 			console.log('APP-L138-inside-getReadingList');
 			this.setState({ isLoading: true });
 			_axios2.default.get(route).then(function (res) {
-				console.log('App-L142-res: ', res);
-				// if (!res) {
-				// 	throw Error(res.statusText);
-				// }
+				console.log('App-L142-res.data: ', res.data);
 				_this3.setState({ isLoading: false });
-				return res;
-			}).then(function (res) {
-				return res.json();
+				return res.data;
 			}).then(function (items) {
 				return _this3.setState({ items: items });
 			}).catch(function (err) {
@@ -10494,24 +10354,33 @@ var App = function (_React$Component2) {
 			});
 		}
 
-		// // make AJAX call to fetch data for the ArticleList component
+		// 	// getUserArticle(input) {
+		// 	// take user input and clean it up
+		// 	// make http post request to server, to /requrl endpoint, attaching input url to req.body.requrl
+		// 	// invoke callback when response comes back from server
+
+	}, {
+		key: 'postLink',
+		value: function postLink(url) {
+			var _this4 = this;
+
+			_axios2.default.post('/reqUrl', { requrl: url })
+			// .then((res) => this.getReadingList('getAll/'))
+			.then(function (res) {
+				return console.log('response received: ', res);
+			}).catch(function (err) {
+				return _this4.setState({ hasErrored: true });
+			});
+		}
+
+		// make AJAX call to fetch data for the ArticleList component
 
 	}, {
 		key: 'componentDidMount',
 		value: function componentDidMount() {
 			console.log('App-L155-inside-componentDidMount');
-			this.getReadingList('/getAll'); // what is entered as argument here?
+			this.getReadingList('getAll/');
 		}
-
-		// 	// getUserArticle(input) {
-		// 	// take user input and clean it up
-		// 	// make http post request to server, to /requrl endpoint, attaching input url to req.body.requrl
-		// 	// invoke callback when response comes back from server
-		// 	// include error handler
-		// }
-
-		// console.log('App L-147: this.state.items: ', this.state.items);
-
 	}, {
 		key: 'render',
 		value: function render() {
@@ -11325,7 +11194,6 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 /***/ }),
 /* 105 */
 /***/ (function(module, exports, __webpack_require__) {
->>>>>>> react-06
 
 "use strict";
 
