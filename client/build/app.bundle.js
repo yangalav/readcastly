@@ -9517,6 +9517,13 @@ function ArticleEntry(props) {
 	var sampleImage = "https://img.washingtonpost.com/rf/image_1484w/2010-2019/WashingtonPost/2017/03/20/National-Politics/Images/AP_59952768667.jpg";
 	var source = "www.washingtonpost.com";
 	var excerpt = "The story of Sergei Millian illustrates the challenge confronting the FBI as it seeks to separate fact from fiction.";
+	var articleText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+	// ShowInfo component shows body of parsed article text when 'More Info' button is clicked
+	// (only console.logs for now)
+	function ShowInfo() {
+		console.log(articleText);
+	}
 
 	return _react2.default.createElement(
 		"div",
@@ -9594,8 +9601,8 @@ function ArticleEntry(props) {
 		),
 		_react2.default.createElement(
 			"button",
-			null,
-			"More Info"
+			{ onClick: ShowInfo },
+			"More Infooooo"
 		),
 		_react2.default.createElement("hr", null)
 	);
