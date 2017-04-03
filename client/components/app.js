@@ -54,7 +54,7 @@ function ArticleEntry(props) {
 	  	<div className="article-source"><span>Source: </span><span>{source}</span></div>
 	  	<img className="article-sampleImage" src={sampleImage} height="42" />
 	  	<div className="article-excerpt"><span>Excerpt: </span><span>{excerpt}</span></div>
-			<button>More In fo</button>
+			<button>More Info</button>
 	  	<hr/>
 	  </div>
 	);

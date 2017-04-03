@@ -83,7 +83,7 @@ app.post('/jsonTest', jsonParser, function(req, res) {
   res.sendStatus(200);
 });
 
-var port = process.env.PORT;
+var port = process.env.PORT || 8080;
 
 app.listen(port, function() {
   console.log("Readcastly server listening intently on port: ", port);

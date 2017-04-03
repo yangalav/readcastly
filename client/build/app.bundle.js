@@ -9595,7 +9595,7 @@ function ArticleEntry(props) {
 		_react2.default.createElement(
 			"button",
 			null,
-			"More In fo"
+			"More Info"
 		),
 		_react2.default.createElement("hr", null)
 	);
