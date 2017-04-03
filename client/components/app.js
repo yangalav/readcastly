@@ -1,8 +1,8 @@
 
 import React from 'react';
-
+;
 // SUBCOMPONENTS below (incl: Title, Transformer, ArticleList, ArticleEntry)
-// will later be separated into their own modules/files 
+// will later be separated into their own modules/files
 
 // Title component
 function Title(props) {
@@ -83,7 +83,3 @@ class App extends React.Component {
 }
 
 export default App;
-
-
-
-
