@@ -2,7 +2,7 @@
 import React from 'react';
 
 // SUBCOMPONENTS below (incl: Title, Transformer, ArticleList, ArticleEntry)
-// will later be separated into their own modules/files 
+// will later be separated into their own modules/files
 
 // Title component
 function Title(props) {
@@ -45,6 +45,13 @@ function ArticleEntry(props) {
 	const sampleImage = "https://img.washingtonpost.com/rf/image_1484w/2010-2019/WashingtonPost/2017/03/20/National-Politics/Images/AP_59952768667.jpg";
 	const source = "www.washingtonpost.com";
 	const excerpt = "The story of Sergei Millian illustrates the challenge confronting the FBI as it seeks to separate fact from fiction.";
+	const articleText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+
+	// ShowInfo component shows body of parsed article text when 'More Info' button is clicked
+	// (only console.logs for now)
+	function ShowInfo() {
+		console.log(articleText);
+	}
 
 	return (
 	  <div className="article-entry">
@@ -54,6 +61,7 @@ function ArticleEntry(props) {
 	  	<div className="article-source"><span>Source: </span><span>{source}</span></div>
 	  	<img className="article-sampleImage" src={sampleImage} height="42" />
 	  	<div className="article-excerpt"><span>Excerpt: </span><span>{excerpt}</span></div>
+			<button onClick={ShowInfo}>More Infooooo</button>
 	  	<hr/>
 	  </div>
 	);
@@ -83,7 +91,3 @@ class App extends React.Component {
 }
 
 export default App;
-
-
-
-
