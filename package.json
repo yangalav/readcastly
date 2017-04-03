@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/readcastly/readcastly#readme",
   "dependencies": {
+    "axios": "^0.16.0",
     "babel": "^6.23.0",
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.5.0",
