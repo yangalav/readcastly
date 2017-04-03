@@ -1,0 +1,9 @@
+// this is to test the route that is sending data to dbController; will compare notes with Andrew on his structure after his whiteboard session
+
+var saveTextToDB;
+
+module.exports = {
+  saveTextToDB: function(dataFromMercury) {
+    console.log('\n\nin dbController.js l. 4: this is dataFromMercury received from server.js: ', dataFromMercury);
+  }
+};

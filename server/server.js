@@ -1,44 +1,56 @@
-var express = require('express');
-var app = express();
-var path = require('path');
-var bodyParser = require('body-parser');
-var urlParser = bodyParser.urlencoded({extended: false});
-var jsonParser = bodyParser.json();
-var request = require('request');
-// var saveTextToDB = require('./controllers/dbController');
+require('dotenv').config();
+const express = require('express');
+const app = express();
+const path = require('path');
+const bodyParser = require('body-parser');
+const urlParser = bodyParser.urlencoded({extended: false});
+const jsonParser = bodyParser.json();
+const request = require('request');
+
+const Articles = require('./database/controllers/articlesController');
+const Sources = require('./database/controllers/sourcesController');
+const Users = require('./database/controllers/usersController');
+const User = require('./database/models/user');
 
 app.use(bodyParser.json());
 
-app.use(express.static(path.join(__dirname, './client')));
+app.use(express.static(path.join(__dirname, '../client')));
 
-app.post('/requrl/:requrl', function(req, res) {
-  let requrl = req.params.requrl;
-  console.log('server.js POST to requrl. l. 14. req.params.url = ', req.params.requrl);
+// app.post('/requrl/:requrl', function(req, res) {
+//   console.log('server.js, POST to /requrl/:requrl. l. 15: req received.');
+//   let requrl = req.params.requrl;
+//   console.log('server.js POST to requrl. l. 14. req.params.url = ', req.params.requrl);
+
+// receive POST req of URL user wants to hear; send GET req to Mercury & receive obj w/ parsed data; send to dbController; (will refactor to pull out routes at least)
+app.post('/requrl', function(req, res) {
+  console.log('server.js, POST to /requrl. l. 20: req received. body = ', req.body);
+  let requrl = req.body.requrl;
+  console.log('server.js POST to requrl. l. 14. requrl = ', requrl);
+
   var objToSaveToDB = {
-    requrl: 'requrl'
+    url: requrl,
+    user_id: User.user_id || 99
   };
 
-  request({
-    'method': 'GET',
-    'x-api-key': 'KmjXDnLR5Dmtn2IPHQCwONFAFUlaJQpObfJq0AM6',
-    'uri': 'https://mercury.postlight.com/parser?url=' + req.params.requrl,
-    'Content-Type': 'application/json'
-  }, function(error, response, body) {
-    console.log('server.js GET req to Mercury, l. 22. body received = ', body);
-    if(error) {
-      console.log('server.js, GET req to Mercury. error! = ', console.error);
+  var options = {
+    method: 'GET',
+    url: 'https://mercury.postlight.com/parser?url=' + requrl,
+    headers: {
+      'x-api-key': process.env.PARSER_KEY,
+      'content-type': 'application/json'
+      }
+  };
+
+  request(options, function (error, response, body) {
+    if (error) {console.log('server.js, GET req to Mercury. error! = ', error);
       res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
-    }
-    // else {
-    //   objToSaveToDB.
-    //   // saveTextToDB.saveToDB(body);
-    //
-    // }
-  }
-)
-
-
-  // res.status(200).send('Got your request to listen to the text of ' + req.params.requrl);
+    };
+    var parsedBody = JSON.parse(body);
+    objBuilder(objToSaveToDB,parsedBody);
+    Articles.create(objToSaveToDB,function(library){
+      res.send(library);
+    })
+  });
 });
 
 // to test; will update with the actual endpoint in next user story
@@ -48,16 +60,16 @@ app.get('/', function(req, res) {
 });
 
 // to test urlParser; will update to add authentication route when we get to that story
-app.post('/login', urlParser, function(req, res) {
-  console.log('server.js l. 16: received POST to /login. Will read it now...');
-  if(req.body === {}) {
-    console.log('server.js l. 18 - urlParser says body is empty on this request: ', req);
-    return res.sendStatus(400);
-  }
-  console.log('server.js l. 21. req.body = ', req.body);
-  console.log('server.js l. 22. req.body.username = ', req.body.username);
-  res.send('Welcome to Readcastly, ' + req.body.username + '! Nice to have you on board.');
-})
+// app.post('/login', urlParser, function(req, res) {
+//   console.log('server.js l. 16: received POST to /login. Will read it now...');
+//   if(req.body === {}) {
+//     console.log('server.js l. 18 - urlParser says body is empty on this request: ', req);
+//     return res.sendStatus(400);
+//   }
+//   console.log('server.js l. 21. req.body = ', req.body);
+//   console.log('server.js l. 22. req.body.username = ', req.body.username);
+//   res.send('Welcome to Readcastly, ' + req.body.username + '! Nice to have you on board.');
+// });
 
 // to test bodyParser for json;
 app.post('/jsonTest', jsonParser, function(req, res) {
@@ -69,30 +81,24 @@ app.post('/jsonTest', jsonParser, function(req, res) {
   }
   console.log('server.js l. 33: req.body should be an obj. body = ', req.body);
   res.sendStatus(200);
-})
+});
 
-var port = process.env.PORT || 8080;
+var port = process.env.PORT;
 
 app.listen(port, function() {
-  console.log("Readcastly server listening intently on port:", port);
+  console.log("Readcastly server listening intently on port: ", port);
 })
 
-module.exports = app;
+var objBuilder = function(obj,source) {
+    obj.title = source.title;
+    obj.text = source.content;
+    obj.author = source.author;
+    obj.publication_date = source.date_published;
+    obj.image = source.lead_image_url;
+    obj.excerpt = source.excerpt;
+    obj.word_count = source.word_count;
+    obj.est_time = source.word_count*2;
+    obj.domain = source.domain;
+}
 
-// sample response from Mercury:
-// {
-//   "title": "Building Awesome CMS",
-//   "content": "<div><div><div class=\"section-content\"><div.... more content",
-//   "author": "Jeremy Mack",
-//   "date_published": "2016-10-03T12:48:58.385Z",
-//   "lead_image_url": "https://cdn-images-1.medium.com/max/1200/1*zo51eqdjJ_XSU0D8Vm8P9A.png",
-//   "dek": null,
-//   "next_page_url": null,
-//   "url": "https://trackchanges.postlight.com/building-awesome-cms-f034344d8ed",
-//   "domain": "trackchanges.postlight.com",
-//   "excerpt": "Awesome CMS is…an awesome list of awesome CMSes. It’s on GitHub, so anyone can add to it via a pull request.",
-//   "word_count": 397,
-//   "direction": "ltr",
-//   "total_pages": 1,
-//   "rendered_pages": 1
-// }
+module.exports = app;
