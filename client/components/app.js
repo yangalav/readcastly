@@ -1,6 +1,6 @@
 
 import React from 'react';
-
+;
 // SUBCOMPONENTS below (incl: Title, Transformer, ArticleList, ArticleEntry)
 // will later be separated into their own modules/files
 
