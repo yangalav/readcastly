@@ -29,7 +29,7 @@ exports.create = function(articleData,callback) {
       }
     })
     .then(function(entry) {
-      return !exactFind ? getAll(entry.attributes.user_id,callback) : console.log('DOWN HERE');
+      return !exactFind ? getAll(entry.attributes.user_id,callback) : console.log('NO NEED TO GET ALL');
     })
     .catch(function(error) {console.log('ERROR CHECKING URL PASSED IN', error);})
 };
