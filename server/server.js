@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, '../client')));
 //   let requrl = req.params.requrl;
 //   console.log('server.js POST to requrl. l. 14. req.params.url = ', req.params.requrl);
 
-// receive POST req of URL user wants to hear; send GET req to Mercury & receive obj w/ parsed data; send to dbController; (will refactor to pull out routes at least)
+// receive POST req of URL user wants to hear; send GET req to Mercury & receive obj w/ parsed data; send to articlesController.js; (will refactor to pull out routes at least)
 app.post('/requrl', function(req, res) {
   console.log('server.js, POST to /requrl. l. 20: req received. body = ', req.body);
   let requrl = req.body.requrl;
@@ -102,6 +102,15 @@ app.listen(port, function() {
 })
 
 var objBuilder = function(obj,source) {
+//   console.log('source.content = ', source.content);
+  // const stripper = function(html) {
+  //   var tmp = '';
+  //   tmp.innerHTML = html;
+  //   return tmp.textContent || tmp.innerText;
+  // };
+  // var excerpt = stripper(source.content);
+  // console.log('server.js, objBuilder, l 112. testing stripper func. excerpt = ', excerpt);
+
     obj.title = source.title;
     obj.text = source.content;
     obj.author = source.author;
