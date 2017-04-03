@@ -1,81 +1,68 @@
 const db = require('../dbConfig');
-const Promise = require('bluebird');
 const Articles = require('../collections/articles');
 const Article = require('../models/article');
 const ArticlesUsers = require('../collections/articles-users');
 const ArticleUser = require('../models/article-user');
 const SourceCon = require('./sourcesController')
 
+var exactFind = false;
+const exactFindMsg = [{"Has_Already": "This article is already in your library"}];
+
+
 exports.create = function(articleData,callback) {
+  exactFind = false;
   return new Article({url: articleData.url}).fetch()
     .then(function(found) {
       if (found) {
-        return new ArticleUser({article_id: found.id,user_id: articleData.user_id}).fetch()
+        console.log('FOUND === ', found.attributes.id);
+        console.log('USER === ', articleData.user_id);
+        return new ArticleUser({article_id: found.attributes.id,user_id: articleData.user_id}).fetch()
           .then(function(alsoFound) {
-            if (alsoFound) {
-              console.log("ARTICLE ALREADY IN USER'S LIBRARY - NEED TO FIGURE OUT HOW TO PASS ERROR UP TO FRONT END");
-            } else {
-              return ArticlesUsers.create({
-                article_id: found.id,
-                user_id: articleData.user_id
-              })
-              .then(function(articleUserEntry) {
-                console.log('EXISTING ARTICLE FOUND, NEW ENTRY CREATED');
-              })
-              .catch(function(error) {
-                console.log('ERROR CREATING NEW ENTRY FOR EXISTING ARTICLE', error);
-              })
-            }
+            return alsoFound ? exactMatch(callback) : linkArticleUser(found,articleData);
           })
-          .catch(function(error) {
-            console.log("ERROR CHECKING IF ARTICLE ALREADY IN USER'S LIBRARY", error)
-          })
+          .catch(function(error) {console.log('ERROR DEALING WITH EXISTING ARTICLE', error)})
       } else {
         return SourceCon.getSource(articleData.domain)
-          .then(function(sourceId) {
-            console.log('SOURCE ID === ', sourceId)
-            return Articles.create({
-              url: articleData.url,
-              title: articleData.title,
-              author: articleData.author,
-              publication_date: articleData.publication_date,
-              source_id: sourceId,
-              text: articleData.text,
-              image: articleData.image,
-              excerpt: articleData.excerpt,
-              word_count: articleData.word_count,
-              est_time: articleData.est_time,
-              created_by: articleData.user_id
-            })
-            .then(function(article) {
-              return ArticlesUsers.create({
-                article_id: article.id,
-                user_id: article.created_by || 0
-              })
-              .then(function(entry) {
-                console.log('NEW ARTICLE-USER ENTRY CREATED', entry);
-                return getAll(entry.attributes.user_id,callback);
-              })
-              .catch(function(error) {
-                console.log('ERROR CREATING ARTICLE-USER ENTRY OF NEW ARTICLE', error);
-              })
-            })
-            .catch(function(error) {
-              console.log('ERROR CREATING NEW ARTICLE', error);
-            })
-          })
-          .catch(function(error) {
-            console.log('ERROR WITH GETSOURCE FUNCTION', error);
-          })
+          .then(function(sourceId){return makeArticle(sourceId,articleData);})
+          .then(function(article){return linkArticleUser(article,articleData);})
+          .catch(function(error) {console.log('ERROR DEALING WITH NEW ARTICLE', error)})
       }
     })
-    // .then(function(data) {
-    //   console.log('OLD ABOUT TO GET ALL');
-    //   // getAll(articleData.user_id);
-    // })
-    .catch(function(error) {
-      console.log('ERROR CHECKING URL PASSED IN', error);
+    .then(function(entry) {
+      return !exactFind ? getAll(entry.attributes.user_id,callback) : console.log('DOWN HERE');
     })
+    .catch(function(error) {console.log('ERROR CHECKING URL PASSED IN', error);})
+};
+
+
+
+var exactMatch = function(callback) {
+  exactFind = true;
+  return callback(exactFindMsg);
+};
+
+var linkArticleUser = function(article,articleData) {
+  return ArticlesUsers.create({
+    article_id: article.id,
+    user_id: articleData.user_id
+  })
+};
+
+var makeArticle = function(sourceId,articleData) {
+  console.log('SOURCE ID === ', sourceId)
+  return Articles.create({
+    url: articleData.url,
+    title: articleData.title,
+    author: articleData.author,
+    publication_date: articleData.publication_date,
+    source_id: sourceId,
+    text: articleData.text,
+    image: articleData.image,
+    excerpt: articleData.excerpt,
+    word_count: articleData.word_count,
+    est_time: articleData.est_time,
+    created_by: articleData.user_id
+  })
 };
 
 var getAll = function(userId,callback) {
@@ -86,6 +73,4 @@ var getAll = function(userId,callback) {
     .select('*')
     .then(callback);
 };
-
-
 
