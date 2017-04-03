@@ -6,13 +6,13 @@ const bodyParser = require('body-parser');
 const urlParser = bodyParser.urlencoded({extended: false});
 const jsonParser = bodyParser.json();
 const request = require('request');
-const sendTextToDB = require('../controllers/dbController');
+const Promise = require('bluebird');
+// var sendTextToDB = require('../controllers/dbController');
 
-
-const articles = require('./database/controllers/articlesController');
-const sources = require('./database/controllers/sourcesController');
-const users = require('./database/controllers/usersController');
-
+const Articles = require('./database/controllers/articlesController');
+const Sources = require('./database/controllers/sourcesController');
+const Users = require('./database/controllers/usersController');
+const User = require('./database/models/user');
 
 app.use(bodyParser.json());
 
@@ -30,7 +30,8 @@ app.post('/requrl', function(req, res) {
   console.log('server.js POST to requrl. l. 14. requrl = ', requrl);
 
   var objToSaveToDB = {
-    requrl: requrl
+    url: requrl,
+    created_by: User.user_id || 99
   };
   // console.log('objToSaveToDB w/ initial value (requrl) = ', objToSaveToDB);
 
@@ -39,7 +40,7 @@ app.post('/requrl', function(req, res) {
   // qs: { url: 'requrl' },
   headers:
    {
-     'x-api-key': 'KmjXDnLR5Dmtn2IPHQCwONFAFUlaJQpObfJq0AM6',
+     'x-api-key': process.env.PARSER_KEY || 'KmjXDnLR5Dmtn2IPHQCwONFAFUlaJQpObfJq0AM6',
      'content-type': 'application/json' }
    };
 
@@ -48,24 +49,36 @@ app.post('/requrl', function(req, res) {
       console.error);
       res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
     };
-    console.log('server.js GET req to Mercury, l. 43. body received = ',
-      body, 'END OF BODY ###########\n\n');
-      console.log('server.js GET req to Mercury, l. 45. Response JSON.parse(body) = ', JSON.parse(body));
-      var parsedBody = JSON.parse(body);
+    console.log('server.js GET req to Mercury, l. 43. body received DEK = ',
+      body.dek, 'END OF BODY ###########\n\n');
+    console.log('server.js GET req to Mercury, l. 45. Response JSON.parse(body) = ');
+    var parsedBody = JSON.parse(body);
 
     objToSaveToDB.title = parsedBody.title;
     objToSaveToDB.text = parsedBody.content;
     objToSaveToDB.author = parsedBody.author;
-    objToSaveToDB.date_published = parsedBody.date_published;
-    objToSaveToDB.lead_image_url = parsedBody.lead_image_url;
+    objToSaveToDB.publication_date = parsedBody.date_published;
+    objToSaveToDB.image = parsedBody.lead_image_url;
     objToSaveToDB.excerpt = parsedBody.excerpt;
     objToSaveToDB.word_count = parsedBody.word_count;
+    objToSaveToDB.est_time = parsedBody.word_count*2;
+    objToSaveToDB.domain = parsedBody.domain;
 
-    console.log('server.js after GET req to Mercury, l. 55. completed objToSaveToDB = ', objToSaveToDB);
+    console.log('server.js after GET req to Mercury, l. 55. completed objToSaveToDB = ');
 
-    sendTextToDB.saveTextToDB(objToSaveToDB);
+    console.log('ARTICLE OBJECT TO BE SAVED TO DB');
 
-    res.status(200).send('Got your request. Obj we will write to db includes this article text field: ' + objToSaveToDB.text);
+    Articles.create(objToSaveToDB,function(library){
+      console.log('ABOUT TO SEND LIBRARY');
+      res.send(library);
+    })
+      // .then(function(userLibrary) {
+      //   console.log('BACK FROM CONTROLLER!!!');
+      //   res.status(200).send('USER LIBRARY', userLibrary);
+      // })
+      // .catch(function(error){
+      //   console.log('ERROR GETTING INFO BACK FROM DB AFTER CREATING ARTICLE', error);
+      // })
   });
 });
 
@@ -99,8 +112,7 @@ app.post('/jsonTest', jsonParser, function(req, res) {
   res.sendStatus(200);
 });
 
-// there was an extra var app = express();
-var port = process.env.PORT || 8080;
+var port = process.env.PORT;
 
 app.listen(port, function() {
   console.log("Readcastly server listening intently on port: ", port);
