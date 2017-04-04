@@ -10,7 +10,7 @@ const objBuilder = function(obj,source) {
 
   obj.title = source.title;
   obj.text = source.content;
-  obj.author = source.author;
+  obj.author = source.author || "Information not available"
   obj.publication_date = source.date_published;
   obj.image = source.lead_image_url || "https://ca.slack-edge.com/T2SUXDE72-U2T9QJWCE-ea64dc6deeb5-72";
   obj.excerpt = source.excerpt;
