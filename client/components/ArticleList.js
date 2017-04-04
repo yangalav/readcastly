@@ -8,7 +8,7 @@ function ArticleList(props) {
 	return (
 		<div className='article-list'>
 			{articles.map((article) => (
-				<ArticleEntry key={article.id} article={article}/>
+				<ArticleEntry key={article.id} article={article} deleteIt={props.deleteIt}/>
 			))}	
 		</div>
 	);
