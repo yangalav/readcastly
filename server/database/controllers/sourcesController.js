@@ -12,8 +12,8 @@ exports.getSource = function(domain) {
   // If exists grab ID
   .then(function(found) {
     if (found) {
-      console.log('SOURCE FOUND', found.id);
-      return found.id;
+      console.log('SOURCE FOUND', found);
+      return {id: found.id, name: found.attributes.name};
     } else {
       console.log('SOURCE NOT FOUND');
       return Sources.create({
@@ -23,8 +23,8 @@ exports.getSource = function(domain) {
         /*image: TBD*/
       })
       .then(function(newSource) {
-        console.log('NEW SOURCE ID ===', newSource.id)
-        return newSource.id;
+        console.log('NEW SOURCE ID ===', newSource.id, newSource.attributes.name);
+        return {id: newSource.id, name: newSource.name};
       })
       .catch(function(error) {
         console.log('ERROR CREATING SOURCE IN ARTICLE CONTROLLER', error);
@@ -33,5 +33,5 @@ exports.getSource = function(domain) {
   })
   .catch(function(error) {
     console.log('ERROR GETTING EXISTING SOURCE ID IN ARTICLE CONTROLLER', error);
-  })
-}
+  });
+};
