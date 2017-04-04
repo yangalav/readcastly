@@ -11,6 +11,7 @@ const Articles = require('./database/controllers/articlesController');
 const Sources = require('./database/controllers/sourcesController');
 const Users = require('./database/controllers/usersController');
 const User = require('./database/models/user');
+const utils = require('./utils');
 
 app.use(bodyParser.json());
 
@@ -44,12 +45,12 @@ app.post('/requrl', function(req, res) {
   request(options, function (error, response, body) {
     if (error) {console.log('server.js, GET req to Mercury. error! = ', error);
       res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
-    };
+    }
     var parsedBody = JSON.parse(body);
-    objBuilder(objToSaveToDB,parsedBody);
+    objToSaveToDB = utils.objBuilder(objToSaveToDB,parsedBody);
     Articles.create(objToSaveToDB,function(library){
       res.send(library);
-    })
+    });
   });
 });
 
@@ -99,28 +100,6 @@ var port = process.env.PORT || 8080;
 
 app.listen(port, function() {
   console.log("Readcastly server listening intently on port: ", port);
-})
-
-var objBuilder = function(obj,source) {
-//   console.log('source.content = ', source.content);
-  // const stripper = function(html) {
-  //   var tmp = '';
-  //   tmp.innerHTML = html;
-  //   return tmp.textContent || tmp.innerText;
-  // };
-  // var excerpt = stripper(source.content);
-  // console.log('server.js, objBuilder, l 112. testing stripper func. excerpt = ', excerpt);
-
-    obj.title = source.title;
-    obj.text = source.content;
-    obj.author = source.author;
-    obj.publication_date = source.date_published;
-    obj.image = source.lead_image_url;
-    obj.excerpt = source.excerpt;
-    obj.word_count = source.word_count;
-    // obj.est_time = source.word_count*2;
-    obj.est_time = source.word_count / 145; // based on 145 wpm avg. spoken speech
-    obj.domain = source.domain;
-}
+});
 
 module.exports = app;
