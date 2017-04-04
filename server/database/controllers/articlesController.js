@@ -20,18 +20,18 @@ exports.create = function(articleData,callback) {
           .then(function(alsoFound) {
             return alsoFound ? exactMatch(callback) : linkArticleUser(found,articleData);
           })
-          .catch(function(error) {console.log('ERROR DEALING WITH EXISTING ARTICLE', error)})
+          .catch(function(error) {console.log('ERROR DEALING WITH EXISTING ARTICLE', error);});
       } else {
         return SourceCon.getSource(articleData.domain)
           .then(function(sourceId){return makeArticle(sourceId,articleData);})
           .then(function(article){return linkArticleUser(article,articleData);})
-          .catch(function(error) {console.log('ERROR DEALING WITH NEW ARTICLE', error)})
+          .catch(function(error) {console.log('ERROR DEALING WITH NEW ARTICLE', error);});
       }
     })
     .then(function(entry) {
       return !exactFind ? getAll(entry.attributes.user_id,callback) : console.log('NO NEED TO GET ALL');
     })
-    .catch(function(error) {console.log('ERROR CHECKING URL PASSED IN', error);})
+    .catch(function(error) {console.log('ERROR CHECKING URL PASSED IN', error);});
 };
 
 
@@ -45,11 +45,11 @@ var linkArticleUser = function(article,articleData) {
   return ArticlesUsers.create({
     article_id: article.id,
     user_id: articleData.user_id
-  })
+  });
 };
 
 var makeArticle = function(sourceId,articleData) {
-  console.log('SOURCE ID === ', sourceId)
+  console.log('SOURCE ID === ', sourceId);
   return Articles.create({
     url: articleData.url,
     title: articleData.title,
@@ -62,7 +62,7 @@ var makeArticle = function(sourceId,articleData) {
     word_count: articleData.word_count,
     est_time: articleData.est_time,
     created_by: articleData.user_id
-  })
+  });
 };
 
 // revert back to var getAll after test
