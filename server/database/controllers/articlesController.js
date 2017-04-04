@@ -66,7 +66,7 @@ var makeArticle = function(sourceId,articleData) {
 };
 
 // revert back to var getAll after test
-exports.getAll = function(userId,callback) {
+var getAll = function(userId,callback) {
   console.log('IN GET ALL userID = ',userId);
   return db.knex('Articles')
     .join('Articles-Users','Articles.id','Articles-Users.article_id')
@@ -74,3 +74,5 @@ exports.getAll = function(userId,callback) {
     .select('*')
     .then(callback);
 };
+
+exports.getAll = getAll;
