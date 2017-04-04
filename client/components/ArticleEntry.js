@@ -22,7 +22,7 @@ function ArticleEntry(props) {
 	  	<div className="article-source"><span>Source: </span><span>{article.source_id}</span></div>
 	  	<img className="article-sampleImage" src={article.image} height="42" />
 	  	<div className="article-excerpt"><span>Excerpt: </span><span>{article.excerpt}</span></div>
-			<button onClick={ShowInfo}>More Infooooo</button>
+			<button onClick={ShowInfo}>More Info</button>
 	  	<hr/>
 	  </div>
 	);

@@ -3,10 +3,10 @@
 import React from 'react';
 import axios from 'axios';
 import Title from './Title';
+import SignupModal from './SignupModal';
 import TransFormEr from './TransFormEr';
 import ArticleList from './ArticleList';
 import ArticleEntry from './ArticleEntry';
-
 
 class App extends React.Component {
 	constructor(props) {
@@ -15,7 +15,7 @@ class App extends React.Component {
 			items: [],
 			hasErrored: false,
 			isLoading: false
-		};	
+		};
 	}
 
 	getReadingList(route) {
@@ -31,19 +31,19 @@ class App extends React.Component {
 
 	postUserLink(url) {
 		// =>TODO: validate user inputs, correct any formatting issues
-		this.setState({ isLoading: true });		
+		this.setState({ isLoading: true });
 		axios.post('/reqUrl', {requrl: url})
 		.then((res) => {
-			this.setState({ isLoading: false });			
-			return res.data.reverse();			
+			this.setState({ isLoading: false });
+			return res.data.reverse();
 		})
-		.then((items) => this.setState({items}))		
+		.then((items) => this.setState({items}))
 		.catch((err) => this.setState({ hasErrored: true }));
 	}
 
 	// make AJAX call to fetch data for the ArticleList component
 	componentDidMount() {
-		this.getReadingList('getAll/'); 
+		this.getReadingList('getAll/');
 	}
 
 	render() {
@@ -64,6 +64,7 @@ class App extends React.Component {
 		return(
 			<div>
 				<Title title='Hello, ReadCast.ly!'/>
+				<SignupModal />
 				<TransFormEr postIt={this.postUserLink.bind(this)}/>
 				<ArticleList articles={this.state.items}/>
 			</div>
