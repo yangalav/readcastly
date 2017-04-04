@@ -6,6 +6,7 @@ import Title from './Title';
 import TransFormEr from './TransFormEr';
 import ArticleList from './ArticleList';
 import ArticleEntry from './ArticleEntry';
+import isValidUrl from '../helpers/urlValidation';
 
 
 class App extends React.Component {
@@ -41,6 +42,19 @@ class App extends React.Component {
 		.catch((err) => this.setState({ hasErrored: true }));
 	}
 
+	deleteArticle(id) {
+		console.log('App-L46-inside deleteArticle with id: ', id);
+		this.setState({ isLoading: true });		
+		axios.delete('/deleteOne', { articleUser_id: id })
+		.then((res) => {
+			this.setState({ isLoading: false });
+			// => TODO: figure out how to alert user that article was deleted
+			console.log('App-L50-Article was deleted: ', res);
+			this.getReadingList('/getAll');
+		})
+		.catch((err) => this.setState({ hasErrored: true }));
+	}
+
 	// make AJAX call to fetch data for the ArticleList component
 	componentDidMount() {
 		this.getReadingList('getAll/'); 
@@ -65,7 +79,7 @@ class App extends React.Component {
 			<div>
 				<Title title='Hello, ReadCast.ly!'/>
 				<TransFormEr postIt={this.postUserLink.bind(this)}/>
-				<ArticleList articles={this.state.items}/>
+				<ArticleList articles={this.state.items} deleteIt={this.deleteArticle.bind(this)}/>
 			</div>
 		);
 	}
