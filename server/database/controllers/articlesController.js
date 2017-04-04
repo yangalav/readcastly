@@ -9,7 +9,7 @@ var exactFind = false;
 const exactFindMsg = [{"Has_Already": "This article is already in your library"}];
 
 
-exports.create = function(articleData,callback) {
+const create = function(articleData,callback) {
   exactFind = false;
   return new Article({url: articleData.url}).fetch()
     .then(function(found) {
@@ -23,7 +23,7 @@ exports.create = function(articleData,callback) {
           .catch(function(error) {console.log('ERROR DEALING WITH EXISTING ARTICLE', error);});
       } else {
         return SourceCon.getSource(articleData.domain)
-          .then(function(sourceId){return makeArticle(sourceId,articleData);})
+          .then(function(source){return makeArticle(source,articleData);})
           .then(function(article){return linkArticleUser(article,articleData);})
           .catch(function(error) {console.log('ERROR DEALING WITH NEW ARTICLE', error);});
       }
@@ -34,28 +34,38 @@ exports.create = function(articleData,callback) {
     .catch(function(error) {console.log('ERROR CHECKING URL PASSED IN', error);});
 };
 
+const deleteOne = function(articleUser_id,callback) {
+  return new ArticleUser({id: articleUser_id})
+    .destroy([require=true])
+    .then(function(deletedModel) {
+      console.log('THIS ARTICLE HAS BEEN DELETED:  ', deletedModel);
+      callback(deletedModel);
+    })
+    .catch(function(error){console.log('ERROR DELETING AN ARTICLE:  ', error);});
+};
 
 
-var exactMatch = function(callback) {
+const exactMatch = function(callback) {
   exactFind = true;
   return callback(exactFindMsg);
 };
 
-var linkArticleUser = function(article,articleData) {
+const linkArticleUser = function(article,articleData) {
   return ArticlesUsers.create({
     article_id: article.id,
     user_id: articleData.user_id
   });
 };
 
-var makeArticle = function(sourceId,articleData) {
-  console.log('SOURCE ID === ', sourceId);
+const makeArticle = function(source,articleData) {
+  console.log('SOURCE ID === ', source);
   return Articles.create({
     url: articleData.url,
     title: articleData.title,
     author: articleData.author,
     publication_date: articleData.publication_date,
-    source_id: sourceId,
+    source_id: source.id,
+    source_name: source.name,
     text: articleData.text,
     image: articleData.image,
     excerpt: articleData.excerpt,
@@ -66,7 +76,7 @@ var makeArticle = function(sourceId,articleData) {
 };
 
 // revert back to var getAll after test
-var getAll = function(userId,callback) {
+const getAll = function(userId,callback) {
   console.log('IN GET ALL userID = ',userId);
   return db.knex('Articles')
     .join('Articles-Users','Articles.id','Articles-Users.article_id')
@@ -75,4 +85,8 @@ var getAll = function(userId,callback) {
     .then(callback);
 };
 
-exports.getAll = getAll;
+module.exports= {
+  create : create,
+  getAll : getAll,
+  deleteOne : deleteOne
+}
