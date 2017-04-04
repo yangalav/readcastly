@@ -67,7 +67,7 @@ app.get('/getAll', function(req, res) {
   // Articles.create(null, function(library){
 
   // call getAll w/ user 99 & cb = res.send
-  Articles.getAll(99, function(library) {
+  Articles.getAll(/*User.user_id*/99, function(library) {
     res.send(library);
   });
 });
@@ -95,6 +95,12 @@ app.get('/getAll', function(req, res) {
 //   console.log('server.js l. 33: req.body should be an obj. body = ', req.body);
 //   res.sendStatus(200);
 // });
+
+app.post('/deleteOne', function(req,res) {
+  Articles.deleteOne(req.body.articleUser_id, function(deletedModel) {
+    res.send(deletedModel);
+  });
+});
 
 var port = process.env.PORT || 8080;
 
