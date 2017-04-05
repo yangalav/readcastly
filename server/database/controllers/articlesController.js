@@ -38,7 +38,7 @@ const deleteOne = function(articleUser_id,callback) {
     .destroy([require=true])
     .then(function(deletedModel) {
       console.log('THIS ARTICLE HAS BEEN DELETED:  ', deletedModel);
-      callback(deletedModel);
+      callback({"deleted": articleUser_id});
     })
     .catch(function(error){console.log('ERROR DELETING AN ARTICLE:  ', error);});
 };
@@ -89,4 +89,4 @@ module.exports= {
   create : create,
   getAll : getAll,
   deleteOne : deleteOne
-}
+};

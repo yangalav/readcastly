@@ -10,15 +10,6 @@ const errors = {
 };
 
 const objBuilder = function(obj,source) {
-//   console.log('source.content = ', source.content);
-  // const stripper = function(html) {
-  //   var tmp = '';
-  //   tmp.innerHTML = html;
-  //   return tmp.textContent || tmp.innerText;
-  // };
-  // var excerpt = stripper(source.content);
-  // console.log('server.js, objBuilder, l 112. testing stripper func. excerpt = ', excerpt);
-
   obj.title = source.title;
   obj.text = stripper(source.content);
   obj.author = source.author || "Information not available";
@@ -90,7 +81,7 @@ const mercuryOptions = function(url) {
       'x-api-key': process.env.PARSER_KEY,
       'content-type': 'application/json'
       }
-    }
+    };
   };
 
 
