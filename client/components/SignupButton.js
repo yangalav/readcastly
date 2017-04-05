@@ -1,47 +1,31 @@
 import React from 'react';
-import Modal from 'react-bootstrap-modal';
+import Modal from 'react-bootstrap';
 
 class SignupButton extends React.Component {
   constructor() {
 		super();
 		this.state = {
-      open : false
+      showModal : false
     };
 
-    this.openModal = this.openModal.bind(this);
-    this.afterOpenModal = this.afterOpenModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
+    this.handleOpenModal = this.handleOpenModal.bind(this);
+    this.handleCloseModal = this.handleCloseModal.bind(this);
 	}
 
-  openModal() {
-    this.setState({open: true});
+  handleOpenModal() {
+    this.setState({showModal: true});
   }
 
-  afterOpenModal() {
-    this.refs.subtitle.style.color = '#f00';
-  }
-
-  closeModal() {
-    this.setState({open: false});
+  handleCloseModal() {
+    this.setState({showModal: false});
   }
 
   render(){
-    // let closeModal = () => this.setState({ open: false })
-
-    // let saveAndClose = () => {
-    //   api.saveData()
-    //     .then(() => this.setState({ open: false }))
-    // }
-
     return (
       <div>
-        <button type='button' onClick={this.openModal}>Launch modal</button>
+        <button type='button' onClick={this.handleOpenModal}>Modal</button>
 
-        <Modal
-          isOpen={this.state.open}
-          onHide={closeModal}
-          aria-labelledby="ModalHeader"
-        >
+        <Modal show={this.state.showModal} onHide={this.handleCloseModal}>
           <Modal.Header closeButton>
             <Modal.Title id='ModalHeader'>A Title Goes here</Modal.Title>
           </Modal.Header>
@@ -64,6 +48,5 @@ class SignupButton extends React.Component {
     )
   }
 }
-
 
 export default SignupButton;

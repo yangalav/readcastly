@@ -14,7 +14,7 @@ class App extends React.Component {
 		this.state = {
 			items: [],
 			hasErrored: false,
-			isLoading: false
+			isLoading: false,
 		};
 	}
 
