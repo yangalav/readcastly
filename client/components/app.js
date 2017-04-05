@@ -15,7 +15,8 @@ class App extends React.Component {
 		this.state = {
 			items: [],
 			hasErrored: false,
-			isLoading: false
+			isLoading: false,
+			failMessage: ''
 		};	
 	}
 
@@ -27,32 +28,37 @@ class App extends React.Component {
 				return res.data.reverse();
 			})
 			.then((items) => this.setState({items}))
-			.catch((err) => this.setState({ hasErrored: true }));
+			.catch((err) => this.setState({ hasErrored: true, failMessage: 'Unable to retrieve articles' }));
 	}
 
 	postUserLink(url) {
 		// =>TODO: validate user inputs, correct any formatting issues
+		if (!isValidUrl(url)) {
+			this.setState({hasErrored: true, failMessage: ('Not a valid url: ' + url)});
+			return;
+		}
 		this.setState({ isLoading: true });		
 		axios.post('/reqUrl', {requrl: url})
 		.then((res) => {
+			// console.log('APP-L43-Hmmmmmmm');
 			this.setState({ isLoading: false });			
 			return res.data.reverse();			
 		})
 		.then((items) => this.setState({items}))		
-		.catch((err) => this.setState({ hasErrored: true }));
+		.catch((err) => this.setState({ hasErrored: true, failMessage: 'Unable to fetch that link' }));
 	}
 
 	deleteArticle(id) {
 		console.log('App-L46-inside deleteArticle with id: ', id);
 		this.setState({ isLoading: true });		
-		axios.delete('/deleteOne', { articleUser_id: id })
+		axios.post('/deleteOne', { articleUser_id: id })
 		.then((res) => {
 			this.setState({ isLoading: false });
 			// => TODO: figure out how to alert user that article was deleted
 			console.log('App-L50-Article was deleted: ', res);
 			this.getReadingList('/getAll');
 		})
-		.catch((err) => this.setState({ hasErrored: true }));
+		.catch((err) => this.setState({ hasErrored: true, failMessage: 'Unable to delete that article' }));
 	}
 
 	// make AJAX call to fetch data for the ArticleList component
@@ -63,14 +69,22 @@ class App extends React.Component {
 	render() {
 
 		if (this.state.hasErrored) {
-			return <p>There was an error when loading the articles</p>;
+			return (
+				<div>
+					<p>There was an error when loading the data</p>
+					<p>{this.state.failMessage}</p>
+				</div>
+			);
 		}
 
 		if (this.state.isLoading) {
 			return (
 				<div>
+				  <Title title='Hello, ReadCast.ly!'/>
+					<TransFormEr postIt={this.postUserLink.bind(this)}/>
 					<p>Loading...</p>
 					<img className="spinner" src='./../images/spiffygif_46x46.gif' height="42" />
+				  <ArticleList articles={this.state.items} deleteIt={this.deleteArticle.bind(this)}/>
 				</div>
 			);
 		}
@@ -78,6 +92,7 @@ class App extends React.Component {
 		return(
 			<div>
 				<Title title='Hello, ReadCast.ly!'/>
+
 				<TransFormEr postIt={this.postUserLink.bind(this)}/>
 				<ArticleList articles={this.state.items} deleteIt={this.deleteArticle.bind(this)}/>
 			</div>
