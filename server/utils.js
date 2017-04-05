@@ -1,4 +1,5 @@
 require('dotenv').config();
+const stripper = require('striptags');
 const newsApiSources = require('./database/collections/newsApi.json');
 const Sources = require('./database/collections/sources');
 const Source = require('./database/models/source');
@@ -19,13 +20,13 @@ const objBuilder = function(obj,source) {
   // console.log('server.js, objBuilder, l 112. testing stripper func. excerpt = ', excerpt);
 
   obj.title = source.title;
-  obj.text = source.content;
+  obj.text = stripper(source.content);
   obj.author = source.author || "Information not available";
   obj.publication_date = source.date_published;
   obj.image = source.lead_image_url || "https://ca.slack-edge.com/T2SUXDE72-U2T9QJWCE-ea64dc6deeb5-72";
   obj.excerpt = source.excerpt;
   obj.word_count = source.word_count;
-  obj.est_time = source.word_count / 145;
+  obj.est_time = source.word_count / 145; // based on 145 wpm avg. spoken speech
   obj.domain = source.domain || domainExtractor(obj.url);
   return obj;
 };
@@ -81,6 +82,16 @@ const newsApiBuilder = function(sourceId,callback) {
     .catch(function(error){console.log('ERROR BUILDING NEWSAPI REQUEST OBJ ', error);});
 };
 
+const mercuryOptions = function(url) {
+  return {
+    method: 'GET',
+    url: 'https://mercury.postlight.com/parser?url=' + url,
+    headers: {
+      'x-api-key': process.env.PARSER_KEY,
+      'content-type': 'application/json'
+      }
+    }
+  };
 
 
 module.exports = {
@@ -88,5 +99,6 @@ module.exports = {
   objBuilder : objBuilder,
   domainExtractor: domainExtractor,
   newsApiImport : newsApiImport,
-  newsApiBuilder: newsApiBuilder
+  newsApiBuilder: newsApiBuilder,
+  mercuryOptions: mercuryOptions
 };
