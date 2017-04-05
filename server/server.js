@@ -6,7 +6,6 @@ const bodyParser = require('body-parser');
 const urlParser = bodyParser.urlencoded({extended: false});
 const jsonParser = bodyParser.json();
 const request = require('request');
-const stripper = require('striptags');
 
 const Articles = require('./database/controllers/articlesController');
 const Sources = require('./database/controllers/sourcesController');
@@ -23,9 +22,7 @@ app.use(express.static(path.join(__dirname, '../client')));
 
 // after MVP on 4.5 we will refactor to at least pull out routes
 
-// receive POST req of URL user wants to hear; send GET req to Mercury & receive obj w/ parsed data; send to articlesController.js;
 app.post('/requrl', function(req, res) {
-  // console.log('server.js, POST to /requrl. l. 20: req received. body = ', req.body);
   let requrl = req.body.requrl;
   console.log('server.js POST to requrl. l. 14. requrl = ', requrl);
 
@@ -34,19 +31,8 @@ app.post('/requrl', function(req, res) {
     user_id: User.currentUser || 99
   };
 
-  var options = {
-    method: 'GET',
-    url: 'https://mercury.postlight.com/parser?url=' + requrl,
-    headers: {
-      'x-api-key': process.env.PARSER_KEY,
-      'content-type': 'application/json'
-      }
-  };
-
-  request(options, function (error, response, body) {
-    // console.log('testing error...body: ', error,'...', body);
-    // if (error) {console.log('server.js, GET req to Mercury. error! = ', error);
-    if(body.error === true) {
+  request(utils.mercuryOptions, function (error, response, body) {
+    if(error) {
       console.log('server.js, GET req to Mercury. error! = ', error);
       res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
     }
@@ -62,37 +48,13 @@ app.post('/requrl', function(req, res) {
   });
 });
 
-// tested this route with an array of all articles currently in db and it worked; sample article in notes
+// will need to switch out hard-coded '99' 3 lines below once login functionality established
 app.get('/getAll', function(req, res) {
-  // console.log('received GET request to /. Here is test db array: ');
-  // console.log('server.js received GET req at / . Readcastly is on its way to fame & fortune!');
-  // res.send('We heard your GET req and the diligent Readcastly hamsters are fast at work. All your wildest dreams will soon come true. Stay tuned for more exciting endpoints coming soon to a Postman near you.');
-  // res.send(testdb);
-
-  // temporarily sending full db to req to this endpoint, as test to render on FE:
   console.log('server.js received GET req at /getAll . Returning array of objects with contents of Readcastly db!');
-
-  // call getAll w/ user 99 & cb = res.send
   Articles.getAll(/*User.currentUser*/99, function(library) {
     res.send(library);
   });
 });
-
-var objBuilder = function(obj, source) {
-  // console.log('source.content = ', source.content);
-  var cleanedArticleText = stripper(source.content);
-  // console.log('server.js, objBuilder, l 78: test npm striptags. new content = ', cleanedArticleText);
-
-    obj.title = source.title;
-    obj.text = cleanedArticleText;
-    obj.author = source.author;
-    obj.publication_date = source.date_published;
-    obj.image = source.lead_image_url;
-    obj.excerpt = source.excerpt;
-    obj.word_count = source.word_count;
-    obj.est_time = source.word_count / 145; // based on 145 wpm avg. spoken speech
-    obj.domain = source.domain;
-};
 
 app.post('/deleteOne', function(req,res) {
   Articles.deleteOne(req.body.articleUser_id, function(deletedModel) {
