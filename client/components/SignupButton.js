@@ -2,13 +2,31 @@ import React from 'react';
 import Modal from 'react-bootstrap-modal';
 
 class SignupButton extends React.Component {
-  constructor(props) {
-		super(props);
-		this.state = {open : true};
+  constructor() {
+		super();
+		this.state = {
+      open : false
+    };
+
+    this.openModal = this.openModal.bind(this);
+    this.afterOpenModal = this.afterOpenModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
 	}
 
+  openModal() {
+    this.setState({open: true});
+  }
+
+  afterOpenModal() {
+    this.refs.subtitle.style.color = '#f00';
+  }
+
+  closeModal() {
+    this.setState({open: false});
+  }
+
   render(){
-    let closeModal = () => this.setState({ open: false })
+    // let closeModal = () => this.setState({ open: false })
 
     // let saveAndClose = () => {
     //   api.saveData()
@@ -17,10 +35,10 @@ class SignupButton extends React.Component {
 
     return (
       <div>
-        <button type='button'>Launch modal</button>
+        <button type='button' onClick={this.openModal}>Launch modal</button>
 
         <Modal
-          show={this.state.open}
+          isOpen={this.state.open}
           onHide={closeModal}
           aria-labelledby="ModalHeader"
         >
