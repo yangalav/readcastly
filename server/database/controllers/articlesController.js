@@ -33,6 +33,31 @@ const create = function(articleData,callback) {
     .catch(function(error) {console.log('ERROR CHECKING URL PASSED IN', error);});
 };
 
+// const create = function(articleData,callback) {
+//   exactFind = false;
+//   let articleToSend = {};
+//   return new Article({url: articleData.url}).fetch()
+//     .then(function(found) {
+//       if (found) {
+//         console.log('FOUND ==== ', found.id);
+//         return new ArticleUser({article_id: found.attributes.id,user_id: articleData.user_id}).fetch()
+//           .then(function(alsoFound) {
+//             return alsoFound ? exactMatch(callback) : linkArticleUser(found,articleData,articleToSend);
+//           })
+//           .catch(function(error) {console.log('ERROR DEALING WITH EXISTING ARTICLE', error);});
+//       } else {
+//         return SourceCon.getSource(articleData.domain)
+//         .then(function(source){return makeArticle(source,articleData);})
+//         .then(function(article){return linkArticleUser(article,articleData,articleToSend);})
+//         .catch(function(error) {console.log('ERROR DEALING WITH NEW ARTICLE', error);});
+//       }
+//     })
+//     .then(function(entry) {
+//       return !exactFind ? callback(articleToSend) : console.log('ARTICLE ALREADY THERE');
+//     })
+//     .catch(function(error) {console.log('ERROR CHECKING URL PASSED IN', error);});
+// };
+
 const deleteOne = function(articleUser_id,callback) {
   return new ArticleUser({id: articleUser_id})
     .destroy([require=true])
