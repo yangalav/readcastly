@@ -50,13 +50,12 @@ app.post('/requrl', function(req, res) {
       res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
     }
     var parsedBody = JSON.parse(body);
-    console.log('PARSED BODY ==== ', parsedBody);
     if (parsedBody.error) {
       res.send(utils.errors.badUrl);
     } else {
       objToSaveToDB = utils.objBuilder(objToSaveToDB,parsedBody);
-      Articles.create(objToSaveToDB,function(library){
-        res.send(library);
+      Articles.create(objToSaveToDB,function(result){
+        res.send(result);
       });
     }
   });

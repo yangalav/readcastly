@@ -13,7 +13,7 @@ const create = function(articleData,callback) {
   return new Article({url: articleData.url}).fetch()
     .then(function(found) {
       if (found) {
-        console.log('FOUND === ', found.attributes.id);
+        console.log('FOUND === ', found.attributes);
         console.log('USER === ', articleData.user_id);
         return new ArticleUser({article_id: found.attributes.id,user_id: articleData.user_id}).fetch()
           .then(function(alsoFound) {
@@ -49,7 +49,8 @@ const exactMatch = function(callback) {
   return callback(utils.errors.hasAlready);
 };
 
-const linkArticleUser = function(article,articleData) {
+const linkArticleUser = function(article,articleData,forExport) {
+  forExport = article.attributes;
   return ArticlesUsers.create({
     article_id: article.id,
     user_id: articleData.user_id
