@@ -11,7 +11,7 @@ const Articles = require('./database/controllers/articlesController');
 const Sources = require('./database/controllers/sourcesController');
 const Users = require('./database/controllers/usersController');
 const User = require('./database/models/user');
-const utils = require('./utils');
+const utils = require('./utils.js');
 
 //DO NOT REMOVE THE BELOW FUNCTION ... WE MAY NEED TO RUN IT AT SOME POINT IN THE FUTURE!!
 //utils.newsApiImport();
@@ -110,7 +110,7 @@ app.post('/deleteOne', function(req,res) {
   });
 });
 
-app.get('topStories', function(req,res) {
+app.get('/topStories', function(req,res) {
   var options = {};
   utils.newsApiBuilder(req.source_id, function(optionsObj){
     options = optionsObj;
