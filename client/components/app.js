@@ -3,7 +3,7 @@
 import React from 'react';
 import axios from 'axios';
 import Title from './Title';
-import SignupModal from './SignupModal';
+import SignupButton from './SignupButton';
 import TransFormEr from './TransFormEr';
 import ArticleList from './ArticleList';
 import ArticleEntry from './ArticleEntry';
@@ -64,7 +64,7 @@ class App extends React.Component {
 		return(
 			<div>
 				<Title title='Hello, ReadCast.ly!'/>
-				<SignupModal />
+				<SignupButton />
 				<TransFormEr postIt={this.postUserLink.bind(this)}/>
 				<ArticleList articles={this.state.items}/>
 			</div>

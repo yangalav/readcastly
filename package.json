@@ -4,7 +4,7 @@
   "description": "",
   "main": "./server/server.js",
   "scripts": {
-    "webpack" : "webpack"
+    "webpack": "webpack"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
     "path": "^0.12.7",
     "process-env": "^1.1.0",
     "react": "^15.4.2",
+    "react-bootstrap-modal": "^3.0.1",
     "react-dom": "^15.4.2",
     "request": "^2.81.0",
     "sql": "^0.74.0"
