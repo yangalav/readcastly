@@ -28,7 +28,6 @@ const create = function(articleData,callback) {
       }
     })
     .then(function(entry) {
-      console.log('ARTICLE TO SEND === ', articleToSend);
       return !exactFind ? callback(articleToSend) : console.log('ARTICLE ALREADY THERE');
     })
     .catch(function(error) {console.log('ERROR CHECKING URL PASSED IN', error);});
