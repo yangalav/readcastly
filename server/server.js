@@ -32,12 +32,20 @@ app.post('/requrl', function(req, res) {
   };
 
   request(utils.mercuryOptions(requrl), function (error, response, body) {
+    console.log('server.js l 35; Mercury resp body = ', body);
     if(error) {
       console.log('server.js, GET req to Mercury. error! = ', error);
       res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
     }
-    var parsedBody = JSON.parse(body);
-    if (parsedBody.error) {
+    // var parsedBody = JSON.parse(body);
+    try {
+      var parsedBody = JSON.parse(body);
+    } catch (error) {
+      console.log('server.js l 43, parsing Merc body. error = ', error);
+      var parsedBody = JSON.parse(JSON.stringify(body));
+      console.log('server.js l 45, trying error solution: JSON.stringify, then parse. result = ', parsedBody);
+    }
+    if (parsedBody.error) { // this is the catch for errors sent from Mercury
       res.send(utils.errors.badUrl);
     } else {
       objToSaveToDB = utils.objBuilder(objToSaveToDB,parsedBody);
@@ -119,8 +127,3 @@ module.exports = app;
 //   console.log('server.js l. 33: req.body should be an obj. body = ', req.body);
 //   res.sendStatus(200);
 // });
-
-
-
-
-
