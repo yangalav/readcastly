@@ -41,7 +41,7 @@ app.post('/requrl', function(req, res) {
   };
 
   request(options, function (error, response, body) {
-    console.log('testing error...response...body: ', error,'...', response,'...', body);
+    console.log('testing error...body: ', error,'...', body);
     // if (error) {console.log('server.js, GET req to Mercury. error! = ', error);
     if(body.error === true) {
       console.log('server.js, GET req to Mercury. error! = ', error);
@@ -74,12 +74,6 @@ app.get('/getAll', function(req, res) {
   });
 });
 
-var port = process.env.PORT || 8080;
-
-app.listen(port, function() {
-  console.log("Readcastly server listening intently on port: ", port);
-})
-
 var objBuilder = function(obj, source) {
   console.log('source.content = ', source.content);
   var cleanedArticleText = stripper(source.content);
@@ -96,7 +90,19 @@ var objBuilder = function(obj, source) {
     obj.domain = source.domain;
 }
 
+app.post('/deleteOne', function(req,res) {
+  Articles.deleteOne(req.body.articleUser_id, function(deletedModel) {
+    res.send(deletedModel);
+  });
+});
+
 module.exports = app;
+
+var port = process.env.PORT || 8080;
+
+app.listen(port, function() {
+  console.log("Readcastly server listening intently on port: ", port);
+});
 
 // other routes we wrote to test and may use in future:
 
@@ -128,17 +134,3 @@ module.exports = app;
 //   console.log('server.js l. 33: req.body should be an obj. body = ', req.body);
 //   res.sendStatus(200);
 // });
-
-app.post('/deleteOne', function(req,res) {
-  Articles.deleteOne(req.body.articleUser_id, function(deletedModel) {
-    res.send(deletedModel);
-  });
-});
-
-var port = process.env.PORT || 8080;
-
-app.listen(port, function() {
-  console.log("Readcastly server listening intently on port: ", port);
-});
-
-module.exports = app;
