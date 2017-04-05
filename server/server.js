@@ -20,8 +20,9 @@ app.use(express.static(path.join(__dirname, '../client')));
 
 // after MVP on 4.5 we will refactor to at least pull out routes
 
+
 // receive POST req of URL user wants to hear; send GET req to Mercury & receive obj w/ parsed data; send to articlesController.js;
-app.post('/requrl', function(req, res) {
+app.post('/reqUrl', function(req, res) {
   // console.log('server.js, POST to /requrl. l. 20: req received. body = ', req.body);
   let requrl = req.body.requrl;
   console.log('server.js POST to requrl. l. 14. requrl = ', requrl);
@@ -73,12 +74,6 @@ app.get('/getAll', function(req, res) {
     res.send(library);
   });
 });
-
-var port = process.env.PORT || 8080;
-
-app.listen(port, function() {
-  console.log("Readcastly server listening intently on port: ", port);
-})
 
 var objBuilder = function(obj, source) {
   console.log('source.content = ', source.content);
@@ -143,3 +138,6 @@ app.listen(port, function() {
 });
 
 module.exports = app;
+
+
+
