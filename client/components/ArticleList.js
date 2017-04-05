@@ -1,4 +1,5 @@
 // ArticleList component (i.e., the container for Articles)
+  // - a stateless component
 
 import React from 'react';
 import ArticleEntry from './ArticleEntry';
