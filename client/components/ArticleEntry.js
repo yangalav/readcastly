@@ -16,6 +16,13 @@ function ArticleEntry({article, deleteIt}) {
 		// console.log(articleText);
 	}
 
+	function cleanTime(entry) {
+		return !entry ? 'N/A' : (entry.slice(5,7) + '/' + entry.slice(8,10) + '/' + entry.slice(0,4)  + ' @ ' + entry.slice(11,16));
+  }
+
+  // const pubDate = cleanTime(article.publication_date); 
+  // let pubDate = cleanTime(article.publication_date); 
+  // console.log('ARTICLE-ENTRY -- DATE: ');
 	// function deleteArticle() {
 	// 	console.log('deleting article with id# ', id);
 	// 	props.deleteIt(id);
@@ -24,9 +31,9 @@ function ArticleEntry({article, deleteIt}) {
 	return (
 	  <div className="article-entry">
 	  	<div className="article-title"><span>Title: </span><span><a href={article.url}>{article.title}</a></span></div>
-	  	<div className="article-author"><span>Author: </span><span>{article.author}</span></div>
-	  	<div className="article-publishDate"><span>Date: </span><span>{article.publication_date}</span></div>
-	  	<div className="article-source"><span>Source: </span><span>{article.source_name || article.source_id}</span></div>
+	  	<div className="article-author"><span>Author: </span><span>{article.author || 'N/A'}</span></div>
+	  	<div className="article-publishDate"><span>Date: </span><span>{cleanTime(article.publication_date)}</span></div>
+	  	<div className="article-source"><span>Source: </span><span>{article.source_name || 'Confidential'}</span></div>
 	  	<img className="article-sampleImage" src={article.image} height="42" />
 	  	<div className="article-excerpt"><span>Excerpt: </span><span>{article.excerpt}</span></div>
 			<button onClick={ShowInfo}>More Infooooo</button>
@@ -39,3 +46,6 @@ function ArticleEntry({article, deleteIt}) {
 export default ArticleEntry;
 
 // 		2017-04-03T04:00:00.000Z
+
+
+

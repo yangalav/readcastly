@@ -130,6 +130,7 @@ module.exports = app;
 // });
 
 app.post('/deleteOne', function(req,res) {
+  console.log('SERVER LINE 100', req.body);
   Articles.deleteOne(req.body.articleUser_id, function(deletedModel) {
     res.send(deletedModel);
   });
