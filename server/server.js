@@ -57,7 +57,7 @@ app.get('/getAll', function(req, res) {
 });
 
 app.post('/deleteOne', function(req,res) {
-  Articles.deleteOne(req.body.articleUser_id, function(deletedModel) {
+  Articles.deleteOne(req.body.article_id, function(deletedModel) {
     res.send(deletedModel);
   });
 });

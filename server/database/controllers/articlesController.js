@@ -4,6 +4,7 @@ const Article = require('../models/article');
 const ArticlesUsers = require('../collections/articles-users');
 const ArticleUser = require('../models/article-user');
 const SourceCon = require('./sourcesController');
+const User = require('../models/user');
 const utils = require('../../utils');
 
 var exactFind = false;
@@ -42,6 +43,16 @@ const deleteOne = function(articleUser_id,callback) {
     })
     .catch(function(error){console.log('ERROR DELETING AN ARTICLE:  ', error);});
 };
+
+// const deleteOne = function(article_id, callback) {
+//   return new ArticleUser({article_id:article_id,user_id:User.currentUser})
+//     .destroy([require=true])
+//     .then(function(deletedModel) {
+//       console.log('THIS ARTICLE HAS BEEN DELETED:  ', deletedModel);
+//       callback({"deleted": article_id});
+//     })
+//     .catch(function(error){console.log('ERROR DELETING AN ARTICLE:  ', error);});
+// };
 
 
 const exactMatch = function(callback) {
