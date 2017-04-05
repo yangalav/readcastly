@@ -16,7 +16,7 @@ class App extends React.Component {
 			items: [],
 			hasErrored: false,
 			isLoading: false
-		};	
+		};
 	}
 
 	getReadingList(route) {
@@ -32,13 +32,13 @@ class App extends React.Component {
 
 	postUserLink(url) {
 		// =>TODO: validate user inputs, correct any formatting issues
-		this.setState({ isLoading: true });		
+		this.setState({ isLoading: true });
 		axios.post('/reqUrl', {requrl: url})
 		.then((res) => {
-			this.setState({ isLoading: false });			
-			return res.data.reverse();			
+			this.setState({ isLoading: false });
+			return res.data.reverse();
 		})
-		.then((items) => this.setState({items}))		
+		.then((items) => this.setState({items}))
 		.catch((err) => this.setState({ hasErrored: true }));
 	}
 
@@ -57,13 +57,13 @@ class App extends React.Component {
 
 	// make AJAX call to fetch data for the ArticleList component
 	componentDidMount() {
-		this.getReadingList('getAll/'); 
+		this.getReadingList('getAll/');
 	}
 
 	render() {
 
 		if (this.state.hasErrored) {
-			return <p>There was an error when loading the articles</p>;
+			return <p>There was an error when loading the articles</p>; // when we get this we should re-render the original page, as currently it just dies here (blank screen + this message)
 		}
 
 		if (this.state.isLoading) {

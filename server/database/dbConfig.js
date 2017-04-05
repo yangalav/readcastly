@@ -13,4 +13,3 @@ const knex = require('knex')({
 var db = require('bookshelf')(knex);
 
 module.exports = db;
-
