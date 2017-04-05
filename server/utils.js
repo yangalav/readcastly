@@ -3,6 +3,11 @@ const newsApiSources = require('./database/collections/newsApi.json');
 const Sources = require('./database/collections/sources');
 const Source = require('./database/models/source');
 
+const errors = {
+    hasAlready: [{"error": "This article is already in your database"}],
+    badUrl: [{"error": "There is a problem processing this article."}]
+};
+
 const objBuilder = function(obj,source) {
 //   console.log('source.content = ', source.content);
   // const stripper = function(html) {
@@ -79,6 +84,7 @@ const newsApiBuilder = function(sourceId,callback) {
 
 
 module.exports = {
+  errors: errors,
   objBuilder : objBuilder,
   domainExtractor: domainExtractor,
   newsApiImport : newsApiImport,

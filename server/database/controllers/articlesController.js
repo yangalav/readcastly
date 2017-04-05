@@ -3,11 +3,10 @@ const Articles = require('../collections/articles');
 const Article = require('../models/article');
 const ArticlesUsers = require('../collections/articles-users');
 const ArticleUser = require('../models/article-user');
-const SourceCon = require('./sourcesController')
+const SourceCon = require('./sourcesController');
+const utils = require('./utils');
 
 var exactFind = false;
-const exactFindMsg = [{"Has_Already": "This article is already in your library"}];
-
 
 const create = function(articleData,callback) {
   exactFind = false;
@@ -47,7 +46,7 @@ const deleteOne = function(articleUser_id,callback) {
 
 const exactMatch = function(callback) {
   exactFind = true;
-  return callback(exactFindMsg);
+  return callback(utils.errors.hasAlready);
 };
 
 const linkArticleUser = function(article,articleData) {

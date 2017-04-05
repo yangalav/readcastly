@@ -45,8 +45,6 @@ app.post('/requrl', function(req, res) {
       }
   };
 
-  const badUrl = [{"Bad_Url": "There is a problem processing this article."}]
-
   request(options, function (error, response, body) {
     if (error) {console.log('server.js, GET req to Mercury. error! = ', error);
       res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
@@ -54,7 +52,7 @@ app.post('/requrl', function(req, res) {
     var parsedBody = JSON.parse(body);
     console.log('PARSED BODY ==== ', parsedBody);
     if (parsedBody.error) {
-      res.send(badUrl);
+      res.send(utils.errors.badUrl);
     } else {
       objToSaveToDB = utils.objBuilder(objToSaveToDB,parsedBody);
       Articles.create(objToSaveToDB,function(library){
@@ -119,8 +117,8 @@ app.get('topStories', function(req,res) {
   });
   request(options, function(error, response, body) {
     res.send(body);
-  })
-})
+  });
+});
 
 var port = process.env.PORT || 8080;
 
