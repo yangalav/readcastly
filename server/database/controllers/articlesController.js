@@ -3,18 +3,17 @@ const Articles = require('../collections/articles');
 const Article = require('../models/article');
 const ArticlesUsers = require('../collections/articles-users');
 const ArticleUser = require('../models/article-user');
-const SourceCon = require('./sourcesController')
+const SourceCon = require('./sourcesController');
+const utils = require('../../utils');
 
 var exactFind = false;
-const exactFindMsg = [{"Has_Already": "This article is already in your library"}];
-
 
 const create = function(articleData,callback) {
   exactFind = false;
   return new Article({url: articleData.url}).fetch()
     .then(function(found) {
       if (found) {
-        console.log('FOUND === ', found.attributes.id);
+        console.log('FOUND === ', found.attributes);
         console.log('USER === ', articleData.user_id);
         return new ArticleUser({article_id: found.attributes.id,user_id: articleData.user_id}).fetch()
           .then(function(alsoFound) {
@@ -47,10 +46,11 @@ const deleteOne = function(articleUser_id,callback) {
 
 const exactMatch = function(callback) {
   exactFind = true;
-  return callback(exactFindMsg);
+  return callback(utils.errors.hasAlready);
 };
 
-const linkArticleUser = function(article,articleData) {
+const linkArticleUser = function(article,articleData,forExport) {
+  forExport = article.attributes;
   return ArticlesUsers.create({
     article_id: article.id,
     user_id: articleData.user_id
