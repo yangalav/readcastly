@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, '../client')));
 
 // after MVP on 4.5 we will refactor to at least pull out routes
 
-<app.post('/requrl', function(req, res) {
+app.post('/requrl', function(req, res) {
   let requrl = req.body.requrl;
   console.log('server.js POST to requrl. l. 14. requrl = ', requrl);
 
