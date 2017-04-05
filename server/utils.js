@@ -82,5 +82,5 @@ module.exports = {
   objBuilder : objBuilder,
   domainExtractor: domainExtractor,
   newsApiImport : newsApiImport,
-  newsApiBuilder: newsApiBuilder;
+  newsApiBuilder: newsApiBuilder
 };

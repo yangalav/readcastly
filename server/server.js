@@ -45,15 +45,22 @@ app.post('/requrl', function(req, res) {
       }
   };
 
+  const badUrl = [{"Bad_Url": "There is a problem processing this article."}]
+
   request(options, function (error, response, body) {
     if (error) {console.log('server.js, GET req to Mercury. error! = ', error);
       res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
     }
     var parsedBody = JSON.parse(body);
-    objToSaveToDB = utils.objBuilder(objToSaveToDB,parsedBody);
-    Articles.create(objToSaveToDB,function(library){
-      res.send(library);
-    });
+    console.log('PARSED BODY ==== ', parsedBody);
+    if (parsedBody.error) {
+      res.send(badUrl);
+    } else {
+      objToSaveToDB = utils.objBuilder(objToSaveToDB,parsedBody);
+      Articles.create(objToSaveToDB,function(library){
+        res.send(library);
+      });
+    }
   });
 });
 
