@@ -7,14 +7,14 @@ const SourceCon = require('./sourcesController');
 const utils = require('../../utils');
 
 var exactFind = false;
+let articleToSend = {};
 
 const create = function(articleData,callback) {
   exactFind = false;
   return new Article({url: articleData.url}).fetch()
     .then(function(found) {
       if (found) {
-        console.log('FOUND === ', found.attributes);
-        console.log('USER === ', articleData.user_id);
+        console.log('FOUND ==== ', found.id);
         return new ArticleUser({article_id: found.attributes.id,user_id: articleData.user_id}).fetch()
           .then(function(alsoFound) {
             return alsoFound ? exactMatch(callback) : linkArticleUser(found,articleData);
@@ -22,41 +22,17 @@ const create = function(articleData,callback) {
           .catch(function(error) {console.log('ERROR DEALING WITH EXISTING ARTICLE', error);});
       } else {
         return SourceCon.getSource(articleData.domain)
-          .then(function(source){return makeArticle(source,articleData);})
-          .then(function(article){return linkArticleUser(article,articleData);})
-          .catch(function(error) {console.log('ERROR DEALING WITH NEW ARTICLE', error);});
+        .then(function(source){return makeArticle(source,articleData);})
+        .then(function(article){return linkArticleUser(article,articleData);})
+        .catch(function(error) {console.log('ERROR DEALING WITH NEW ARTICLE', error);});
       }
     })
     .then(function(entry) {
-      return !exactFind ? getAll(entry.attributes.user_id,callback) : console.log('NO NEED TO GET ALL');
+      console.log('ARTICLE TO SEND === ', articleToSend);
+      return !exactFind ? callback(articleToSend) : console.log('ARTICLE ALREADY THERE');
     })
     .catch(function(error) {console.log('ERROR CHECKING URL PASSED IN', error);});
 };
-
-// const create = function(articleData,callback) {
-//   exactFind = false;
-//   let articleToSend = {};
-//   return new Article({url: articleData.url}).fetch()
-//     .then(function(found) {
-//       if (found) {
-//         console.log('FOUND ==== ', found.id);
-//         return new ArticleUser({article_id: found.attributes.id,user_id: articleData.user_id}).fetch()
-//           .then(function(alsoFound) {
-//             return alsoFound ? exactMatch(callback) : linkArticleUser(found,articleData,articleToSend);
-//           })
-//           .catch(function(error) {console.log('ERROR DEALING WITH EXISTING ARTICLE', error);});
-//       } else {
-//         return SourceCon.getSource(articleData.domain)
-//         .then(function(source){return makeArticle(source,articleData);})
-//         .then(function(article){return linkArticleUser(article,articleData,articleToSend);})
-//         .catch(function(error) {console.log('ERROR DEALING WITH NEW ARTICLE', error);});
-//       }
-//     })
-//     .then(function(entry) {
-//       return !exactFind ? callback(articleToSend) : console.log('ARTICLE ALREADY THERE');
-//     })
-//     .catch(function(error) {console.log('ERROR CHECKING URL PASSED IN', error);});
-// };
 
 const deleteOne = function(articleUser_id,callback) {
   return new ArticleUser({id: articleUser_id})
@@ -75,7 +51,7 @@ const exactMatch = function(callback) {
 };
 
 const linkArticleUser = function(article,articleData,forExport) {
-  forExport = article.attributes;
+  articleToSend = article.attributes;
   return ArticlesUsers.create({
     article_id: article.id,
     user_id: articleData.user_id
