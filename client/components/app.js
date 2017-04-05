@@ -25,10 +25,10 @@ class App extends React.Component {
 		axios.get(route)
 			.then((res) => {
 				// console.log('APP-L-27 - res.data ***: ', res.data);
-				this.setState({ isLoading: false });
-				return res.data.reverse();
+				this.setState({ isLoading: false, items: (res.data.reverse()) });
+				// return res.data.reverse();
 			})
-			.then((items) => this.setState({items}))
+			// .then((items) => this.setState({items}))
 			.catch((err) => this.setState({ hasErrored: true, failMessage: 'Unable to retrieve articles' }));
 	}
 
@@ -46,25 +46,45 @@ class App extends React.Component {
 		this.setState({ isLoading: true });
 		axios.post('/requrl', {requrl: url})
 		.then((res) => {
-			console.log('APP-L-43 - res.data ***: ', res.data);
-			this.setState({ isLoading: false, items: (this.addOne(res.data)) });
-			// this.setState({ isLoading: false });
-			return this.state.items;
-			// return res.data.reverse();
+			// console.log('APP-L-43 - res.data ***: ', res.data);
+			this.setState({ isLoading: false, items: (this.addOne(res.data)) });	
 		})
-		// .then((items) => this.setState({items}))
 		.catch((err) => this.setState({ hasErrored: true, failMessage: 'Unable to fetch that link' }));
 	}
 
+	findIndex(array, id) {
+		// console.log('inside App-findIndex-L60, id: ', id);
+		let found = false
+		let index;
+		let count = 0
+		while (found === false) {
+		  if (array[count].id === id) {
+		    found = true;
+		    index = count;
+		  }
+		  count++;
+		}
+		// console.log('inside App-findIndex-L71, index: ', index);
+		return index;		
+	}
+
+	deleteOne(resObj) {
+		// console.log('inside App-deleteOne-L76, resObj: ', resObj);
+		let result = this.state.items;
+		// console.log('L78-result: ', result);
+		let index = this.findIndex(result, resObj.deleted);
+		result.splice(index, 1);
+		// console.log('inside App-deleteOne-L81, result: ', result);
+		return result;
+	}	
+
 	deleteArticle(id) {
-		console.log('App-L46-inside deleteArticle with id: ', id);
-		this.setState({ isLoading: true });
+		// console.log('App-L81-inside deleteArticle with id: ', id);
+		this.setState({ isLoading: true });		
 		axios.post('/deleteOne', { articleUser_id: id })
 		.then((res) => {
-			this.setState({ isLoading: false });
+			this.setState({ isLoading: false, items: (this.deleteOne(res.data)) });
 			// => TODO: figure out how to alert user that article was deleted
-			console.log('App-L50-Article was deleted: ', res);
-			this.getReadingList('/getAll');
 		})
 		.catch((err) => this.setState({ hasErrored: true, failMessage: 'Unable to delete that article' }));
 	}

@@ -73,7 +73,7 @@ app.get('/topStories', function(req,res) {
 });
 
 app.post('/deleteOne', function(req,res) {
-  console.log('SERVER LINE 100', req.body);
+  console.log('SERVER LINE 100**************', req.body);
   Articles.deleteOne(req.body.articleUser_id, function(deletedModel) {
     res.send(deletedModel);
   });
