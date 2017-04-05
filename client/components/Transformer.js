@@ -1,5 +1,5 @@
 // TransFormEr component
-	// (component where users enter links, to have them transformed)
+	// (component where users enter links, in a form, to have them 'transformed')
 
 import React from 'react';
 
@@ -17,9 +17,9 @@ class TransFormEr extends React.Component {
 	}
 
 	handleSubmit(event) {
-		console.log('A link was submitted: ', this.state.value);
 		event.preventDefault();
 		this.props.postIt(this.state.value);
+		this.setState({value: ''});		
 	}
 
 	render() {
