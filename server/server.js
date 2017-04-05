@@ -23,8 +23,9 @@ app.use(express.static(path.join(__dirname, '../client')));
 
 // after MVP on 4.5 we will refactor to at least pull out routes
 
+
 // receive POST req of URL user wants to hear; send GET req to Mercury & receive obj w/ parsed data; send to articlesController.js;
-app.post('/requrl', function(req, res) {
+app.post('/reqUrl', function(req, res) {
   // console.log('server.js, POST to /requrl. l. 20: req received. body = ', req.body);
   let requrl = req.body.requrl;
   console.log('server.js POST to requrl. l. 14. requrl = ', requrl);
@@ -94,12 +95,6 @@ var objBuilder = function(obj, source) {
     obj.domain = source.domain;
 };
 
-app.post('/deleteOne', function(req,res) {
-  Articles.deleteOne(req.body.articleUser_id, function(deletedModel) {
-    res.send(deletedModel);
-  });
-});
-
 app.get('/topStories', function(req,res) {
   var options = {};
   utils.newsApiBuilder(req.source_id, function(optionsObj){
@@ -110,13 +105,22 @@ app.get('/topStories', function(req,res) {
   });
 });
 
-module.exports = app;
+app.post('/deleteOne', function(req,res) {
+  console.log('SERVER LINE 100', req.body);
+  Articles.deleteOne(req.body.articleUser_id, function(deletedModel) {
+    res.send(deletedModel);
+  });
+});
 
 var port = process.env.PORT || 8080;
 
 app.listen(port, function() {
   console.log("Readcastly server listening intently on port: ", port);
 });
+
+module.exports = app;
+
+
 
 // other routes we wrote to test and may use in future:
 
@@ -148,3 +152,8 @@ app.listen(port, function() {
 //   console.log('server.js l. 33: req.body should be an obj. body = ', req.body);
 //   res.sendStatus(200);
 // });
+
+
+
+
+

@@ -19,11 +19,12 @@ class App extends React.Component {
 			failMessage: ''
 		};	
 	}
-
+	
 	getReadingList(route) {
 		this.setState({ isLoading: true });
 		axios.get(route)
 			.then((res) => {
+				// console.log('APP-L-27 - res.data ***: ', res.data);
 				this.setState({ isLoading: false });
 				return res.data.reverse();
 			})
@@ -31,18 +32,27 @@ class App extends React.Component {
 			.catch((err) => this.setState({ hasErrored: true, failMessage: 'Unable to retrieve articles' }));
 	}
 
+	addOne(obj) {
+		let result = this.state.items;
+		result.unshift(obj);
+		return result;
+	}	
+
 	postUserLink(url) {
 		if (!isValidUrl(url)) {
 			this.setState({hasErrored: true, failMessage: ('Not a valid url: ' + url)});
 			return;
 		}
 		this.setState({ isLoading: true });		
-		axios.post('/reqUrl', {requrl: url})
+		axios.post('/requrl', {requrl: url})
 		.then((res) => {
-			this.setState({ isLoading: false });			
-			return res.data.reverse();			
+			console.log('APP-L-43 - res.data ***: ', res.data);
+			this.setState({ isLoading: false, items: (this.addOne(res.data)) });
+			// this.setState({ isLoading: false });			
+			return this.state.items;
+			// return res.data.reverse();			
 		})
-		.then((items) => this.setState({items}))		
+		// .then((items) => this.setState({items}))		
 		.catch((err) => this.setState({ hasErrored: true, failMessage: 'Unable to fetch that link' }));
 	}
 
