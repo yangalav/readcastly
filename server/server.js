@@ -13,6 +13,9 @@ const Users = require('./database/controllers/usersController');
 const User = require('./database/models/user');
 const utils = require('./utils');
 
+//DO NOT REMOVE THE BELOW FUNCTION ... WE MAY NEED TO RUN IT AT SOME POINT IN THE FUTURE!!
+//utils.newsApiImport();
+
 app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, '../client')));
@@ -30,7 +33,7 @@ app.post('/requrl', function(req, res) {
 
   var objToSaveToDB = {
     url: requrl,
-    user_id: User.user_id || 99
+    user_id: User.currentUser || 99
   };
 
   var options = {
@@ -67,7 +70,7 @@ app.get('/getAll', function(req, res) {
   // Articles.create(null, function(library){
 
   // call getAll w/ user 99 & cb = res.send
-  Articles.getAll(/*User.user_id*/99, function(library) {
+  Articles.getAll(/*User.currentUser*/99, function(library) {
     res.send(library);
   });
 });
@@ -101,6 +104,16 @@ app.post('/deleteOne', function(req,res) {
     res.send(deletedModel);
   });
 });
+
+app.get('topStories', function(req,res) {
+  var options = {};
+  utils.newsApiBuilder(req.source_id, function(optionsObj){
+    options = optionsObj;
+  });
+  request(options, function(error, response, body) {
+    res.send(body);
+  })
+})
 
 var port = process.env.PORT || 8080;
 
