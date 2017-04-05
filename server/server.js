@@ -31,7 +31,7 @@ app.post('/requrl', function(req, res) {
     user_id: User.currentUser || 99
   };
 
-  request(utils.mercuryOptions, function (error, response, body) {
+  request(utils.mercuryOptions(requrl), function (error, response, body) {
     if(error) {
       console.log('server.js, GET req to Mercury. error! = ', error);
       res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');

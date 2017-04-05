@@ -82,13 +82,15 @@ const newsApiBuilder = function(sourceId,callback) {
     .catch(function(error){console.log('ERROR BUILDING NEWSAPI REQUEST OBJ ', error);});
 };
 
-const mercuryOptions = {
+const mercuryOptions = function(url) {
+  return {
     method: 'GET',
-    url: 'https://mercury.postlight.com/parser?url=' + requrl,
+    url: 'https://mercury.postlight.com/parser?url=' + url,
     headers: {
       'x-api-key': process.env.PARSER_KEY,
       'content-type': 'application/json'
       }
+    }
   };
 
 
