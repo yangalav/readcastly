@@ -12,7 +12,10 @@ const Articles = require('./database/controllers/articlesController');
 const Sources = require('./database/controllers/sourcesController');
 const Users = require('./database/controllers/usersController');
 const User = require('./database/models/user');
-const utils = require('./utils');
+const utils = require('./utils.js');
+
+//DO NOT REMOVE THE BELOW FUNCTION ... WE MAY NEED TO RUN IT AT SOME POINT IN THE FUTURE!!
+//utils.newsApiImport();
 
 app.use(bodyParser.json());
 
@@ -28,7 +31,7 @@ app.post('/requrl', function(req, res) {
 
   var objToSaveToDB = {
     url: requrl,
-    user_id: User.user_id || 99
+    user_id: User.currentUser || 99
   };
 
   var options = {
@@ -41,21 +44,22 @@ app.post('/requrl', function(req, res) {
   };
 
   request(options, function (error, response, body) {
-    console.log('testing error...body: ', error,'...', body);
+    // console.log('testing error...body: ', error,'...', body);
     // if (error) {console.log('server.js, GET req to Mercury. error! = ', error);
     if(body.error === true) {
       console.log('server.js, GET req to Mercury. error! = ', error);
       res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
     }
-    // else {
-    //     var parsedBody = JSON.parse(body);
-    //     console.log('server.js, res from GET req to Mercury = ', parsedBody);
-    //     objBuilder(objToSaveToDB, parsedBody);
-    //     Articles.create(objToSaveToDB, function(library) {
-    //     res.send(library);
-    //     })
-    //   }
-   });
+    var parsedBody = JSON.parse(body);
+    if (parsedBody.error) {
+      res.send(utils.errors.badUrl);
+    } else {
+      objToSaveToDB = utils.objBuilder(objToSaveToDB,parsedBody);
+      Articles.create(objToSaveToDB,function(result){
+        res.send(result);
+      });
+    }
+  });
 });
 
 // tested this route with an array of all articles currently in db and it worked; sample article in notes
@@ -69,15 +73,15 @@ app.get('/getAll', function(req, res) {
   console.log('server.js received GET req at /getAll . Returning array of objects with contents of Readcastly db!');
 
   // call getAll w/ user 99 & cb = res.send
-  Articles.getAll(/*User.user_id*/99, function(library) {
+  Articles.getAll(/*User.currentUser*/99, function(library) {
     res.send(library);
   });
 });
 
 var objBuilder = function(obj, source) {
-  console.log('source.content = ', source.content);
+  // console.log('source.content = ', source.content);
   var cleanedArticleText = stripper(source.content);
-  console.log('server.js, objBuilder, l 78: test npm striptags. new content = ', cleanedArticleText);
+  // console.log('server.js, objBuilder, l 78: test npm striptags. new content = ', cleanedArticleText);
 
     obj.title = source.title;
     obj.text = cleanedArticleText;
@@ -88,11 +92,21 @@ var objBuilder = function(obj, source) {
     obj.word_count = source.word_count;
     obj.est_time = source.word_count / 145; // based on 145 wpm avg. spoken speech
     obj.domain = source.domain;
-}
+};
 
 app.post('/deleteOne', function(req,res) {
   Articles.deleteOne(req.body.articleUser_id, function(deletedModel) {
     res.send(deletedModel);
+  });
+});
+
+app.get('/topStories', function(req,res) {
+  var options = {};
+  utils.newsApiBuilder(req.source_id, function(optionsObj){
+    options = optionsObj;
+  });
+  request(options, function(error, response, body) {
+    res.send(body);
   });
 });
 
