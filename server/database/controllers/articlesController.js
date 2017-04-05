@@ -89,4 +89,4 @@ module.exports= {
   create : create,
   getAll : getAll,
   deleteOne : deleteOne
-}
+};
