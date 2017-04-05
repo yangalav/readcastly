@@ -3,11 +3,11 @@
 import React from 'react';
 import axios from 'axios';
 import Title from './Title';
+// import SignupButton from './SignupButton';
 import TransFormEr from './TransFormEr';
 import ArticleList from './ArticleList';
 import ArticleEntry from './ArticleEntry';
 import isValidUrl from '../helpers/urlValidation';
-
 
 class App extends React.Component {
 	constructor(props) {
@@ -17,9 +17,9 @@ class App extends React.Component {
 			hasErrored: false,
 			isLoading: false,
 			failMessage: ''
-		};	
+		};
 	}
-	
+
 	getReadingList(route) {
 		this.setState({ isLoading: true });
 		axios.get(route)
@@ -36,29 +36,29 @@ class App extends React.Component {
 		let result = this.state.items;
 		result.unshift(obj);
 		return result;
-	}	
+	}
 
 	postUserLink(url) {
 		if (!isValidUrl(url)) {
 			this.setState({hasErrored: true, failMessage: ('Not a valid url: ' + url)});
 			return;
 		}
-		this.setState({ isLoading: true });		
+		this.setState({ isLoading: true });
 		axios.post('/requrl', {requrl: url})
 		.then((res) => {
 			console.log('APP-L-43 - res.data ***: ', res.data);
 			this.setState({ isLoading: false, items: (this.addOne(res.data)) });
-			// this.setState({ isLoading: false });			
+			// this.setState({ isLoading: false });
 			return this.state.items;
-			// return res.data.reverse();			
+			// return res.data.reverse();
 		})
-		// .then((items) => this.setState({items}))		
+		// .then((items) => this.setState({items}))
 		.catch((err) => this.setState({ hasErrored: true, failMessage: 'Unable to fetch that link' }));
 	}
 
 	deleteArticle(id) {
 		console.log('App-L46-inside deleteArticle with id: ', id);
-		this.setState({ isLoading: true });		
+		this.setState({ isLoading: true });
 		axios.post('/deleteOne', { articleUser_id: id })
 		.then((res) => {
 			this.setState({ isLoading: false });

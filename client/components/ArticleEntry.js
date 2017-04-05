@@ -12,7 +12,7 @@ function ArticleEntry({article, deleteIt}) {
 	// ShowInfo component shows body of parsed article text when 'More Info' button is clicked
 	// (only console.logs for now)
 	function ShowInfo() {
-		console.log('article: ', article);		
+		console.log('article: ', article);
 		// console.log(articleText);
 	}
 
@@ -20,8 +20,8 @@ function ArticleEntry({article, deleteIt}) {
 		return !entry ? 'N/A' : (entry.slice(5,7) + '/' + entry.slice(8,10) + '/' + entry.slice(0,4)  + ' @ ' + entry.slice(11,16));
   }
 
-  // const pubDate = cleanTime(article.publication_date); 
-  // let pubDate = cleanTime(article.publication_date); 
+  // const pubDate = cleanTime(article.publication_date);
+  // let pubDate = cleanTime(article.publication_date);
   // console.log('ARTICLE-ENTRY -- DATE: ');
 	// function deleteArticle() {
 	// 	console.log('deleting article with id# ', id);
@@ -37,7 +37,7 @@ function ArticleEntry({article, deleteIt}) {
 	  	<img className="article-sampleImage" src={article.image} height="42" />
 	  	<div className="article-excerpt"><span>Excerpt: </span><span>{article.excerpt}</span></div>
 			<button onClick={ShowInfo}>More Infooooo</button>
-			<button onClick={() => deleteIt(article.id)}>Delete</button>			
+			<button onClick={() => deleteIt(article.id)}>Delete</button>
 	  	<hr/>
 	  </div>
 	);
@@ -46,6 +46,3 @@ function ArticleEntry({article, deleteIt}) {
 export default ArticleEntry;
 
 // 		2017-04-03T04:00:00.000Z
-
-
-
