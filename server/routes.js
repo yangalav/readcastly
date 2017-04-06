@@ -22,11 +22,17 @@ module.exports = function(app, express) {
       }
       try {
         console.log('routes.js l24, in try block after Mercury response...');
-        console.log(undeclaredVar);
-        // var parsedBody = JSON.parse(body);
-        // console.log('...result: parsedBody = ', parsedBody);
+        var parsedBody = JSON.parse(body);
+        console.log('...result: parsedBody = ', parsedBody);
+        if(parsedBody === null) {
+          res.send(utils.errors.mercuryCantParse);
+          return;
+        }
       } catch (parseError) {
-        console.log('routes.js l28, in catch block, try block not able to parse Mercury response. parseError = ', parseError, '\n\\n');
+        console.log('routes.js l28, in catch block, try block not able to parse Mercury response. parseError = ', parseError, '\n\n');
+        var parsedBody;
+        res.send(utils.errors.mercuryCantParse);
+        return;
       }
 
       if (parsedBody.error) {
