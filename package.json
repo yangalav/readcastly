@@ -4,7 +4,7 @@
   "description": "",
   "main": "./server/server.js",
   "scripts": {
-    "webpack": "webpack"
+    "webpack": "webpack -w"
   },
   "repository": {
     "type": "git",
@@ -17,16 +17,23 @@
   },
   "homepage": "https://github.com/readcastly/readcastly#readme",
   "dependencies": {
+    "axios": "^0.16.0",
     "babel": "^6.23.0",
     "bcrypt-nodejs": "0.0.3",
+    "bluebird": "^3.5.0",
+    "dotenv": "^4.0.0",
     "eslint-config-airbnb": "^14.1.0",
     "express": "^4.15.2",
+    "mysql": "^2.13.0",
     "nodemon": "^1.11.0",
     "path": "^0.12.7",
     "process-env": "^1.1.0",
     "react": "^15.4.2",
+    "react-bootstrap": "^0.30.8",
     "react-dom": "^15.4.2",
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "sql": "^0.74.0",
+    "striptags": "^3.0.1"
   },
   "devDependencies": {
     "babel-core": "^6.24.0",
@@ -50,7 +57,8 @@
     "process-env": "^1.1.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
-    "webpack": "^2.3.2"
+    "webpack": "^2.3.2",
+    "webpack-dev-server": "^2.4.2"
   },
   "config": {
     "commitizen": {
