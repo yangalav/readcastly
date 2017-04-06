@@ -33,7 +33,7 @@ const domainExtractor = function(url) {
     } else if (url[i] === '/' || i === length) {
       end = i;
     } else {
-      i++;
+      i++; 
     }
   }
   return url.slice(start,end);
