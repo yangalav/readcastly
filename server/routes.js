@@ -8,7 +8,7 @@ module.exports = function(app, express) {
 
   app.post('/requrl', function(req, res) {
     let requrl = req.body.requrl;
-    console.log('server.js POST to requrl. l. 14. requrl = ', requrl);
+    console.log('\n\nroutes.js POST to requrl. l. 11. requrl = ', requrl);
 
     var objToSaveToDB = {
       url: requrl,
@@ -17,10 +17,18 @@ module.exports = function(app, express) {
 
     request(utils.mercuryOptions(requrl), function (error, response, body) {
       if(error) {
-        console.log('server.js, GET req to Mercury. error! = ', error);
+        console.log('routes.js l 20, GET req to Mercury. error! = ', error);
         res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
       }
-      var parsedBody = JSON.parse(body);
+      try {
+        console.log('routes.js l24, in try block after Mercury response...');
+        console.log(undeclaredVar);
+        // var parsedBody = JSON.parse(body);
+        // console.log('...result: parsedBody = ', parsedBody);
+      } catch (parseError) {
+        console.log('routes.js l28, in catch block, try block not able to parse Mercury response. parseError = ', parseError, '\n\\n');
+      }
+
       if (parsedBody.error) {
         res.send(utils.errors.badUrl);
       } else {
