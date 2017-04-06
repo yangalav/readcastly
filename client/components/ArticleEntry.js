@@ -25,7 +25,7 @@ function ArticleEntry({article, deleteIt}) {
 	  	<img className="article-sampleImage" src={article.image} height="42" />
 	  	<div className="article-excerpt"><span>Excerpt: </span><span>{article.excerpt}</span></div>
 			<button onClick={ShowInfo}>More Infooooo</button>
-			<button onClick={() => deleteIt(article.article_id)}>Delete</button>
+			<button onClick={() => deleteIt(article.url)}>Delete</button>
 	  	<hr/>
 	  </div>
 	);

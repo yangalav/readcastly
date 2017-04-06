@@ -2,7 +2,8 @@ var db = require('../dbConfig');
 var bcrypt = require('bcrypt-nodejs');
 var Promise = require('bluebird');
 
-var currentUser = 0;
+//Change this to something else when authentication in place!!
+var currentUser = 99;
 
 var Model = db.Model.extend({
 

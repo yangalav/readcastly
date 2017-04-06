@@ -33,6 +33,7 @@ class App extends React.Component {
 	// helper function for postUserLink
 	addOne(obj) {
 		let result = this.state.items;
+		console.log(obj);
 		result.unshift(obj);
 		return result;
 	}
@@ -47,43 +48,43 @@ class App extends React.Component {
 		axios.post('/requrl', {requrl: url})
 		.then((res) => {
 			this.setState({ isLoading: false, items: (this.addOne(res.data)) });
-			return;	
+			return;
 		})
 		.catch((err) => this.setState({ hasErrored: true, failMessage: 'Unable to fetch that link' }));
 	}
 
 	// helper function for helper, deleteOne
-	findIndex(array, id) {
+	findIndex(array, url) {
 		let found = false
 		let index;
 		let count = 0
 		while (found === false) {
-		  if (array[count].id === id) {
+			if (array[count].url === url) {
 		    found = true;
 		    index = count;
 		  }
 		  count++;
 		}
-		return index;		
+		return index;
 	}
-  
+
   // helper function for deleteArticle
 	deleteOne(resObj) {
 		let result = this.state.items;
 		let index = this.findIndex(result, resObj.deleted);
 		result.splice(index, 1);
 		return result;
-	}	
+	}
 
 	// for deleting a single article
-	deleteArticle(id) {
-		this.setState({ isLoading: true });		
-		axios.post('/deleteOne', { article_id: id })
+	deleteArticle(url) {
+		// this.setState({ isLoading: true });
+		axios.post('/deleteOne', { url: url })
 		.then((res) => {
 			this.setState({ isLoading: false, items: (this.deleteOne(res.data)) });
 			// => TODO: figure out how to alert user that article was deleted
 		})
-		.catch((err) => this.setState({ hasErrored: true, failMessage: 'Unable to delete that article' }));
+		.catch((err) => this.setState({ hasErrored: true, failMessage: err/*'Unable to delete that article'*/ }));
 	}
 
 	// invokes ajax call to fetch data for the ArticleList component
