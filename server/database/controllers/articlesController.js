@@ -45,11 +45,11 @@ const create = function(articleData,callback) {
 // };
 
 const deleteOne = function(article_id, callback) {
+  console.log('IN DELETEONE');
   return db.knex('Articles-Users')
-    .where('article_id',article_id)
-    .where('user_id',User.currentUser)
+    .where({article_id: article_id, user_id: User.currentUser})
     .del()
-    .then(callback)
+    .then(callback);
 };
 
 
