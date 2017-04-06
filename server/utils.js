@@ -6,7 +6,7 @@ const Source = require('./database/models/source');
 
 const errors = {
     hasAlready: [{"error": "This article is already in your database"}],
-    badUrl: [{"error": "There is a problem processing this article."}]
+    badUrl: [{"error": "Sincere apologies from the Read.cast.ly team, but the URL submitted is one of a small number that our service cannot currently handle (such as URLs from LinkedIn Pulse). We will work on this!"}] // this is Mercury parser issue
 };
 
 const objBuilder = function(obj,source) {

@@ -33,29 +33,26 @@ app.post('/requrl', function(req, res) {
 
   request(utils.mercuryOptions(requrl), function (error, response, body) {
     console.log('server.js l 35; Mercury resp body = ', body);
-    if(error) {
-      console.log('server.js, GET req to Mercury. error! = ', error);
-      res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
-    }
+    // if(body.error === true) { // remove this once I know we don't to distinguish various Mercury error messages
+
     // var parsedBody = JSON.parse(body);
     try {
       var parsedBody = JSON.parse(body);
     } catch (error) {
-      console.log('server.js l 43, parsing Merc body. error = ', error);
+      console.log('server.js l 43, parsing Merc body. error in parser = ', error);
       var parsedBody = JSON.parse(JSON.stringify(body));
       console.log('server.js l 45, trying error solution: JSON.stringify, then parse. result = ', parsedBody);
     }
     if (parsedBody.error) { // this is the catch for errors sent from Mercury
-      res.send(utils.errors.badUrl);
+      res.status(502).send(utils.errors.badUrl);
     } else {
       objToSaveToDB = utils.objBuilder(objToSaveToDB,parsedBody);
       Articles.create(objToSaveToDB,function(result){
         res.send(result);
       });
     }
-  });
+   });
 });
-
 // will need to switch out hard-coded '99' 3 lines below once login functionality established
 app.get('/getAll', function(req, res) {
   console.log('server.js received GET req at /getAll . Returning array of objects with contents of Readcastly db!');
