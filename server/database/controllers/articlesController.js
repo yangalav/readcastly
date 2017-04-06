@@ -34,24 +34,22 @@ const create = function(articleData,callback) {
     .catch(function(error) {console.log('ERROR CHECKING URL PASSED IN', error);});
 };
 
-// const deleteOne = function(articleUser_id,callback) {
-//   return new ArticleUser({id: articleUser_id})
+// const deleteOne = function(article_id, callback) {
+//   return new ArticleUser({article_id:article_id,user_id:User.currentUser})
 //     .destroy([require=true])
 //     .then(function(deletedModel) {
 //       console.log('THIS ARTICLE HAS BEEN DELETED:  ', deletedModel);
-//       callback({"deleted": articleUser_id});
+//       callback({"deleted": article_id});
 //     })
 //     .catch(function(error){console.log('ERROR DELETING AN ARTICLE:  ', error);});
 // };
 
 const deleteOne = function(article_id, callback) {
-  return new ArticleUser({article_id:article_id,user_id:User.currentUser})
-    .destroy([require=true])
-    .then(function(deletedModel) {
-      console.log('THIS ARTICLE HAS BEEN DELETED:  ', deletedModel);
-      callback({"deleted": article_id});
-    })
-    .catch(function(error){console.log('ERROR DELETING AN ARTICLE:  ', error);});
+  return db.knex('Articles-Users')
+    .where('article_id',article_id)
+    .where('user_id',User.currentUser)
+    .del()
+    .then(callback)
 };
 
 
