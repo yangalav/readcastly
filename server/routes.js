@@ -41,8 +41,8 @@ module.exports = function(app, express) {
   });
 
   app.post('/deleteOne', function(req,res) {
-    Articles.deleteOne(req.body.article_id, function(deletedModel) {
-      res.send({"deleted": req.body.article_id});
+    Articles.deleteOne(req.body.url, function(deletedModel) {
+      res.send({"deleted": req.body.url});
     });
   });
 

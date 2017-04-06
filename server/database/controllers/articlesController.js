@@ -44,12 +44,18 @@ const create = function(articleData,callback) {
 //     .catch(function(error){console.log('ERROR DELETING AN ARTICLE:  ', error);});
 // };
 
-const deleteOne = function(article_id, callback) {
-  console.log('IN DELETEONE');
+const deleteOne = function(url, callback) {
   return db.knex('Articles-Users')
-    .where({article_id: article_id, user_id: User.currentUser})
-    .del()
-    .then(callback);
+    .join('Articles','Articles-Users.article_id','Articles.id')
+    .where('Articles.url',url)
+    .andWhere('Articles-Users.user_id',User.currentUser)
+    .select('Articles-Users.id')
+    .then(function(result){
+      return db.knex('Articles-Users')
+      .where('id',result[0].id)
+      .del()
+      .then(callback);
+    });
 };
 
 
