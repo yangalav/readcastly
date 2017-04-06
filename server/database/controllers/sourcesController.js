@@ -8,7 +8,7 @@ const getSource = function(domain) {
   return new Source({homepage: domain}).fetch()
     .then(function(found) {
       if (found) {
-        console.log('SOURCE FOUND', found);
+        console.log('SOURCE FOUND');
         return {id: found.id, name: found.attributes.name};
       } else {
         return Sources.create({
