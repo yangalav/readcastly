@@ -85,6 +85,16 @@ const mercuryOptions = function(url) {
     };
   };
 
+const readcastBuilder = function(articleData) {
+  var readcast = {
+    title: articleData.title,
+    source: articleData.source
+  }
+  if (articleData.author) {
+    readcast.author = article.author;
+  }
+  return readcast;
+}
 
 module.exports = {
   errors: errors,
@@ -92,5 +102,6 @@ module.exports = {
   domainExtractor: domainExtractor,
   newsApiImport : newsApiImport,
   newsApiBuilder: newsApiBuilder,
-  mercuryOptions: mercuryOptions
+  mercuryOptions: mercuryOptions,
+  readcastBuilder: readcastBuilder
 };

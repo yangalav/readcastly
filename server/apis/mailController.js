@@ -16,7 +16,7 @@ const bodyMaker = function(readcast) {
     if (readcast.author) {
         body += ', by ' + readcast.author;
     }
-    body += ', from ' + readcast.source + ".  Thank you for using Readcast.ly.  We're never gonna give you up."
+    body += ', from ' + readcast.source + ".  Thank you for using Readcast.ly.  We're never gonna give you up.";
     return body;
 };
 

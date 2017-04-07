@@ -72,6 +72,15 @@ module.exports = function(app, express) {
     });
   });
 
+  app.get('/mailer', function(req,res) {
+    let readcast = utils.readcastBuilder(req.body);
+    //req.body will need all fields required for conversion, including title, author, and source, at a minimum, in addition to text
+    //invoke function that converts article to speech, grab path
+    readcast.location = //path to file;
+    mailer.sendMail(User.currentEmail,readcast);
+    res.send(/*TBD*/);
+  });
+
 
 };
 
