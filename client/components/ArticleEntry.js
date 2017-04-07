@@ -19,17 +19,30 @@ function ArticleEntry({article, deleteIt}) {
 
 	return (
 	  <div className="article-entry">
-	  	<div className="article-title"><span>Title: </span><span><a href={article.url}>{article.title}</a></span></div>
-	  	<div className="article-author"><span>Author: </span><span>{article.author || 'N/A'}</span></div>
-	  	<div className="article-publishDate"><span>Date: </span><span>{cleanTime(article.publication_date)}</span></div>
-	  	<div className="article-source"><span>Source: </span><span>{article.source_name || 'Confidential'}</span></div>
-	  	<img className="article-sampleImage" src={article.image} height="42" />
-	  	<div className="article-excerpt"><span>Excerpt: </span><span>{article.excerpt}</span></div>
-			<button onClick={ShowInfo}>More Infooooo</button>
-			<button onClick={() => deleteIt(article.url)}>Delete</button>
-	  	<hr/>
+	  	{article.title && <div className="article-title"><span>Title: </span><span><a href={article.url}>{article.title}</a></span></div>}
+	  	{article.author && <div className="article-author"><span>Author: </span><span>{article.author}</span></div>}
+	  	{article.publication_date && <div className="article-publishDate"><span>Date: </span><span>{cleanTime(article.publication_date)}</span></div>}
+	  	{article.source_name && <div className="article-source"><span>Source: </span><span>{article.source_name}</span></div>}
+	  	{article.image && <img className="article-sampleImage" src={article.image} height="42" />}
+	  	{article.excerpt && <div className="article-excerpt"><span>Excerpt: </span><span>{article.excerpt}</span></div>}
+			{article.title && <button onClick={ShowInfo}>More Infooooo</button>}
+			{article.title && <button onClick={() => deleteIt(article.url)}>Delete</button>}
+	  	{article.title &&<hr/>}
 	  </div>
 	);
+	// return (
+	//   <div className="article-entry">
+	//   	<div className="article-title"><span>Title: </span><span><a href={article.url}>{article.title}</a></span></div>
+	//   	<div className="article-author"><span>Author: </span><span>{article.author || 'N/A'}</span></div>
+	//   	<div className="article-publishDate"><span>Date: </span><span>{cleanTime(article.publication_date)}</span></div>
+	//   	<div className="article-source"><span>Source: </span><span>{article.source_name || 'Confidential'}</span></div>
+	//   	<img className="article-sampleImage" src={article.image} height="42" />
+	//   	<div className="article-excerpt"><span>Excerpt: </span><span>{article.excerpt}</span></div>
+	// 		<button onClick={ShowInfo}>More Infooooo</button>
+	// 		<button onClick={() => deleteIt(article.url)}>Delete</button>
+	//   	<hr/>
+	//   </div>
+	// );
 }
 
 export default ArticleEntry;

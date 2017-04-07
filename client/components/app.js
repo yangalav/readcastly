@@ -8,6 +8,7 @@ import TransFormEr from './TransFormEr';
 import ArticleList from './ArticleList';
 import ArticleEntry from './ArticleEntry';
 import isValidUrl from '../helpers/urlValidation';
+import {Loading, ErrorAlert} from './Alerts';
 
 class App extends React.Component {
 	constructor(props) {
@@ -27,7 +28,7 @@ class App extends React.Component {
 			.then((res) => {
 				this.setState({ isLoading: false, items: (res.data.reverse()) });
 			})
-			.catch((err) => this.setState({ hasErrored: true, failMessage: 'Unable to retrieve articles' }));
+			.catch((err) => this.setState({ failMessage: (res.data.error || 'Unable to retrieve articles'), hasErrored: true }));
 	}
 
 	// helper function for postUserLink
@@ -40,8 +41,9 @@ class App extends React.Component {
 
 	// for posting new links
 	postUserLink(url) {
+		this.setState({hasErrored: false, failMessage: ''});
 		if (!isValidUrl(url)) {
-			this.setState({hasErrored: true, failMessage: ('Not a valid url: ' + url)});
+			this.setState({ failMessage: ('Not a valid url: ' + url), hasErrored: true });
 			return;
 		}
 		this.setState({ isLoading: true });
@@ -50,7 +52,7 @@ class App extends React.Component {
 			this.setState({ isLoading: false, items: (this.addOne(res.data)) });
 			return;
 		})
-		.catch((err) => this.setState({ hasErrored: true, failMessage: 'Unable to fetch that link' }));
+		.catch((err) => this.setState({ failMessage: (res.data.error || 'Unable to fetch that link'), hasErrored: true }));
 	}
 
 	// helper function for helper, deleteOne
@@ -84,7 +86,7 @@ class App extends React.Component {
 			this.setState({ isLoading: false, items: (this.deleteOne(res.data)) });
 			// => TODO: figure out how to alert user that article was deleted
 		})
-		.catch((err) => this.setState({ hasErrored: true, failMessage: err/*'Unable to delete that article'*/ }));
+		.catch((err) => this.setState({ hasErrored: true, failMessage: (res.data.error ||'Unable to delete that article') }));
 	}
 
 	// invokes ajax call to fetch data for the ArticleList component
@@ -94,36 +96,46 @@ class App extends React.Component {
 
 	render() {
 
-		// => FIXIT: when we get this we should re-render the original page, as currently it just dies here (blank screen + this message)
-		if (this.state.hasErrored) {
-			return (
-				<div>
-					<p>There was an error when loading the data</p>
-					<p>{this.state.failMessage}</p>
-				</div>
-			);
-		}
-
-		if (this.state.isLoading) {
-			return (
-				<div>
-				  <Title title='Hello, ReadCast.ly!'/>
-					<TransFormEr postIt={this.postUserLink.bind(this)}/>
-					<p>Loading...</p>
-					<img className="spinner" src='./../images/spiffygif_46x46.gif' height="42" />
-				  <ArticleList articles={this.state.items} deleteIt={this.deleteArticle.bind(this)}/>
-				</div>
-			);
-		}
-
 		return(
 			<div>
 				<Title title='Hello, ReadCast.ly!'/>
-
+				{this.state.isLoading && <Loading />}
+				{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
 				<TransFormEr postIt={this.postUserLink.bind(this)}/>
 				<ArticleList articles={this.state.items} deleteIt={this.deleteArticle.bind(this)}/>
 			</div>
 		);
+
+		// // => FIXIT: when we get this we should re-render the original page, as currently it just dies here (blank screen + this message)
+		// if (this.state.hasErrored) {
+		// 	return (
+		// 		<div>
+		// 			<p>There was an error when loading the data</p>
+		// 			<p>{this.state.failMessage}</p>
+		// 		</div>
+		// 	);
+		// }
+
+		// if (this.state.isLoading) {
+		// 	return (
+		// 		<div>
+		// 		  <Title title='Hello, ReadCast.ly!'/>
+		// 			<TransFormEr postIt={this.postUserLink.bind(this)}/>
+		// 			<p>Loading...</p>
+		// 			<img className="spinner" src='./../images/spiffygif_46x46.gif' height="42" />
+		// 		  <ArticleList articles={this.state.items} deleteIt={this.deleteArticle.bind(this)}/>
+		// 		</div>
+		// 	);
+		// }
+
+		// return(
+		// 	<div>
+		// 		<Title title='Hello, ReadCast.ly!'/>
+
+		// 		<TransFormEr postIt={this.postUserLink.bind(this)}/>
+		// 		<ArticleList articles={this.state.items} deleteIt={this.deleteArticle.bind(this)}/>
+		// 	</div>
+		// );
 	}
 }
 
