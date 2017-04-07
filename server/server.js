@@ -14,8 +14,6 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, '../client')));
 
-<<<<<<< HEAD
-=======
 // after MVP on 4.5 we will refactor to at least pull out routes
 
 app.post('/requrl', function(req, res) {
@@ -79,20 +77,16 @@ app.get('/signup', function(req,res) {
     res.send('This is our signup page :)');
 });
 
->>>>>>> working on signup form
 var port = process.env.PORT || 8080;
 
 app.listen(port, function() {
   console.log("Readcastly server listening intently on port: ", port);
 });
 
-<<<<<<< HEAD
+
 require('./routes.js')(app, express);
 
 module.exports = app;
-=======
-module.exports = app;
-
 
 
 // other routes we wrote to test and may use in future:
@@ -125,4 +119,3 @@ module.exports = app;
 //   console.log('server.js l. 33: req.body should be an obj. body = ', req.body);
 //   res.sendStatus(200);
 // });
->>>>>>> working on signup form
