@@ -11,43 +11,6 @@ const texter = require('./apis/textController');
 module.exports = function(app, express) {
 
   app.post('/requrl', function(req, res) {
-    // let requrl = req.body.requrl;
-    // console.log('\n\nroutes.js POST to requrl. l. 11. requrl = ', requrl);
-
-    // var objToSaveToDB = {
-    //   url: requrl,
-    //   user_id: User.currentUser || 99
-    // };
-
-    // request(utils.mercuryOptions(requrl), function (error, response, body) {
-    //   if(error) {
-    //     console.log('routes.js l 20, GET req to Mercury. error! = ', error);
-    //     res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
-    //   }
-    //   try {
-    //     console.log('routes.js l24, in try block after Mercury response...');
-    //     var parsedBody = JSON.parse(body);
-    //     // console.log('...result: parsedBody = ', parsedBody);
-    //     if(parsedBody === null) {
-    //       res.send(utils.errors.mercuryCantParse);
-    //       return;
-    //     }
-    //   } catch (parseError) {
-    //     console.log('routes.js l28, in catch block, try block not able to parse Mercury response. parseError = ', parseError, '\n\n');
-    //     var parsedBody;
-    //     res.send(utils.errors.mercuryCantParse);
-    //     return;
-    //   }
-
-    //   if (parsedBody.error) {
-    //     res.send(utils.errors.badUrl);
-    //   } else {
-    //     objToSaveToDB = utils.objBuilder(objToSaveToDB,parsedBody);
-    //     Articles.create(objToSaveToDB,function(result){
-    //       res.send(result);
-    //     });
-    //   }
-    // });
     mercury.parseAndSave(req.body.requrl,function(result) {
       res.send(result);
     });
