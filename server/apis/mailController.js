@@ -4,10 +4,10 @@ const nodemailer = require('nodemailer');
 
 // create reusable transporter object using the default SMTP transport
 let transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: 'hotmail',
     auth: {
-        user: 'readcastly@gmail.com',
-        pass: process.env.GMAIL_PASSWORD
+        user: 'readcastly@outlook.com',
+        pass: process.env.OUTLOOK_PASSWORD
     }
 });
 
@@ -32,12 +32,13 @@ const messageMaker = function(email,readcast) {
     };
 };
 
-const sendMail = function(email,readcast) {
+const sendMail = function(email,readcast,callback) {
     transporter.sendMail(messageMaker(email,readcast), (error, info) => {
         if (error) {
             return console.log('ERROR SENDING MAIL ', error);
         }
         console.log('Message %s sent: %s', info.messageId, info.response);
+        callback(info);
     });
 };
 
