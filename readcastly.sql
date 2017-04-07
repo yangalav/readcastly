@@ -19,6 +19,8 @@ CREATE TABLE `Users` (
   `password` VARCHAR(10) NOT NULL,
   `first_name` VARCHAR(20) NOT NULL,
   `last_name` VARCHAR(20) NULL,
+  `phone` VARCHAR(20) NOT NULL,
+  `voice_pref` INTEGER(1) NULL,
   `avatar` VARCHAR(100) NOT NULL DEFAULT 'http://cdn.makeuseof.com/wp-content/uploads/2015/06/6_emoji.png?187d39  ',
   PRIMARY KEY (`id`)
 );

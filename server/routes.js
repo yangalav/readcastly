@@ -3,6 +3,8 @@ const request = require('request');
 const Articles = require('./database/controllers/articlesController');
 const User = require('./database/models/user');
 const utils = require('./utils.js');
+const mailer = require('./apis/mailController');
+const texter = require('./apis/textController');
 
 module.exports = function(app, express) {
 
