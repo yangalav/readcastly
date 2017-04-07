@@ -12,8 +12,9 @@ function ArticleEntry({article, deleteIt}) {
 		// console.log(articleText);
 	}
 
+  // removed time -- to add it back, just append this =>  + ' @ ' + entry.slice(11,16)
 	function cleanTime(entry) {
-		return !entry ? 'N/A' : (entry.slice(5,7) + '/' + entry.slice(8,10) + '/' + entry.slice(0,4)  + ' @ ' + entry.slice(11,16));
+		return !entry ? 'N/A' : (entry.slice(5,7) + '/' + entry.slice(8,10) + '/' + entry.slice(0,4));
   }
 
 	return (
