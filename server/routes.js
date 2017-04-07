@@ -25,7 +25,7 @@ module.exports = function(app, express) {
       try {
         console.log('routes.js l24, in try block after Mercury response...');
         var parsedBody = JSON.parse(body);
-        console.log('...result: parsedBody = ', parsedBody);
+        // console.log('...result: parsedBody = ', parsedBody);
         if(parsedBody === null) {
           res.send(utils.errors.mercuryCantParse);
           return;
