@@ -6,9 +6,10 @@ const bodyParser = require('body-parser');
 const urlParser = bodyParser.urlencoded({extended: false});
 const jsonParser = bodyParser.json();
 const request = require('request');
+const news = require('./apis/newsController');
 
 //DO NOT REMOVE THE BELOW FUNCTION ... WE MAY NEED TO RUN IT AT SOME POINT IN THE FUTURE!!
-//utils.newsApiImport();
+//news.newsApiImport();
 
 app.use(bodyParser.json());
 
