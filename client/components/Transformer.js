@@ -27,7 +27,7 @@ class TransFormEr extends React.Component {
 			<form onSubmit={this.handleSubmit}>
 				<label>
 					Enter Link: 
-					<input type="text" size="120" value={this.state.value} onChange={this.handleChange} />
+					<input className="transformer-input" type="text" size="120" value={this.state.value} onChange={this.handleChange} />
 				</label>
 				<input type="submit" value="Convert it" />
 				<hr/>
