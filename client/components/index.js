@@ -10,7 +10,7 @@ import { Router,
 } from 'react-router'
 
 ReactDOM.render((
-  <Router history={hashHistory} >
+  <Router history={hashHistory}>
     <Route path="/" component={App}/>
   </Router>
   ),

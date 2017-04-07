@@ -40,7 +40,8 @@ module.exports = function(app, express) {
     });
   });
 
-  app.post('/deleteOne', function(req,res) {
+  app.post('/api/deleteOne', function(req,res) {
+    console.log('DELETE REQ: ', req.body)
     Articles.deleteOne(req.body.url, function(deletedModel) {
       res.send({"deleted": req.body.url});
     });

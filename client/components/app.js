@@ -71,6 +71,7 @@ class App extends React.Component {
 
   // helper function for deleteArticle
 	deleteOne(resObj) {
+		console.log("delete oneee");
 		let result = this.state.items;
 		let index = this.findIndex(result, resObj.deleted);
 		result.splice(index, 1);
@@ -78,12 +79,13 @@ class App extends React.Component {
 	}
 
 	// for deleting a single article
-	deleteArticle(id) {
+	deleteArticle(url) {
 		this.setState({ isLoading: true });
-		axios.post('/deleteOne', { article_id: id })
+		axios.post('/api/deleteOne', { url: url })
 		.then((res) => {
 			this.setState({ isLoading: false, items: (this.deleteOne(res.data)) });
 			// => TODO: figure out how to alert user that article was deleted
+			console.log("deletedddd");
 		})
 		.catch((err) => this.setState({ hasErrored: true, failMessage: err/*'Unable to delete that article'*/ }));
 	}
