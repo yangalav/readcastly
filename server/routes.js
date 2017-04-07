@@ -3,6 +3,8 @@ const request = require('request');
 const Articles = require('./database/controllers/articlesController');
 const User = require('./database/models/user');
 const utils = require('./utils.js');
+const mailer = require('./apis/mailController');
+const texter = require('./apis/textController');
 
 module.exports = function(app, express) {
 
@@ -23,7 +25,7 @@ module.exports = function(app, express) {
       try {
         console.log('routes.js l24, in try block after Mercury response...');
         var parsedBody = JSON.parse(body);
-        console.log('...result: parsedBody = ', parsedBody);
+        // console.log('...result: parsedBody = ', parsedBody);
         if(parsedBody === null) {
           res.send(utils.errors.mercuryCantParse);
           return;
@@ -67,6 +69,16 @@ module.exports = function(app, express) {
     });
     request(options, function(error, response, body) {
       res.send(body);
+    });
+  });
+
+  app.get('/mailer', function(req,res) {
+    let readcast = utils.readcastBuilder(req.body);
+    //req.body will need all fields required for conversion, including title, author, and source, at a minimum, in addition to text
+    //invoke function that converts article to speech, grab path
+    readcast.location = //path to file;
+    mailer.sendMail(User.currentEmail,readcast,function(confirmation){
+      res.send(confirmation);
     });
   });
 
