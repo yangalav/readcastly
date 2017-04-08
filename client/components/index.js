@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './app';
 import SignupForm from './SignupForm';
-import { Router, Route, hashHistory } from 'react-router'; 
+import { Router, Route, hashHistory } from 'react-router';
 
 ReactDOM.render(
   <Router history={hashHistory}>
