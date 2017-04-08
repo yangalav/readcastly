@@ -46,4 +46,3 @@ function ArticleEntry({article, deleteIt}) {
 }
 
 export default ArticleEntry;
-

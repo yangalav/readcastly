@@ -4,6 +4,7 @@ import React from 'react';
 import axios from 'axios';
 import Title from './Title';
 // import SignupButton from './SignupButton';
+import SignUpForm from './SignUpForm';
 import TransFormEr from './TransFormEr';
 import ArticleList from './ArticleList';
 import ArticleEntry from './ArticleEntry';
@@ -79,9 +80,9 @@ class App extends React.Component {
 	}
 
 	// for deleting a single article
-	deleteArticle(url) {
-		// this.setState({ isLoading: true });
-		axios.post('/deleteOne', { url: url })
+	deleteArticle(id) {
+		this.setState({ isLoading: true });
+		axios.post('/deleteOne', { article_id: id })
 		.then((res) => {
 			this.setState({ isLoading: false, items: (this.deleteOne(res.data)) });
 			// => TODO: figure out how to alert user that article was deleted
