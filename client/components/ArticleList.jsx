@@ -2,7 +2,7 @@
   // - a stateless component
 
 import React from 'react';
-import ArticleEntry from './ArticleEntry';
+import ArticleEntry from './ArticleEntry.jsx';
 
 function ArticleList(props) {
 	const articles = props.articles;
@@ -10,7 +10,7 @@ function ArticleList(props) {
 		<div className='article-list'>
 			{articles.map((article) => (
 				<ArticleEntry key={article.id} article={article} deleteIt={props.deleteIt}/>
-			))}	
+			))}
 		</div>
 	);
 }

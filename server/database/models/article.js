@@ -1,7 +1,17 @@
 var db = require('../dbConfig');
 
 var Article = db.Model.extend({
-  tableName: 'Articles'
+  tableName: 'Articles',
+  hasTimestamps: true,
+
+  addedToLibrary: function() {
+    this.set('likes', this.get('likes') + 1);
+  },
+
+  converted: function() {
+    this.set('converted', this.get('converted') + 1);
+  }
+
 });
 
 module.exports = Article;

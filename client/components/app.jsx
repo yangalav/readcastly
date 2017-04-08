@@ -1,15 +1,15 @@
-// 'APP' component is a stateful, top-level component
+// {'APP' component is a stateful, top-level component }
 
 import React from 'react';
 import axios from 'axios';
-import Title from './Title';
-// import SignupButton from './SignupButton';
-import TransFormEr from './TransFormEr';
-import ArticleList from './ArticleList';
-import ArticleEntry from './ArticleEntry';
-// import Player from './player';
-import isValidUrl from '../helpers/urlValidation';
-import {Loading, ErrorAlert} from './Alerts';
+import Title from './Title.jsx';
+// {import SignupButton from './SignupButton'; }
+import TransFormEr from './TransFormer.jsx';
+import ArticleList from './ArticleList.jsx';
+import ArticleEntry from './ArticleEntry.jsx';
+import Player from './Player.jsx';
+import isValidUrl from '../helpers/urlValidation.js';
+import {Loading, ErrorAlert} from './Alerts.jsx';
 
 class App extends React.Component {
 	constructor(props) {
@@ -19,11 +19,11 @@ class App extends React.Component {
 			hasErrored: false,
 			isLoading: false,
 			failMessage: '',
-			nowPlaying: {url: 'http://amberkalvin.com:31/Music/500%20CLASSIC%20ROCK%20SONGS%201/277%20-%20Todd%20Rundgren%20-%20I%20Saw%20The%20Light.mp3', title: 'I Saw the Light'}
+			nowPlaying: {url: 'http://www.netprophet.net/charts/charts/Badfinger%20-%20No%20Matter%20What.mp3', title: 'No Matter What'}
 		};
 	}
 
-	// for getting entire article list
+	// {for getting entire article list}
 	getReadingList(route) {
 		this.setState({ isLoading: true });
 		axios.get(route)
@@ -33,7 +33,7 @@ class App extends React.Component {
 			.catch((err) => this.setState({ failMessage: (res.data.error || 'Unable to retrieve articles'), hasErrored: true }));
 	}
 
-	// helper function for postUserLink
+// {helper function for postUserLink}
 	addOne(obj) {
 		let result = this.state.items;
 		console.log(obj);
@@ -41,7 +41,7 @@ class App extends React.Component {
 		return result;
 	}
 
-	// for posting new links
+// {for posting new links}
 	postUserLink(url) {
 		this.setState({hasErrored: false, failMessage: ''});
 		if (!isValidUrl(url)) {
@@ -57,7 +57,7 @@ class App extends React.Component {
 		.catch((err) => this.setState({ failMessage: (res.data.error || 'Unable to fetch that link'), hasErrored: true }));
 	}
 
-	// helper function for helper, deleteOne
+// {helper function for helper, deleteOne}
 	findIndex(array, url) {
 		let found = false
 		let index;
@@ -72,7 +72,7 @@ class App extends React.Component {
 		return index;
 	}
 
-  // helper function for deleteArticle
+// {helper function for deleteArticle}
 	deleteOne(resObj) {
 		let result = this.state.items;
 		let index = this.findIndex(result, resObj.deleted);
@@ -80,18 +80,18 @@ class App extends React.Component {
 		return result;
 	}
 
-	// for deleting a single article
+// {for deleting a single article}
 	deleteArticle(url) {
-		// this.setState({ isLoading: true });
+		// {this.setState({ isLoading: true });}
 		axios.post('/deleteOne', { url: url })
 		.then((res) => {
 			this.setState({ isLoading: false, items: (this.deleteOne(res.data)) });
-			// => TODO: figure out how to alert user that article was deleted
+			// {=> TODO: figure out how to alert user that article was deleted}
 		})
 		.catch((err) => this.setState({ hasErrored: true, failMessage: (res.data.error ||'Unable to delete that article') }));
 	}
 
-	// invokes ajax call to fetch data for the ArticleList component
+	// {invokes ajax call to fetch data for the ArticleList component}
 	componentDidMount() {
 		this.getReadingList('getAll/');
 	}
@@ -105,11 +105,13 @@ class App extends React.Component {
 				{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
 				<TransFormEr postIt={this.postUserLink.bind(this)}/>
 				<ArticleList articles={this.state.items} deleteIt={this.deleteArticle.bind(this)}/>
-				<player track={this.state.nowPlaying}/>
+				<div id="player_container">
+					<Player track={this.state.nowPlaying}/>
+				</div>
 			</div>
 		);
 
-		// // => FIXIT: when we get this we should re-render the original page, as currently it just dies here (blank screen + this message)
+		{/*// // => FIXIT: when we get this we should re-render the original page, as currently it just dies here (blank screen + this message)
 		// if (this.state.hasErrored) {
 		// 	return (
 		// 		<div>
@@ -138,7 +140,7 @@ class App extends React.Component {
 		// 		<TransFormEr postIt={this.postUserLink.bind(this)}/>
 		// 		<ArticleList articles={this.state.items} deleteIt={this.deleteArticle.bind(this)}/>
 		// 	</div>
-		// );
+		// );*/}
 	}
 }
 
