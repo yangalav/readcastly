@@ -60,6 +60,10 @@ module.exports = function(app, express) {
     });
   });
 
+  app.get('/signup', function(req,res) {
+      res.send('this is our signup page :)');
+  });
+
 };
 
 // other routes we wrote to test and may use in future:

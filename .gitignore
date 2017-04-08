@@ -2,7 +2,7 @@ node_modules/
 .env
 *.sql
 server/.DS_Store
-/client/build/
+client/build/app.bundle.js
 .notes
 .idea
 .DS_Store
