@@ -7,6 +7,7 @@ import Title from './Title';
 import TransFormEr from './TransFormEr';
 import ArticleList from './ArticleList';
 import ArticleEntry from './ArticleEntry';
+// import Player from './player';
 import isValidUrl from '../helpers/urlValidation';
 import {Loading, ErrorAlert} from './Alerts';
 
@@ -17,7 +18,8 @@ class App extends React.Component {
 			items: [],
 			hasErrored: false,
 			isLoading: false,
-			failMessage: ''
+			failMessage: '',
+			nowPlaying: {url: 'http://amberkalvin.com:31/Music/500%20CLASSIC%20ROCK%20SONGS%201/277%20-%20Todd%20Rundgren%20-%20I%20Saw%20The%20Light.mp3', title: 'I Saw the Light'}
 		};
 	}
 
@@ -103,6 +105,7 @@ class App extends React.Component {
 				{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
 				<TransFormEr postIt={this.postUserLink.bind(this)}/>
 				<ArticleList articles={this.state.items} deleteIt={this.deleteArticle.bind(this)}/>
+				<player track={this.state.nowPlaying}/>
 			</div>
 		);
 
