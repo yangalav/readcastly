@@ -32,6 +32,7 @@
     "react": "^15.4.2",
     "react-bootstrap": "^0.30.8",
     "react-dom": "^15.4.2",
+    "react-router": "^3.0.0",
     "request": "^2.81.0",
     "sql": "^0.74.0",
     "striptags": "^3.0.1",
