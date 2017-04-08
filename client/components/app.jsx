@@ -11,6 +11,7 @@ import Player from './Player.jsx';
 import isValidUrl from '../helpers/urlValidation.js';
 import {Loading, ErrorAlert} from './Alerts.jsx';
 
+
 class App extends React.Component {
 	constructor(props) {
 		super(props);

@@ -2,6 +2,31 @@
   // - stateful component
 
 import React from 'react';
+import {FormControl, FormGroup} from 'react-bootstrap';
+
+const voices = [
+	{id: 1, name: 'Big Daddy'},
+	{id: 2, name: 'Mama'},
+	{id: 3, name: 'Little Brother'},
+	{id: 4, name: 'Kid Sister'}
+];
+
+const makeVoiceMenu = function(voices) {
+	return(
+		<div className="voice-chooser">
+			<FormGroup controlId="voiceSelect">
+	      <FormControl componentClass="select" placeholder="Voice Choice">
+	      <option>Voice Choice</option>
+	      {voices.map((voice,i) => (
+					<option key={i} value={voice.id} >{voice.name}</option>
+					))}
+	      </FormControl>
+	    </FormGroup>
+		</div>
+	);
+};
+
+const voiceMenu = makeVoiceMenu(voices);
 
 function ArticleEntry({article, deleteIt}) {
 	const articleText = article.text;
@@ -18,7 +43,7 @@ function ArticleEntry({article, deleteIt}) {
   }
 
 	return (
-	  <div className="article-entry">
+	  <div className="list-group-item article-entry">
 	  	{article.title && <div className="article-title"><span>Title: </span><span><a href={article.url}>{article.title}</a></span></div>}
 	  	{article.author && <div className="article-author"><span>Author: </span><span>{article.author}</span></div>}
 	  	{article.publication_date && <div className="article-publishDate"><span>Date: </span><span>{cleanTime(article.publication_date)}</span></div>}
@@ -27,7 +52,8 @@ function ArticleEntry({article, deleteIt}) {
 	  	{article.excerpt && <div className="article-excerpt"><span>Excerpt: </span><span>{article.excerpt}</span></div>}
 			{article.title && <button onClick={ShowInfo}>More Infooooo</button>}
 			{article.title && <button onClick={() => deleteIt(article.url)}>Delete</button>}
-	  	{article.title &&<hr/>}
+			{voiceMenu}
+	  	{/*article.title &&<hr/>*/}
 	  </div>
 	);
 	// return (

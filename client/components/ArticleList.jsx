@@ -7,7 +7,7 @@ import ArticleEntry from './ArticleEntry.jsx';
 function ArticleList(props) {
 	const articles = props.articles;
 	return (
-		<div className='article-list'>
+		<div className='list-group article-list'>
 			{articles.map((article) => (
 				<ArticleEntry key={article.id} article={article} deleteIt={props.deleteIt}/>
 			))}
