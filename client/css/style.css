@@ -4,15 +4,41 @@ body {
   left: 20px;
 }
 
+.title {
+  text-align: center;
+}
+
+.urlInput {
+  min-width: 1050px;
+  width: auto;
+
+}
+
 .transformer-input {
 	font-weight: normal;
 	padding-left: 5px;
+}
+
+.spinner {
+  align-content: center;
+}
+
+.article-list {
+  margin-bottom: 75px;
+}
+
+.article-entry {
+  margin-bottom: 10px;
+  border-radius: 10px !important;
 }
 
 .voice-chooser {
   width: 130px;
 }
 
+.conversion-chooser {
+  width: 130px;
+}
 /*.center {
     margin: auto;
     width: 50%;

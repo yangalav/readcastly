@@ -92,6 +92,15 @@ class App extends React.Component {
 		.catch((err) => this.setState({ hasErrored: true, failMessage: (res.data.error ||'Unable to delete that article') }));
 	}
 
+	convertArticle(exportObject) {
+		//title,author,date,source,text,voice,method
+		//build object and post to conversion endpoint
+		//if stream, when res comes in set state.nowPlaying to returned url
+		//if text or e-mail when res comes in notify of success
+	}
+
+
+
 	// {invokes ajax call to fetch data for the ArticleList component}
 	componentDidMount() {
 		this.getReadingList('getAll/');
@@ -102,10 +111,10 @@ class App extends React.Component {
 		return(
 			<div>
 				<Title title='Hello, ReadCast.ly!'/>
-				{this.state.isLoading && <Loading />}
 				{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
 				<TransFormEr postIt={this.postUserLink.bind(this)}/>
-				<ArticleList articles={this.state.items} deleteIt={this.deleteArticle.bind(this)}/>
+				{this.state.isLoading && <Loading />}
+				<ArticleList articles={this.state.items} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)/>
 				<div id="player_container">
 					<Player track={this.state.nowPlaying}/>
 				</div>

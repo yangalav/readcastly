@@ -2,7 +2,6 @@ var db = require('../dbConfig');
 
 var Article = db.Model.extend({
   tableName: 'Articles',
-  hasTimestamps: true,
 
   addedToLibrary: function() {
     this.set('likes', this.get('likes') + 1);
