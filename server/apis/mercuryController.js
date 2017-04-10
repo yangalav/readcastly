@@ -74,4 +74,3 @@ const parseAndSave = function(url,callback){
 
 
 module.exports = { parseAndSave : parseAndSave };
-

@@ -2,7 +2,11 @@ node_modules/
 .env
 *.sql
 server/.DS_Store
+<<<<<<< HEAD
 client/build/app.bundle.js
+=======
+client/build/
+>>>>>>> front-end-updates
 .notes
 .idea
 .DS_Store
