@@ -67,6 +67,10 @@ module.exports = function(app, express) {
       res.send('this is our signup page :)');
   });
 
+  app.post('/login', function(req, res) {
+    res.send('this is our login page :)');
+  })
+
   // app.post('/signup',
   //   passport.authenticate('local', { successRedirect: '/',
   //                                    failureRedirect: '/login',

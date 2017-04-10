@@ -3,8 +3,8 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
-const passport = require('passport'),
-  LocalStrategy = require('passport-local').Strategy;
+const passport = require('passport');
+  // LocalStrategy = require('passport-local').Strategy;
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
@@ -24,29 +24,11 @@ const news = require('./apis/newsController');
   app.use(session({
     secret: 'corgisaregreat',
     resave: true,
-    saveUninitialized: true 
+    saveUninitialized: true
   }));
   app.use(passport.initialize());
   app.use(passport.session());
 
-
-
-
-//
-// passport.use(new LocalStrategy(
-//   function(username, password, done) {
-//     User.findOne({ username: username }, function (err, user) {
-//       if (err) { return done(err); }
-//       if (!user) {
-//         return done(null, false, { message: 'Incorrect username.' });
-//       }
-//       if (!user.validPassword(password)) {
-//         return done(null, false, { message: 'Incorrect password.' });
-//       }
-//       return done(null, user);
-//     });
-//   }
-// ));
 
 var port = process.env.PORT || 8080;
 
@@ -55,6 +37,6 @@ app.listen(port, function() {
 });
 
 require('./routes.js')(app, express);
-require('./passport.js')(app, passport);
+require('./passport.js')(passport);
 
 module.exports = app;
