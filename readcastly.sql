@@ -61,7 +61,7 @@ CREATE TABLE `Articles` (
   `date_added` TIMESTAMP NOT NULL,
   `word_count` INTEGER(11) NOT NULL,
   `est_time` INTEGER(11) NULL,
-  `likes` INTEGER(11) NULL DEFAULT 0,
+  `likes` INTEGER(11) NOT NULL DEFAULT 1,
   `conversions` INTEGER(11) NOT NULL DEFAULT 0,
   `created_by` INTEGER(11) NOT NULL,
   PRIMARY KEY (`id`),

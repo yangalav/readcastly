@@ -2,8 +2,8 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './app';
-import SignupForm from './SignupForm';
+import App from './components/App.jsx';
+import SignupForm from './components/SignupForm.jsx';
 import { Router, Route, hashHistory } from 'react-router';
 
 ReactDOM.render(
