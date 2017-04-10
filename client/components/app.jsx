@@ -22,7 +22,7 @@ class App extends React.Component {
 			hasErrored: false,
 			isLoading: false,
 			failMessage: '',
-			nowPlaying: {url: 'http://www.netprophet.net/charts/charts/Badfinger%20-%20No%20Matter%20What.mp3', title: 'No Matter What'},
+			nowPlaying: {url: 'http://www.netprophet.net/charts/charts/Badfinger%20-%20No%20Matter%20What.mp3', title: 'No Matter What // testing scroll. Last word is "initially". This is a song by the legendary Badfinger, who were on Apple Records. Apple Computer told the Beatles they would never be in music so that settled the court case initially'},
 			user:{
 				id: 99
 				// email:,
