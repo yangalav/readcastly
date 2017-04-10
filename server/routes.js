@@ -3,32 +3,19 @@ const request = require('request');
 const Articles = require('./database/controllers/articlesController');
 const User = require('./database/models/user');
 const utils = require('./utils.js');
+const mercury = require('./apis/mercuryController');
+const news = require('./apis/newsController');
+const mailer = require('./apis/mailController');
+const texter = require('./apis/textController');
+
+// To be written and passed into routes between endpoint and function
+// const isLoggedIn = function(){};
 
 module.exports = function(app, express) {
 
   app.post('/requrl', function(req, res) {
-    let requrl = req.body.requrl;
-    console.log('server.js POST to requrl. l. 14. requrl = ', requrl);
-
-    var objToSaveToDB = {
-      url: requrl,
-      user_id: User.currentUser || 99
-    };
-
-    request(utils.mercuryOptions(requrl), function (error, response, body) {
-      if(error) {
-        console.log('server.js, GET req to Mercury. error! = ', error);
-        res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
-      }
-      var parsedBody = JSON.parse(body);
-      if (parsedBody.error) {
-        res.send(utils.errors.badUrl);
-      } else {
-        objToSaveToDB = utils.objBuilder(objToSaveToDB,parsedBody);
-        Articles.create(objToSaveToDB,function(result){
-          res.send(result);
-        });
-      }
+    mercury.parseAndSave(req.body.requrl,function(result) {
+      res.send(result);
     });
   });
 
@@ -48,7 +35,7 @@ module.exports = function(app, express) {
 
   app.get('/topStories', function(req,res) {
     var options = {};
-    utils.newsApiBuilder(req.source_id, function(optionsObj){
+    news.newsApiBuilder(req.source_id, function(optionsObj){
       options = optionsObj;
     });
     request(options, function(error, response, body) {
@@ -56,6 +43,29 @@ module.exports = function(app, express) {
     });
   });
 
+  app.post('/mailer', function(req,res) {
+    let readcast = utils.readcastBuilder(req.body);
+    //req.body will need all fields required for conversion, including title, author, and source, at a minimum, in addition to text
+    //invoke function that converts article to speech, grab path
+    readcast.location = //path to file;
+    mailer.sendMail(User.currentEmail,readcast,function(confirmation){
+      res.send(confirmation);
+    });
+  });
+
+  app.post('/texter', function(req,res) {
+    let readcast = utils.readcastBuilder(req.body);
+    //req.body will need all fields required for conversion, including title, author, and source, at a minimum, in addition to text
+    //invoke function that converts article to speech, grab path - AUDIO FORMAT RETURNED MUST BE MP4, MPEG, OR OGG
+    readcast.location = //path to file;
+    texter.sendText(User.currentPhone,readcast,function(confirmation){
+      res.send(confirmation);
+    });
+  });
+
+  app.get('/signup', function(req,res) {
+      res.send('this is our signup page :)');
+  });
 
 };
 

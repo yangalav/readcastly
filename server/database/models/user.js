@@ -4,6 +4,8 @@ var Promise = require('bluebird');
 
 //Change this to something else when authentication in place!!
 var currentUser = 99;
+var currentEmail = '';
+var currentPhone = '';
 
 var Model = db.Model.extend({
 
@@ -15,6 +17,8 @@ var Model = db.Model.extend({
   comparePassword: function(attemptedPassword, callback) {
     bcrypt.compare(attemptedPassword, this.get('password'), function(err, isMatch) {
       currentUser = this.get('id');
+      currentEmail = this.get('email');
+      currentPhone = this.get('phone');
       callback(isMatch);
     });
   },
@@ -29,7 +33,9 @@ var Model = db.Model.extend({
 
 module.exports = {
   Model: Model,
-  currentUser: currentUser
-}
+  currentUser: currentUser,
+  currentEmail: currentEmail,
+  currentPhone: currentPhone
+};
 
 // Note to self: Model files are a bookshelf feature to allow us to attach libraries of common tasks used when querying databases

@@ -55,7 +55,7 @@ const exactMatch = function(callback) {
   return callback(utils.errors.hasAlready);
 };
 
-const linkArticleUser = function(article,articleData,forExport) {
+const linkArticleUser = function(article,articleData) {
   articleToSend = article.attributes;
   return ArticlesUsers.create({
     article_id: article.id,

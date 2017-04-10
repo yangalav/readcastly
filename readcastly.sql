@@ -19,6 +19,8 @@ CREATE TABLE `Users` (
   `password` VARCHAR(10) NOT NULL,
   `first_name` VARCHAR(20) NOT NULL,
   `last_name` VARCHAR(20) NULL,
+  `phone` VARCHAR(20) NOT NULL,
+  `voice_pref` INTEGER(1) NULL,
   `avatar` VARCHAR(100) NOT NULL DEFAULT 'http://cdn.makeuseof.com/wp-content/uploads/2015/06/6_emoji.png?187d39  ',
   PRIMARY KEY (`id`)
 );
@@ -59,7 +61,7 @@ CREATE TABLE `Articles` (
   `date_added` TIMESTAMP NOT NULL,
   `word_count` INTEGER(11) NOT NULL,
   `est_time` INTEGER(11) NULL,
-  `likes` INTEGER(11) NULL DEFAULT 0,
+  `likes` INTEGER(11) NOT NULL DEFAULT 1,
   `conversions` INTEGER(11) NOT NULL DEFAULT 0,
   `created_by` INTEGER(11) NOT NULL,
   PRIMARY KEY (`id`),

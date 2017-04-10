@@ -2,16 +2,17 @@
   // - a stateless component
 
 import React from 'react';
-import ArticleEntry from './ArticleEntry';
+import {Row} from 'react-bootstrap';
+import ArticleEntry from './ArticleEntry.jsx';
 
 function ArticleList(props) {
 	const articles = props.articles;
 	return (
-		<div className='article-list'>
+		<Row className='list-group article-list'>
 			{articles.map((article) => (
-				<ArticleEntry key={article.id} article={article} deleteIt={props.deleteIt}/>
-			))}	
-		</div>
+				<ArticleEntry key={article.id} article={article} deleteIt={props.deleteIt} convertIt={props.convertIt}/>
+			))}
+		</Row>
 	);
 }
 
