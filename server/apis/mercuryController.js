@@ -6,10 +6,10 @@ const User = require('../database/models/user');
 const utils = require('../utils.js');
 
 
-const articleObjStarter = function(url){
+const articleObjStarter = function(url,userId){
   return {
       url: url,
-      user_id: User.currentUser || 99
+      user_id: userId
     };
 };
 
@@ -38,8 +38,8 @@ const articleObjFinisher = function(obj,source) {
   return obj;
 };
 
-const parseAndSave = function(url,callback){
-  let article = articleObjStarter(url);
+const parseAndSave = function(userId, url,callback){
+  let article = articleObjStarter(url,userId);
   request(optionsBuilder(url), function(error, response, body) {
     if(error) {
         console.log('routes.js l 20, GET req to Mercury. error! = ', error);

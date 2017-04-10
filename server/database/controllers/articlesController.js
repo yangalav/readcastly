@@ -35,11 +35,11 @@ const create = function(articleData,callback) {
 };
 
 
-const deleteOne = function(url, callback) {
+const deleteOne = function(userId, url, callback) {
   return db.knex('Articles-Users')
     .join('Articles','Articles-Users.article_id','Articles.id')
     .where('Articles.url',url)
-    .andWhere('Articles-Users.user_id',User.currentUser)
+    .andWhere('Articles-Users.user_id',userId)
     .select('Articles-Users.id')
     .then(function(result){
       return db.knex('Articles-Users')
