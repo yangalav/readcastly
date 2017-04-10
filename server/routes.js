@@ -13,7 +13,7 @@ const texter = require('./apis/textController');
 module.exports = function(app, express) {
 
   app.post('/requrl', function(req, res) {
-    mercury.parseAndSave(req.body,userId,req.body.requrl,function(result) {
+    mercury.parseAndSave(req.body.userId,req.body.requrl,function(result) {
       res.send(result);
     });
   });

@@ -120,7 +120,7 @@ class App extends React.Component {
 
 		return(
 			<div>
-				<Title title='Hello, ReadCast.ly!'/>
+				<Title title='Welcome to Read.Cast.ly!'/>
 				{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
 				<TransFormEr postIt={this.postUserLink.bind(this)}/>
 				{this.state.isLoading && <Loading />}
