@@ -53,7 +53,7 @@ class ArticleEntry extends React.Component {
 
 	exportMenu() {return (this.makeExportMenu(this.props.exportOptions.methods));};
 
-	showInfo() {console.log('article:', article);};
+	showInfo() {console.log('article:', this.props.article);};
 
 	export() {
 		let articleObj = {
@@ -79,7 +79,7 @@ class ArticleEntry extends React.Component {
 		  	{this.props.article.excerpt && <div className="article-excerpt"><span>Excerpt: </span><span>{this.props.article.excerpt}</span></div>}
 				{this.props.article && this.voiceMenu()}
 				{this.props.article && this.exportMenu()}
-				{this.props.article && <Button bsStyle="primary" onClick={this.showInfo}>Read to Me</Button>}
+				{this.props.article && <Button bsStyle="primary" onClick={this.export.bind(this)}>Read to Me</Button>}
 				{this.props.article && <Button bsStyle="danger" onClick={() => this.props.deleteIt(this.props.article.url)}>Remove From Library</Button>}
 		  </Col>
 		);

@@ -25,11 +25,11 @@ class App extends React.Component {
 			nowPlaying: {url: 'http://www.netprophet.net/charts/charts/Badfinger%20-%20No%20Matter%20What.mp3', title: 'No Matter What'},
 			user:{
 				id: 99,
-				stream: 'stream'//,
-				// email:,
-				// phone:,
+				stream: 'stream',
+				email: 'arfechner@gmail.com',
+				phone: '+19734602180',
 				// first_name:,
-				// voice_pref:,
+				voice_pref: 'Mama'
 				// avatar:,
 			}
 		};
@@ -110,15 +110,17 @@ class App extends React.Component {
 			article: articleObject.article
 		};
 		let route = '/'+ articleObject.method;
-		axios.post(route, {payload: exportObj})
-		.then((res) => {
-			if (articleObject.method = "stream") {
-				this.setState({nowPlaying: res.url});
-			} else {
-				console.log('Message successfully sent to' + exportObj.destination + '.');
-			}
-		})
-		.catch((err) => this.setState({ hasErrored: true, failMessage: ('Error in conversion to speech: ' + err)}));
+		console.log(exportObj);
+		console.log(route);
+		// axios.post(route, {payload: exportObj})
+		// .then((res) => {
+		// 	if (articleObject.method = "stream") {
+		// 		this.setState({nowPlaying: res.url});
+		// 	} else {
+		// 		console.log('Message successfully sent to' + exportObj.destination + '.');
+		// 	}
+		// })
+		// .catch((err) => this.setState({ hasErrored: true, failMessage: ('Error in conversion to speech: ' + err)}));
 	}
 
 	// {invokes ajax call to fetch data for the ArticleList component}
