@@ -14,7 +14,7 @@ const texter = require('./apis/textController');
 module.exports = function(app, express) {
 
   app.post('/requrl', function(req, res) {
-    mercury.parseAndSave(req.body,userId,req.body.requrl,function(result) {
+    mercury.parseAndSave(req.body.userId,req.body.requrl,function(result) {
       res.send(result);
     });
   });
@@ -43,22 +43,31 @@ module.exports = function(app, express) {
     });
   });
 
-  app.post('/mailer', function(req,res) {
-    let readcast = utils.readcastBuilder(req.body);
+  app.post('/stream', function(req,res) {
+    let readcast = utils.readcastBuilder(req.body.payload.article);
+    //req.body will need all fields required for conversion, including title, author, and source, at a minimum, in addition to text
+    //invoke function that converts article to speech, grab path
+    // amazon.stream(readcast, function(url) {
+      // res.send(url);
+    // });
+  });
+
+  app.post('/email', function(req,res) {
+    let readcast = utils.readcastBuilder(req.body.payload.article);
     //req.body will need all fields required for conversion, including title, author, and source, at a minimum, in addition to text
     //invoke function that converts article to speech, grab path
     readcast.location = //path to file;
-    mailer.sendMail(req.body.email,readcast,function(confirmation){
+    mailer.sendMail(req.body.payload.destination,readcast,function(confirmation){
       res.send(confirmation);
     });
   });
 
-  app.post('/texter', function(req,res) {
-    let readcast = utils.readcastBuilder(req.body);
+  app.post('/phone', function(req,res) {
+    let readcast = utils.readcastBuilder(req.body.payload.article);
     //req.body will need all fields required for conversion, including title, author, and source, at a minimum, in addition to text
     //invoke function that converts article to speech, grab path - AUDIO FORMAT RETURNED MUST BE MP4, MPEG, OR OGG
     readcast.location = //path to file;
-    texter.sendText(req.body.phone,readcast,function(confirmation){
+    texter.sendText(req.body.payload.destination,readcast,function(confirmation){
       res.send(confirmation);
     });
   });

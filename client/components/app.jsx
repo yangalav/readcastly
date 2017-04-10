@@ -24,7 +24,8 @@ class App extends React.Component {
 			failMessage: '',
 			nowPlaying: {url: 'http://www.netprophet.net/charts/charts/Badfinger%20-%20No%20Matter%20What.mp3', title: 'No Matter What'},
 			user:{
-				id: 99
+				id: 99,
+				stream: 'stream'//,
 				// email:,
 				// phone:,
 				// first_name:,
@@ -41,7 +42,7 @@ class App extends React.Component {
 			.then((res) => {
 				this.setState({ isLoading: false, items: (res.data.reverse()) });
 			})
-			.catch((err) => this.setState({ failMessage: (res.data.error || 'Unable to retrieve articles'), hasErrored: true }));
+			.catch((err) => this.setState({ failMessage: ('Unable to retrieve articles'), hasErrored: true }));
 	}
 
 // {helper function for postUserLink}
@@ -102,14 +103,23 @@ class App extends React.Component {
 		.catch((err) => this.setState({ hasErrored: true, failMessage: (res.data.error ||'Unable to delete that article') }));
 	}
 
-	convertArticle(exportObject) {
-		//title,author,date,source,text,voice,method
-		//build object and post to conversion endpoint
-		//if stream, when res comes in set state.nowPlaying to returned url
-		//if text or e-mail when res comes in notify of success
+	convertArticle(articleObject) {
+		let exportObj = {
+			userId: this.state.user.id,
+			destination: this.state.user[articleObject.method],
+			article: articleObject.article
+		};
+		let route = '/'+ articleObject.method;
+		axios.post(route, {payload: exportObj})
+		.then((res) => {
+			if (articleObject.method = "stream") {
+				this.setState({nowPlaying: res.url});
+			} else {
+				console.log('Message successfully sent to' + exportObj.destination + '.');
+			}
+		})
+		.catch((err) => this.setState({ hasErrored: true, failMessage: ('Error in conversion to speech: ' + err)}));
 	}
-
-
 
 	// {invokes ajax call to fetch data for the ArticleList component}
 	componentDidMount() {
@@ -124,7 +134,7 @@ class App extends React.Component {
 				{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
 				<TransFormEr postIt={this.postUserLink.bind(this)}/>
 				{this.state.isLoading && <Loading />}
-				<ArticleList articles={this.state.items} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)}/>
+				<ArticleList articles={this.state.items} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)}/>
 				<div id="player_container">
 					<Player track={this.state.nowPlaying}/>
 				</div>

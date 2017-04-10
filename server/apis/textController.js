@@ -15,7 +15,7 @@ const deleteMedia = function(message, callback) {
   });
 };
 
-const sendText = function(readcast,phone,callback) {
+const sendText = function(phone,readcast,callback) {
   client.messages.create({
       body: 'Readcast.ly presents "' + readcast.title + '"',
       to: phone,
