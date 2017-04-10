@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 
 class LoginForm extends React.Component {
   constructor() {
@@ -13,7 +14,7 @@ class LoginForm extends React.Component {
           <input type="email" name="email"/><br/>
           Password:<br/>
           <input type="password" name="password"/><br/>
-          <input type="submit" value="Login"/>
+          <Button bsStyle="success">Login</Button>
         </form>
       </div>
   	);

@@ -3,8 +3,10 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
-// const passport = require('passport'),
-  // LocalStrategy = require('passport-local').Strategy;
+const passport = require('passport'),
+  LocalStrategy = require('passport-local').Strategy;
+const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const urlParser = bodyParser.urlencoded({extended: false});
 const jsonParser = bodyParser.json();
@@ -14,12 +16,18 @@ const news = require('./apis/newsController');
 //DO NOT REMOVE THE BELOW FUNCTION ... WE MAY NEED TO RUN IT AT SOME POINT IN THE FUTURE!!
 //news.newsApiImport();
 
-
+  app.use(morgan('dev'));
+  app.use(cookieParser());
   app.use(bodyParser.json());
   app.use(express.static(path.join(__dirname, '../client')));
 
-  // app.use(passport.initialize());
-  // app.use(passport.session());
+  app.use(session({
+    secret: 'corgisaregreat',
+    resave: true,
+    saveUninitialized: true 
+  }));
+  app.use(passport.initialize());
+  app.use(passport.session());
 
 
 
@@ -47,5 +55,6 @@ app.listen(port, function() {
 });
 
 require('./routes.js')(app, express);
+require('./passport.js')(app, passport);
 
 module.exports = app;
