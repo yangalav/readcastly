@@ -1,7 +1,6 @@
 require('dotenv').config();
 const request = require('request');
 const Articles = require('./database/controllers/articlesController');
-// const User = require('./database/models/user');
 const utils = require('./utils.js');
 const mercury = require('./apis/mercuryController');
 const news = require('./apis/newsController');
@@ -19,7 +18,6 @@ module.exports = function(app, express) {
     });
   });
 
-  // will need to switch out hard-coded '99' 3 lines below once login functionality established
   app.get('/getAll', function(req, res) {
     console.log('server.js received GET req at /getAll . Returning array of objects with contents of Readcastly db!');
     Articles.getAll(req.query.userId, function(library) {
