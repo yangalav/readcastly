@@ -22,14 +22,22 @@ class App extends React.Component {
 			hasErrored: false,
 			isLoading: false,
 			failMessage: '',
-			nowPlaying: {url: 'http://www.netprophet.net/charts/charts/Badfinger%20-%20No%20Matter%20What.mp3', title: 'No Matter What'}
+			nowPlaying: {url: 'http://www.netprophet.net/charts/charts/Badfinger%20-%20No%20Matter%20What.mp3', title: 'No Matter What'},
+			user:{
+				id: 99
+				// email:,
+				// phone:,
+				// first_name:,
+				// voice_pref:,
+				// avatar:,
+			}
 		};
 	}
 
 	// {for getting entire article list}
-	getReadingList(route) {
+	getReadingList() {
 		this.setState({ isLoading: true });
-		axios.get(route)
+		axios.get('/getAll', {params: {userId: this.state.user.id} })
 			.then((res) => {
 				this.setState({ isLoading: false, items: (res.data.reverse()) });
 			})
@@ -52,7 +60,7 @@ class App extends React.Component {
 			return;
 		}
 		this.setState({ isLoading: true });
-		axios.post('/requrl', {requrl: url})
+		axios.post('/requrl', {userId: this.state.user.id, requrl: url})
 		.then((res) => {
 			this.setState({ isLoading: false, items: (this.addOne(res.data)) });
 			return;
@@ -86,7 +94,7 @@ class App extends React.Component {
 // {for deleting a single article}
 	deleteArticle(url) {
 		// {this.setState({ isLoading: true });}
-		axios.post('/deleteOne', { url: url })
+		axios.post('/deleteOne', { userId: this.state.user.id, url: url })
 		.then((res) => {
 			this.setState({ isLoading: false, items: (this.deleteOne(res.data)) });
 			// {=> TODO: figure out how to alert user that article was deleted}
@@ -105,7 +113,7 @@ class App extends React.Component {
 
 	// {invokes ajax call to fetch data for the ArticleList component}
 	componentDidMount() {
-		this.getReadingList('getAll/');
+		this.getReadingList();
 	}
 
 	render() {

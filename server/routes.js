@@ -1,7 +1,7 @@
 require('dotenv').config();
 const request = require('request');
 const Articles = require('./database/controllers/articlesController');
-const User = require('./database/models/user');
+// const User = require('./database/models/user');
 const utils = require('./utils.js');
 const mercury = require('./apis/mercuryController');
 const news = require('./apis/newsController');
@@ -14,7 +14,7 @@ const texter = require('./apis/textController');
 module.exports = function(app, express) {
 
   app.post('/requrl', function(req, res) {
-    mercury.parseAndSave(req.body.requrl,function(result) {
+    mercury.parseAndSave(req.body,userId,req.body.requrl,function(result) {
       res.send(result);
     });
   });
@@ -22,13 +22,13 @@ module.exports = function(app, express) {
   // will need to switch out hard-coded '99' 3 lines below once login functionality established
   app.get('/getAll', function(req, res) {
     console.log('server.js received GET req at /getAll . Returning array of objects with contents of Readcastly db!');
-    Articles.getAll(/*User.currentUser*/99, function(library) {
+    Articles.getAll(req.query.userId, function(library) {
       res.send(library);
     });
   });
 
   app.post('/deleteOne', function(req,res) {
-    Articles.deleteOne(req.body.url, function(deletedModel) {
+    Articles.deleteOne(req.body.userId,req.body.url, function(deletedModel) {
       res.send({"deleted": req.body.url});
     });
   });
@@ -48,7 +48,7 @@ module.exports = function(app, express) {
     //req.body will need all fields required for conversion, including title, author, and source, at a minimum, in addition to text
     //invoke function that converts article to speech, grab path
     readcast.location = //path to file;
-    mailer.sendMail(User.currentEmail,readcast,function(confirmation){
+    mailer.sendMail(req.body.email,readcast,function(confirmation){
       res.send(confirmation);
     });
   });
@@ -58,7 +58,7 @@ module.exports = function(app, express) {
     //req.body will need all fields required for conversion, including title, author, and source, at a minimum, in addition to text
     //invoke function that converts article to speech, grab path - AUDIO FORMAT RETURNED MUST BE MP4, MPEG, OR OGG
     readcast.location = //path to file;
-    texter.sendText(User.currentPhone,readcast,function(confirmation){
+    texter.sendText(req.body.phone,readcast,function(confirmation){
       res.send(confirmation);
     });
   });
