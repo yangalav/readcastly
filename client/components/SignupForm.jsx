@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 
 class SignupForm extends React.Component {
   constructor() {
@@ -19,7 +20,7 @@ class SignupForm extends React.Component {
           <input type="password" name="password"/><br/>
           Avatar:<br/>
           <input type="url" name="avatar"/><br/>
-          <input type="submit" value="Sign Up"/>
+          <Button bsStyle="success">Sign Up</Button>
         </form>
       </div>
   	);
