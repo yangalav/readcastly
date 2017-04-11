@@ -16,7 +16,8 @@ function ArticleList(props) {
     methods : [
       {id: "stream", method: 'Stream It'},
       {id: "email", method: 'Email It'},
-      {id: "phone", method: 'Text It'}
+      {id: "phone", method: 'Text It'},
+      {id: "link", method: 'Link It'}
     ]
   }
 

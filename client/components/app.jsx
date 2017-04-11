@@ -26,6 +26,7 @@ class App extends React.Component {
 			user:{
 				id: 99,
 				stream: 'stream',
+				link: 'link',
 				email: 'arfechner@gmail.com',
 				phone: '+19734602180',
 				// first_name:,

@@ -2,7 +2,7 @@
   // - stateful component
 
 import React from 'react';
-import {Button, Col, FormControl, FormGroup} from 'react-bootstrap';
+import {Button, Col, FormControl, FormGroup, Row} from 'react-bootstrap';
 
 class ArticleEntry extends React.Component {
 	constructor(props) {
@@ -67,16 +67,24 @@ class ArticleEntry extends React.Component {
 	render() {
 		return (
 			<Col md={8} mdOffset={2} className="list-group-item article-entry">
-		  	{this.props.article.title && <div className="article-title"><span>Title: </span><span><a href={this.props.article.url}>{this.props.article.title}</a></span></div>}
-		  	{this.props.article.author && <div className="article-author"><span>Author: </span><span>{this.props.article.author}</span></div>}
-		  	{this.props.article.publication_date && <div className="article-publishDate"><span>Date: </span><span>{this.props.article.publication_date}</span></div>}
-		  	{this.props.article.source_name && <div className="article-source"><span>Source: </span><span>{this.props.article.source_name}</span></div>}
-		  	{this.props.article.image && <img className="article-sampleImage" src={this.props.article.image} height="42" />}
-		  	{this.props.article.excerpt && <div className="article-excerpt"><span>Excerpt: </span><span>{this.props.article.excerpt}</span></div>}
-				{this.props.article && this.voiceMenu()}
-				{this.props.article && this.exportMenu()}
-				{this.props.article && <Button bsStyle="primary" onClick={this.export.bind(this)}>Read To Me! (Est. Time: {this.props.article.est_time})</Button>}
-				{this.props.article && <Button bsStyle="danger" onClick={() => this.props.deleteIt(this.props.article.url)}>Remove From Library</Button>}
+				<Col md={3} className="articleImage">
+					{this.props.article.image && <img className="article-sampleImage" src={this.props.article.image} width="100%" />}
+				</Col>
+				<Col md={7} className="article-info">
+		  		{this.props.article.title && <div className="article-title"><span>Title: </span><span><a href={this.props.article.url}>{this.props.article.title}</a></span></div>}
+		  		{this.props.article.author && <div className="article-author"><span>Author: </span><span>{this.props.article.author}</span></div>}
+		  		{this.props.article.publication_date && <div className="article-publishDate"><span>Date: </span><span>{this.props.article.publication_date}</span></div>}
+		  		{this.props.article.source_name && <div className="article-source"><span>Source: </span><span>{this.props.article.source_name}</span></div>}
+		  		{this.props.article.excerpt && <div className="article-excerpt"><span>Excerpt: </span><span>{this.props.article.excerpt}</span></div>}
+		  		{this.props.article && <Button bsStyle="danger" onClick={() => this.props.deleteIt(this.props.article.url)}>Remove From Library</Button>}
+		  	</Col>
+		  <Col md={2}>
+		  	<div  className="article-buttons">
+					{this.props.article && this.voiceMenu()}
+					{this.props.article && this.exportMenu()}
+					{this.props.article && <Button bsStyle="primary" onClick={this.export.bind(this)}>Read To Me!<br />Est. Time: {this.props.article.est_time})</Button>}
+				</div>
+				</Col>
 		  </Col>
 		);
 	}
