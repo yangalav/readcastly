@@ -40,9 +40,23 @@ class App extends React.Component {
 		this.setState({ isLoading: true });
 		axios.get('/getAll', {params: {userId: this.state.user.id} })
 			.then((res) => {
+				res.data.forEach((article) => {
+					if (article.publication_date) {article.publication_date = this.cleanDate(article.publication_date)};
+					article.est_time = this.cleanTime(article.est_time);
+				});
 				this.setState({ isLoading: false, items: (res.data.reverse()) });
 			})
 			.catch((err) => this.setState({ failMessage: ('Unable to retrieve articles'), hasErrored: true }));
+	}
+
+	cleanDate(entry) {
+		return !entry ? 'N/A' : (entry.slice(5,7) + '/' + entry.slice(8,10) + '/' + entry.slice(0,4));
+	}
+
+	cleanTime(entry) {
+		let mins = Math.floor(entry);
+		let secs = (''+(entry-mins)*60).slice(0,2);
+		return secs === '0' ? mins + ":" + '00' : mins + ":" + secs;
 	}
 
 // {helper function for postUserLink}
@@ -112,7 +126,13 @@ class App extends React.Component {
 		let route = '/'+ articleObject.method;
 		console.log(exportObj);
 		console.log(route);
-		// axios.post(route, {payload: exportObj})
+		axios.post(route, {payload: exportObj})
+			.then((res) => {
+				console.log(res.data.method);
+			})
+			.catch((err) => {
+				console.log(articleObject.method, err);
+			});
 		// .then((res) => {
 		// 	if (articleObject.method = "stream") {
 		// 		this.setState({nowPlaying: res.url});

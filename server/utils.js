@@ -24,7 +24,13 @@ const domainExtractor = function(url) {
   return url.slice(start,end);
 };
 
+const readcastBuilder = function(articleObj) {
+// placeholder
+  return articleObj.title;
+}
+
 module.exports = {
   errors: errors,
-  domainExtractor: domainExtractor
+  domainExtractor: domainExtractor,
+  readcastBuilder: readcastBuilder
 };
