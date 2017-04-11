@@ -8,9 +8,6 @@ class ArticleEntry extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {method: '', voice: this.props.user.voice_pref};
-
-		// this.handleChange = this.handleChange.bind(this);
-		// this.handleSubmit = this.handleSubmit.bind(this);
 	};
 
 	makeVoiceMenu(voices) {

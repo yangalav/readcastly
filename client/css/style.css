@@ -29,6 +29,7 @@ body {
 }
 
 .article-title{
+  font: arial;
   font-size: 1.75em;
 }
 
