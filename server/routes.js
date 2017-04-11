@@ -63,10 +63,21 @@ module.exports = function(app, express) {
     });
   });
 
+  //AUTHENTICATION ROUTES:
+
   app.get('/signup', function(req,res) {
       res.send('this is our signup page :)');
   });
 
+  app.post('/login', function(req, res) {
+    res.send('this is our login page :)');
+  })
+
+  // app.post('/signup',
+  //   passport.authenticate('local', { successRedirect: '/',
+  //                                    failureRedirect: '/login',
+  //                                    failureFlash: true })
+  // );
 };
 
 // other routes we wrote to test and may use in future:
