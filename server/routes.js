@@ -43,24 +43,54 @@ module.exports = function(app, express) {
     });
   });
 
-  app.post('/mailer', function(req,res) {
-    let readcast = utils.readcastBuilder(req.body);
+  app.post('/stream', function(req,res) {
+    console.log('IN STREAM ENDPOINT');
+    console.log('PAYLOAD === ', req.body.payload);
+    res.send({"method": 'SUCCESSFUL STREAM RETURN'});
+    // let readcast = utils.readcastBuilder(req.body.payload.article);
     //req.body will need all fields required for conversion, including title, author, and source, at a minimum, in addition to text
     //invoke function that converts article to speech, grab path
-    readcast.location = //path to file;
-    mailer.sendMail(req.body.email,readcast,function(confirmation){
-      res.send(confirmation);
-    });
+    // amazon.stream(readcast, function(url) {
+      // res.send(url);
+    // });
   });
 
-  app.post('/texter', function(req,res) {
-    let readcast = utils.readcastBuilder(req.body);
+  app.post('/email', function(req,res) {
+    console.log('IN EMAIL ENDPOINT');
+    console.log('PAYLOAD === ', req.body.payload);
+    res.send({"method": 'SUCCESSFUL EMAIL RETURN'});
+    // let readcast = utils.readcastBuilder(req.body.payload.article);
+    // //req.body will need all fields required for conversion, including title, author, and source, at a minimum, in addition to text
+    // //invoke function that converts article to speech, grab path
+    // readcast.location = //path to file;
+    // mailer.sendMail(req.body.payload.destination,readcast,function(confirmation){
+    //   res.send(confirmation);
+    // });
+  });
+
+  app.post('/phone', function(req,res) {
+    console.log('IN PHONE ENDPOINT');
+    console.log('PAYLOAD === ', req.body.payload);
+    res.send({"method": 'SUCCESSFUL PHONE RETURN'});
+    // let readcast = utils.readcastBuilder(req.body.payload.article);
+    // //req.body will need all fields required for conversion, including title, author, and source, at a minimum, in addition to text
+    // //invoke function that converts article to speech, grab path - AUDIO FORMAT RETURNED MUST BE MP4, MPEG, OR OGG
+    // readcast.location = //path to file;
+    // texter.sendText(req.body.payload.destination,readcast,function(confirmation){
+    //   res.send(confirmation);
+    // });
+  });
+
+  app.post('/link', function(req,res) {
+    console.log('IN LINK ENDPOINT');
+    console.log('PAYLOAD === ', req.body.payload);
+    res.send({"method": 'SUCCESSFUL LINK RETURN'});
+    // let readcast = utils.readcastBuilder(req.body.payload.article);
     //req.body will need all fields required for conversion, including title, author, and source, at a minimum, in addition to text
-    //invoke function that converts article to speech, grab path - AUDIO FORMAT RETURNED MUST BE MP4, MPEG, OR OGG
-    readcast.location = //path to file;
-    texter.sendText(req.body.phone,readcast,function(confirmation){
-      res.send(confirmation);
-    });
+    //invoke function that converts article to speech, grab path
+    // amazon.stream(readcast, function(url) {
+      // res.send(url);
+    // });
   });
 
   //AUTHENTICATION ROUTES:

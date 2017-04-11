@@ -2,7 +2,7 @@
 	// (component where users enter links, in a form, to have them 'transformed')
 
 import React from 'react';
-import {Button, Col, ControlLabel, Form, FormControl, FormGroup, Row} from 'react-bootstrap';
+import { Grid, Row, Col, Form, FormControl, FormGroup, InputGroup, Button } from 'react-bootstrap';
 
 
 class TransFormEr extends React.Component {
@@ -27,20 +27,19 @@ class TransFormEr extends React.Component {
 
 	render() {
 		return (
-		<Row className="transformer">
-		<Col md={8} mdOffset={2}>
-			<Form inline onSubmit={this.handleSubmit}>
-				<FormGroup controlId="urlConverter">
-					<ControlLabel>Enter Link</ControlLabel>
-					{'    '}
-					<FormControl className="urlInput" type="text" placeholder="http://...." value={this.state.value} onChange={this.handleChange} />
-				</FormGroup>
-				{'  '}
-				<Button type="submit" bsStyle="warning">Add to Library</Button>
-				<hr/>
-			</Form>
-		</Col>
-		</Row>
+			<Grid>
+				<Row className="transformer">
+					<Form inline onSubmit={this.handleSubmit}>
+						<Col md={10}>
+							<FormControl type="text" id="add-library-input" placeholder="Enter URL ..." value={this.state.value} onChange={this.handleChange} />
+						</Col>
+						<Col md={2}>
+					    <Button type="submit" bsStyle="warning" id="add-library-btn">Add to Library</Button>
+						</Col>
+						</Form>
+						<hr/>
+				</Row>
+			</Grid>
 		);
 	}
 	// render() {

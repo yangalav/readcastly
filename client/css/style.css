@@ -1,17 +1,13 @@
 body {
   background-color: lightblue;
-  position: absolute;
-  left: 20px;
+}
+
+.row {
+  padding-bottom: 20px;
 }
 
 .title {
   text-align: center;
-}
-
-.urlInput {
-  min-width: 1050px;
-  width: auto;
-
 }
 
 .transformer-input {
@@ -32,13 +28,42 @@ body {
   border-radius: 10px !important;
 }
 
-.voice-chooser {
-  width: 120px;
+.article-title{
+  font: arial;
+  font-size: 1.75em;
+}
+
+.article-author{
+
+}
+
+.article-publishDate{
+
+}
+
+.article-source{
+
+}
+
+#add-library-input, #add-library-btn {
+  width: 100%;
+}
+
+.modal-container {
+  position: relative;
+}
+
+.modal-container .modal, .modal-container .modal-backdrop {
+  position: absolute;
+}
+/*.voice-chooser {
+  width: 130px;
 }
 
 .conversion-chooser {
-  width: 120px;
-}
+  width: 130px;
+}*/
+
 /*.center {
     margin: auto;
     width: 50%;
