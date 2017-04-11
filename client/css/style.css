@@ -28,9 +28,22 @@ body {
   border-radius: 10px !important;
 }
 
-.article-info {
+.article-title{
+  font-size: 1.75em;
+}
+
+.article-author{
 
 }
+
+.article-publishDate{
+
+}
+
+.article-source{
+
+}
+
 #add-library-input, #add-library-btn {
   width: 100%;
 }

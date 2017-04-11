@@ -18,9 +18,10 @@ class ArticleEntry extends React.Component {
 			<div className="voice-chooser">
 				<FormGroup controlId="voiceSelect">
 	      	<FormControl componentClass="select" value={this.state.voice} onChange={this.handleVoiceChange.bind(this)} placeholder="Voice Choice">
-	      	{voices.map((voice,i) => (
-						<option key={i} value={voice.name} >{voice.name}</option>
-					))}
+	      	{voices.map((voice,i) => {
+	      		return voice.flag ? (<option key={i} value={voice.name} >{voice.name}</option>) :
+	      			(<option key={i} disabled="disabled" >{voice.name}</option>)
+	      		})}
 	      	</FormControl>
 	    	</FormGroup>
 			</div>
@@ -72,10 +73,10 @@ class ArticleEntry extends React.Component {
 						{this.props.article.image && <img className="article-sampleImage img-responsive img-rounded" src={this.props.article.image} />}
 					</Col>
 					<Col md={7} className="article-info">
-		  			{this.props.article.title && <div className="article-title"><span>Title: </span><span><a href={this.props.article.url}>{this.props.article.title}</a></span></div>}
-		  			{this.props.article.author && <div className="article-author"><span>Author: </span><span>{this.props.article.author}</span></div>}
-		  			{this.props.article.publication_date && <div className="article-publishDate"><span>Date: </span><span>{this.props.article.publication_date}</span></div>}
-		  			{this.props.article.source_name && <div className="article-source"><span>Source: </span><span>{this.props.article.source_name}</span></div>}
+		  			{this.props.article.title && <div className="article-title"><span><a href={this.props.article.url}><b>{this.props.article.title}</b></a></span></div>}
+		  			{this.props.article.author && <div className="article-author"><span>{this.props.article.author}</span></div>}
+		  			{this.props.article.publication_date && <div className="article-publishDate"><span>{this.props.article.publication_date}</span></div>}
+		  			{this.props.article.source_name && <div className="article-source"><span><i>{this.props.article.source_name}</i></span></div>}
 		  			{this.props.article.excerpt && <div className="article-excerpt"><span>Excerpt: </span><span>{this.props.article.excerpt}</span></div>}
 		  			{this.props.article && <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.props.deleteIt(this.props.article.url)}>Remove From Library</Button>}
 		  		</Col>

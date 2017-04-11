@@ -8,10 +8,25 @@ import ArticleEntry from './ArticleEntry.jsx';
 function ArticleList(props) {
   let exportOptions = {
     voices : [
-      {id: 1, name: 'Big Daddy'},
-      {id: 2, name: 'Mama'},
-      {id: 3, name: 'Little Brother'},
-      {id: 4, name: 'Kid Sister'}
+      {name: '--American English--'},
+      {flag: 'us', name: 'Joanna'},
+      {flag: 'us', name: 'Salli'},
+      {flag: 'us', name: 'Kendra'},
+      {flag: 'us', name: 'Kimberly'},
+      {flag: 'us', name: 'Ivy'},
+      {flag: 'us', name: 'Joey'},
+      {flag: 'us', name: 'Justin'},
+      {name: '--British English--'},
+      {flag: 'uk', name: 'Amy'},
+      {flag: 'uk', name: 'Emma'},
+      {flag: 'uk', name: 'Brian'},
+      {name: '--Australian English--'},
+      {flag: 'au', name: 'Nicole'},
+      {flag: 'uk', name: 'Russell'},
+      {name: '--Indian English--'},
+      {flag: 'in', name: 'Raveena'},
+      {name: '--Welsh English--'},
+      {flag: 'wa', name: 'Geraint'}
     ],
     methods : [
       {id: "stream", method: 'Stream It'},
