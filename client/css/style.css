@@ -7,12 +7,35 @@ body {
 }
 
 .title {
+    /*position: absolute;*/
   text-align: center;
+    /*left: 20px;*/
+  font-family: 'Work Sans', sans-serif;
+  font-weight: bolder;
+  font-size: 48px;
+}
+
+.subtitle {
+  text-align: center;
+  font-family: 'Work Sans', sans-serif;
+  font-style: italic;
+  /*font-size: 24px;*/
+}
+
+.urlInput {
+  min-width: 680px;
+  width: auto;
+  border-radius: 10px !important;
 }
 
 .transformer-input {
 	font-weight: normal;
 	padding-left: 5px;
+}
+
+.readcasts-topstories {
+  text-align: center;
+  font-weight: bold;
 }
 
 .spinner {

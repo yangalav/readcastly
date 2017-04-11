@@ -31,10 +31,11 @@ class TransFormEr extends React.Component {
 				<Row className="transformer">
 					<Form inline onSubmit={this.handleSubmit}>
 						<Col md={10}>
-							<FormControl type="text" id="add-library-input" placeholder="Enter URL ..." value={this.state.value} onChange={this.handleChange} />
+							<FormControl type="text" id="add-library-input" placeholder="Enter an article URL" value={this.state.value} onChange={this.handleChange} />
 						</Col>
 						<Col md={2}>
-					    <Button type="submit" bsStyle="warning" id="add-library-btn">Add to Library</Button>
+					    <Button type="submit" bsStyle="success" id="listen-now-btn">Listen now</Button>
+							<Button type="submit" bsStyle="primary" id="add-library-btn">Add to Library</Button>
 						</Col>
 						</Form>
 						<hr/>
@@ -42,6 +43,8 @@ class TransFormEr extends React.Component {
 			</Grid>
 		);
 	}
+	// => TODO: write function & connect Listen now button to process URL & begin playing when available;
+
 	// render() {
 	// 	return (
 	// 		<form class="transformer" onSubmit={this.handleSubmit}>
