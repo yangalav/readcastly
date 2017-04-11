@@ -24,7 +24,58 @@ const domainExtractor = function(url) {
   return url.slice(start,end);
 };
 
+const dbStats = function(dbContents) {
+  console.log('server.utils.js l 28: running dbStats...');
+  var count = 0;
+  var total = 0;
+  var highest = 0;
+  var highestArray = [];
+  var numOfHighestCountsToTrack = 25;
+
+  var avg1 = function(arr) {
+    for(var item of arr) {
+    // console.log('\narticle id = ', item["id"]);
+    // console.log('article word count = ', item["word_count"]);
+      count++;
+      total+= item["word_count"]
+      // console.log('highestArray[highestArray.length-1] = ', highestArray[highestArray.length-1]);
+      if(highestArray[highestArray.length-1] === undefined || item["word_count"] >    highestArray[highestArray.length-1]) {
+        highestArray.push(item["word_count"]);
+        highestArray.sort(function(a, b) {return b-a});
+        if(highestArray.length > numOfHighestCountsToTrack) {
+          highestArray.pop();
+        }
+        highest = highestArray[0];
+      }
+    }
+    console.log('\n\nTotal # words in all articles in db = ', total);
+    console.log('# of articles in db = ', count);
+    console.log('Average word count = ', Math.floor(total / count));
+    console.log('\n', numOfHighestCountsToTrack, ' articles with highest word counts: ', highestArray);
+  };
+  avg1(dbContents);
+
+  var variedAverages = function(arr) {
+    var reduction = function(numOfHighestToSubtract) {
+      // console.log('\n\n# of highest word counts to remove = ', numOfHighestToSubtract);
+      var subArray = highestArray.slice(0, numOfHighestToSubtract);
+      var reduced = subArray.reduce(function(acc, val) {
+        return acc + val;
+      });
+      console.log('\nReducing # words by: ', reduced);
+      return reduced;
+    }
+
+    for(var z=0; z < arr.length; z++) {
+      var newAvg = Math.floor((total - reduction(arr[z])) / (count - arr[z]));
+      console.log('i.e., the avg. word count if we remove the ', arr[z], ' longest articles = ', newAvg);
+    }
+  }
+  variedAverages([10, 7, 5, 3, 1]) // these are the scenarios to run: # of highest word counts to remove
+}
+
 module.exports = {
   errors: errors,
-  domainExtractor: domainExtractor
+  domainExtractor: domainExtractor,
+  dbStats: dbStats
 };

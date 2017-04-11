@@ -21,6 +21,8 @@ module.exports = function(app, express) {
   app.get('/getAll', function(req, res) {
     console.log('server.js received GET req at /getAll . Returning array of objects with contents of Readcastly db!');
     Articles.getAll(req.query.userId, function(library) {
+      console.log('server/routes.js l 25, about to call utils.dbstats...');
+      utils.dbStats(library);
       res.send(library);
     });
   });

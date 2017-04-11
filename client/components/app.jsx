@@ -114,6 +114,7 @@ class App extends React.Component {
 	// {invokes ajax call to fetch data for the ArticleList component}
 	componentDidMount() {
 		this.getReadingList();
+						// console.log('app.js getReadingList l 42. full db returned: ', res.data;
 	}
 
 	render() {
