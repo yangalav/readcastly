@@ -36,7 +36,7 @@ class ArticleEntry extends React.Component {
 	makeExportMenu(methods) {
 		return(
 			<div className="conversion-chooser">
-				<FormGroup controlId="conversionSelect">
+				<FormGroup controlId="conversionSelect" bsClass="">
 	      	<FormControl componentClass="select" value={this.state.method} onChange={this.handleMethodChange.bind(this)} placeholder="File Options">
 	      	{methods.map((option,i) => (
 						<option key={i} value={option.id} >{option.method}</option>
@@ -68,7 +68,7 @@ class ArticleEntry extends React.Component {
 		return (
 			<Col md={8} mdOffset={2} className="list-group-item article-entry">
 				<Col md={3} className="articleImage">
-					{this.props.article.image && <img className="article-sampleImage" src={this.props.article.image} width="100%" />}
+					{this.props.article.image && <img className="article-sampleImage" src={this.props.article.image} width="100%" responsive />}
 				</Col>
 				<Col md={7} className="article-info">
 		  		{this.props.article.title && <div className="article-title"><span>Title: </span><span><a href={this.props.article.url}>{this.props.article.title}</a></span></div>}
@@ -79,10 +79,10 @@ class ArticleEntry extends React.Component {
 		  		{this.props.article && <Button bsStyle="danger" onClick={() => this.props.deleteIt(this.props.article.url)}>Remove From Library</Button>}
 		  	</Col>
 		  <Col md={2}>
-		  	<div  className="article-buttons">
+		  	<div className="article-buttons">
 					{this.props.article && this.voiceMenu()}
 					{this.props.article && this.exportMenu()}
-					{this.props.article && <Button bsStyle="primary" onClick={this.export.bind(this)}>Read To Me!<br />Est. Time: {this.props.article.est_time})</Button>}
+					{this.props.article && <Button bsStyle="primary" onClick={this.export.bind(this)} block>Read To Me!<br /><i>Est. Time: {this.props.article.est_time}</i></Button>}
 				</div>
 				</Col>
 		  </Col>
