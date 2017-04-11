@@ -6,6 +6,7 @@ import axios from 'axios';
 import Title from './Title.jsx';
 import Subtitle from './Subtitle.jsx';
 import WhichView from './ReadcastTopstories.jsx';
+// import HeaderNavigation from './Navbar.jsx';
 // {import SignupButton from './SignupButton'; }
 import SignUpForm from './SignupForm.jsx';
 import TransFormEr from './TransFormer.jsx';
@@ -123,6 +124,9 @@ class App extends React.Component {
 
 		return(
 			<div>
+
+		
+
 				<Title title='Read.Cast.ly'/>
 				<Subtitle subtitle='your reading backlog solved'/>
 				{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
@@ -173,3 +177,5 @@ export default App;
 
 	// <ReadcastTopstories readcast='Your Read.casts'/>
 	// => TODO: // get player scroll to work. Test text: Last word is "initially". This is a song by the legendary Badfinger, who were on Apple Records. Apple Computer told the Beatles they would never be in music so that settled the court case initially
+
+					// <div id="navbar"></div>
