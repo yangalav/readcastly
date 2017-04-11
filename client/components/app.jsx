@@ -10,6 +10,7 @@ import TransFormEr from './TransFormer.jsx';
 import ArticleList from './ArticleList.jsx';
 import ArticleEntry from './ArticleEntry.jsx';
 import Player from './Player.jsx';
+import Confirm from './confirm.jsx';
 import isValidUrl from '../helpers/urlValidation.js';
 import {Loading, ErrorAlert} from './Alerts.jsx';
 
@@ -32,7 +33,10 @@ class App extends React.Component {
 				// first_name:,
 				voice_pref: 'Mama'
 				// avatar:,
-			}
+			},
+			showConfirm: false,
+			lastMethod: '',
+			lastUrl: '',
 		};
 	}
 
@@ -63,8 +67,10 @@ class App extends React.Component {
 // {helper function for postUserLink}
 	addOne(obj) {
 		let result = this.state.items;
+		obj.est_time = this.cleanTime(obj.est_time);
 		console.log(obj);
 		result.unshift(obj);
+		this.toggleConfirm();
 		return result;
 	}
 
@@ -125,6 +131,7 @@ class App extends React.Component {
 			article: articleObject.article
 		};
 		let route = '/'+ articleObject.method;
+		this.setState({lastMethod: articleObject.method, lastUrl: articleObject.article.url});
 		console.log(exportObj);
 		console.log(route);
 		axios.post(route, {payload: exportObj})
@@ -149,6 +156,11 @@ class App extends React.Component {
 		this.getReadingList();
 	}
 
+	toggleConfirm() {
+		let currentState = this.state.showConfirm;
+		this.setState({showConfirm: !currentState});
+	}
+
 	render() {
 
 		return(
@@ -157,7 +169,10 @@ class App extends React.Component {
 				{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
 				<TransFormEr postIt={this.postUserLink.bind(this)}/>
 				{this.state.isLoading && <Loading />}
-				<ArticleList articles={this.state.items} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)}/>
+				<div className="modal-container">
+					<ArticleList articles={this.state.items} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} />
+					<Confirm deleteArticle={this.deleteArticle.bind(this)} user={this.state.user} method={this.state.lastMethod} toggleConfirm={this.toggleConfirm.bind(this)} url={this.state.lastUrl} showConfirm={this.state.showConfirm} />
+				</div>
 				<div id="player_container">
 					<Player track={this.state.nowPlaying}/>
 				</div>
