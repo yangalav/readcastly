@@ -2,7 +2,7 @@
   // - a stateless component
 
 import React from 'react';
-import {Row} from 'react-bootstrap';
+import {Grid} from 'react-bootstrap';
 import ArticleEntry from './ArticleEntry.jsx';
 
 function ArticleList(props) {
@@ -22,11 +22,11 @@ function ArticleList(props) {
   }
 
 	return (
-		<Row className='list-group article-list'>
+		<Grid className='article-list'>
 			{props.articles.map((article) => (
 				<ArticleEntry key={article.id} article={article} user={props.user} exportOptions={exportOptions} deleteIt={props.deleteIt} convertIt={props.convertIt}/>
 			))}
-		</Row>
+		</Grid>
 	);
 }
 

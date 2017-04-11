@@ -36,7 +36,7 @@ class ArticleEntry extends React.Component {
 	makeExportMenu(methods) {
 		return(
 			<div className="conversion-chooser">
-				<FormGroup controlId="conversionSelect" bsClass="">
+				<FormGroup controlId="conversionSelect">
 	      	<FormControl componentClass="select" value={this.state.method} onChange={this.handleMethodChange.bind(this)} placeholder="File Options">
 	      	{methods.map((option,i) => (
 						<option key={i} value={option.id} >{option.method}</option>
@@ -66,26 +66,28 @@ class ArticleEntry extends React.Component {
 
 	render() {
 		return (
-			<Col md={8} mdOffset={2} className="list-group-item article-entry">
-				<Col md={3} className="articleImage">
-					{this.props.article.image && <img className="article-sampleImage" src={this.props.article.image} width="100%" responsive />}
-				</Col>
-				<Col md={7} className="article-info">
-		  		{this.props.article.title && <div className="article-title"><span>Title: </span><span><a href={this.props.article.url}>{this.props.article.title}</a></span></div>}
-		  		{this.props.article.author && <div className="article-author"><span>Author: </span><span>{this.props.article.author}</span></div>}
-		  		{this.props.article.publication_date && <div className="article-publishDate"><span>Date: </span><span>{this.props.article.publication_date}</span></div>}
-		  		{this.props.article.source_name && <div className="article-source"><span>Source: </span><span>{this.props.article.source_name}</span></div>}
-		  		{this.props.article.excerpt && <div className="article-excerpt"><span>Excerpt: </span><span>{this.props.article.excerpt}</span></div>}
-		  		{this.props.article && <Button bsStyle="danger" onClick={() => this.props.deleteIt(this.props.article.url)}>Remove From Library</Button>}
+			<Row>
+				<Col md={12} className="list-group-item article-entry">
+					<Col md={3} className="articleImage">
+						{this.props.article.image && <img className="article-sampleImage img-responsive img-rounded" src={this.props.article.image} />}
+					</Col>
+					<Col md={7} className="article-info">
+		  			{this.props.article.title && <div className="article-title"><span>Title: </span><span><a href={this.props.article.url}>{this.props.article.title}</a></span></div>}
+		  			{this.props.article.author && <div className="article-author"><span>Author: </span><span>{this.props.article.author}</span></div>}
+		  			{this.props.article.publication_date && <div className="article-publishDate"><span>Date: </span><span>{this.props.article.publication_date}</span></div>}
+		  			{this.props.article.source_name && <div className="article-source"><span>Source: </span><span>{this.props.article.source_name}</span></div>}
+		  			{this.props.article.excerpt && <div className="article-excerpt"><span>Excerpt: </span><span>{this.props.article.excerpt}</span></div>}
+		  			{this.props.article && <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.props.deleteIt(this.props.article.url)}>Remove From Library</Button>}
+		  		</Col>
+		  	<Col md={2}>
+		  		<div className="article-buttons">
+						{this.props.article && this.voiceMenu()}
+						{this.props.article && this.exportMenu()}
+						{this.props.article && <Button bsStyle="primary" onClick={this.export.bind(this)} block>Read To Me!<br /><i>Est. Time: {this.props.article.est_time}</i></Button>}
+					</div>
+					</Col>
 		  	</Col>
-		  <Col md={2}>
-		  	<div className="article-buttons">
-					{this.props.article && this.voiceMenu()}
-					{this.props.article && this.exportMenu()}
-					{this.props.article && <Button bsStyle="primary" onClick={this.export.bind(this)} block>Read To Me!<br /><i>Est. Time: {this.props.article.est_time}</i></Button>}
-				</div>
-				</Col>
-		  </Col>
+		  </Row>
 		);
 	}
 };
