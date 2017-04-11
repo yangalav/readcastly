@@ -2,16 +2,26 @@ body {
   background-color: lightblue;
   position: absolute;
   left: 20px;
+  font-family: 'Work Sans', sans-serif;
 }
 
 .title {
   text-align: center;
+  font-family: 'Work Sans', sans-serif;
+  /*font-size: 36px;*/
+}
+
+.subtitle {
+  text-align: center;
+  font-family: 'Work Sans', sans-serif;
+  font-style: italic;
+  /*font-size: 24px;*/
 }
 
 .urlInput {
-  min-width: 1050px;
+  min-width: 680px;
   width: auto;
-
+  border-radius: 10px !important;
 }
 
 .transformer-input {

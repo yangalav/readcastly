@@ -31,18 +31,18 @@ class TransFormEr extends React.Component {
 		<Col md={8} mdOffset={2}>
 			<Form inline onSubmit={this.handleSubmit}>
 				<FormGroup controlId="urlConverter">
-					<ControlLabel>Enter Link</ControlLabel>
-					{'    '}
-					<FormControl className="urlInput" type="text" placeholder="http://...." value={this.state.value} onChange={this.handleChange} />
-				</FormGroup>
-				{'  '}
-				<Button type="submit" bsStyle="warning">Add to Library</Button>
+					<FormControl className="urlInput" type="text" placeholder="Enter an article URL" value={this.state.value} onChange={this.handleChange} />
+				</FormGroup>{' '}{' '}
+				<Button type="submit" bsStyle="success">Listen now</Button>{' '}
+				<Button type="submit" bsStyle="primary">Add to library</Button>
 				<hr/>
 			</Form>
 		</Col>
 		</Row>
 		);
 	}
+	// => TODO: write function & connect Listen now button to process URL & begin playing when available; 
+
 	// render() {
 	// 	return (
 	// 		<form class="transformer" onSubmit={this.handleSubmit}>
