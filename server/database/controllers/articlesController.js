@@ -4,7 +4,6 @@ const Article = require('../models/article');
 const ArticlesUsers = require('../collections/articles-users');
 const ArticleUser = require('../models/article-user');
 const SourceCon = require('./sourcesController');
-const User = require('../models/user');
 const utils = require('../../utils');
 
 var exactFind = false;
