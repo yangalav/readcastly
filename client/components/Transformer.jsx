@@ -28,6 +28,7 @@ class TransFormEr extends React.Component {
 	render() {
 		return (
 			<Grid>
+						<hr/>
 				<Row className="transformer">
 					<Form inline onSubmit={this.handleSubmit}>
 						<Col md={8}>
@@ -37,11 +38,9 @@ class TransFormEr extends React.Component {
 					    <Button type="submit" bsStyle="success" id="listen-now-btn">Listen now</Button>
 						</Col>
             <Col md={2}>
-							<Button type="submit" bsStyle="primary" id="add-library-btn">Add to Library</Button>
+							<Button type="submit" bsStyle="default" id="add-library-btn">Add to Library</Button>
 						</Col>
-
 						</Form>
-						<hr/>
 				</Row>
 			</Grid>
 		);

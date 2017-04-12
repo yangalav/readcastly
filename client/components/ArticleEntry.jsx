@@ -81,7 +81,7 @@ class ArticleEntry extends React.Component {
 		  		<div className="article-buttons">
 						{this.props.article && this.voiceMenu()}
 						{this.props.article && this.exportMenu()}
-						{this.props.article && <Button bsStyle="primary" onClick={this.export.bind(this)} block>Read To Me!<br /><i>Est. Time: {this.props.article.est_time}</i></Button>}
+						{this.props.article && <Button bsStyle="success" onClick={this.export.bind(this)} block>Read To Me!<br /><i>Est. Time: {this.props.article.est_time}</i></Button>}
 					</div>
 					</Col>
 		  	</Col>
@@ -149,5 +149,3 @@ export default ArticleEntry;
 // 	//   </div>
 // 	// );
 // }
-
-

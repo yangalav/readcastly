@@ -1,7 +1,13 @@
 body {
-  background-color: lightblue;
+  background-color: #e0f3ff;
 }
 
+hr {
+  height: 2px !important;
+  background: #077ac6;
+  /*background: #ad1111;*/
+  width: 50%;
+}
 .row {
   padding-bottom: 20px;
 }
@@ -19,6 +25,7 @@ body {
   text-align: center;
   font-family: 'Work Sans', sans-serif;
   font-style: italic;
+  color: #ad1111
   /*font-size: 24px;*/
 }
 
@@ -66,6 +73,10 @@ body {
 
 .article-source{
 
+}
+
+#logo {
+  align-content: center;
 }
 
 #add-library-input, #add-library-btn, #listen-now-btn {
