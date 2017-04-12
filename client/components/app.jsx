@@ -129,33 +129,39 @@ class App extends React.Component {
 		})
 		.catch((err) => this.setState({ hasErrored: true, failMessage: (res.data.error ||'Unable to delete that article') }));
 	}
-
+// req.body.payload = {
+//     userId: /*user id number*/,
+//     destination: e-mail address if e-mail, phone number if phone, 'stream' if stream, 'link' if link ,
+//     voice: /*name of voice*/,
+//     article: { /* complete article object */ }
+// };
 	convertArticle(articleObject) {
 		let exportObj = {
 			userId: this.state.user.id,
 			destination: this.state.user[articleObject.method],
-			voice: articleObject.voice,
+			voice: articleObject.voice || 'Joanna',
 			article: articleObject.article
 		};
-		let route = '/'+ articleObject.method;
+		// let route = '/'+ articleObject.method; //**************
+		let route = '/stream';
 		this.setState({lastMethod: articleObject.method, lastUrl: articleObject.article.url});
-		console.log(exportObj);
-		console.log(route);
+		console.log('EXPORT-OBJ: ', exportObj);
+		console.log('ROUTE: ', route);
 		axios.post(route, {payload: exportObj})
-			.then((res) => {
-				console.log(res.data.method);
-			})
-			.catch((err) => {
-				console.log(articleObject.method, err);
-			});
-		// .then((res) => {
-		// 	if (articleObject.method = "stream") {
-		// 		this.setState({nowPlaying: res.url});
-		// 	} else {
-		// 		console.log('Message successfully sent to' + exportObj.destination + '.');
-		// 	}
-		// })
-		// .catch((err) => this.setState({ hasErrored: true, failMessage: ('Error in conversion to speech: ' + err)}));
+			// .then((res) => {
+			// 	console.log(res.data.method);
+			// })
+			// .catch((err) => {
+			// 	console.log(articleObject.method, err);
+			// });
+		.then((res) => {
+			if (articleObject.method = "stream") {
+				this.setState({nowPlaying: res.url});
+			} else {
+				console.log('Message successfully sent to' + exportObj.destination + '.');
+			}
+		})
+		.catch((err) => this.setState({ hasErrored: true, failMessage: ('Error in conversion to speech: ' + err)}));
 	}
 
 	// {invokes ajax call to fetch data for the ArticleList component}
