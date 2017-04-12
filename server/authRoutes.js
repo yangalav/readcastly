@@ -29,7 +29,7 @@ let LocalSignup =  new LocalStrategy({
         if(user.length) {
           console.log('user exists, it is ' + user[0].first_name);
         } else {
-          User.addUser(email,password);
+          User.addUser(email,password,req.body.firstName,req.body.lastName,req.body.phone,req.body.voicePref,req.body.avatar);
           console.log('user added!');
         }
       });

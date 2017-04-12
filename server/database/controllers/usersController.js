@@ -24,13 +24,18 @@ const findByEmail = function(email) {
 };
 
 
-const addUser = function(email,password) {
+const addUser = function(email,password,firstName,lastName,phone,voicePref,avatar) {
   console.log('adding ' + email + ' and ' + password);
   return db.knex('Users')
     .insert(
     {
       email: email,
-      password: password
+      password: password,
+      first_name: firstName,
+      last_name: lastName,
+      phone: phone,
+      voice_pref: voicePref,
+      avatar: avatar,
     }
   )
   .catch(function(err) {

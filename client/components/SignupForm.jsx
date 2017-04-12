@@ -29,13 +29,18 @@ class SignupForm extends React.Component {
   handleSignUp() {
     console.log("The email is: " + this.state.email);
     console.log("The password is: " + this.state.password);
+    console.log("The first name is: " + this.state.firstName);
+    console.log("The last name is: " + this.state.lastName);
+    console.log("The phone is: " + this.state.phone);
+    console.log("The voice pref is: " + this.state.voicePref);
+    console.log("The avatar is: " + this.state.avatar);
     axios.post('/signup', {
       email: this.state.email,
       password: this.state.password,
-      first_name: this.state.firstName,
-      last_name: this.state.lastName,
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
       phone: this.state.phone,
-      voice_pref: this.state.voicePref,
+      voicePref: this.state.voicePref,
       avatar: this.state.avatar,
     })
 		.then((res) => {
