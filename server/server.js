@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
+const flash = require('connect-flash');
 const passport = require('passport');
   // LocalStrategy = require('passport-local').Strategy;
 const morgan = require('morgan');
@@ -28,6 +29,9 @@ const news = require('./apis/newsController');
   }));
   app.use(passport.initialize());
   app.use(passport.session());
+  app.use(flash());
+  require('./routes.js')(app, express, passport);
+  require('./authRoutes.js')(app, passport);
 
 
 var port = process.env.PORT || 8080;
@@ -36,7 +40,5 @@ app.listen(port, function() {
   console.log("Readcastly server listening intently on port: ", port);
 });
 
-require('./routes.js')(app, express);
-require('./passport.js')(passport);
 
 module.exports = app;
