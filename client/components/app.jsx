@@ -177,11 +177,12 @@ class App extends React.Component {
 				{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
 				<TransFormEr postIt={this.postUserLink.bind(this)}/>
 				{this.state.isLoading && <Loading />}
+				<WhichView readcast='Your Read.casts'/>
 				<div className="modal-container">
 					<ArticleList articles={this.state.items} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} />
 					<Confirm deleteArticle={this.deleteArticle.bind(this)} user={this.state.user} method={this.state.lastMethod} toggleConfirm={this.toggleConfirm.bind(this)} url={this.state.lastUrl} showConfirm={this.state.showConfirm} />
 				</div>
-				<WhichView readcast='Your Read.casts'/>
+
 				<div id="player_container">
 					<Player track={this.state.nowPlaying}/>
 				</div>
