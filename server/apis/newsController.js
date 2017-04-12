@@ -6,7 +6,7 @@ const Source = require('../database/models/source');
 const newsApiImport = function(sources) {
   newsApiSources.sources.forEach(function(source){
     Sources.create({
-      name: source.name,
+      name: source.name, // is this meant to be sources[0].name...url...id, etc.? Is that sample data from NewsAPI? (As of 4/11 no more source logos)
       homepage: source.url,
       most_read: source.id,
       image: urlsToLogos.medium

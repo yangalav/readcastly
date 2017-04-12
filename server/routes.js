@@ -33,7 +33,10 @@ module.exports = function(app, express) {
     });
   });
 
-  app.get('/topStories', function(req,res) {
+  app.post('/topStories', function(req,res) {
+    console.log('routes.js GET req to /topStories, l 37. req.body = ', req.body);
+    console.log('routes.js GET req to /topStories, l 37. req.source_id = ', req.source_id);
+    // console.log('routes.js GET req to /topStories, l 37. req.source_id = ', req.source_id);
     var options = {};
     news.newsApiBuilder(req.source_id, function(optionsObj){
       options = optionsObj;
