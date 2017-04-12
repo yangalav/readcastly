@@ -6,11 +6,12 @@ const mercury = require('./apis/mercuryController');
 const news = require('./apis/newsController');
 const mailer = require('./apis/mailController');
 const texter = require('./apis/textController');
+// const passport = require('passport');
 
 // To be written and passed into routes between endpoint and function
 // const isLoggedIn = function(){};
 
-module.exports = function(app, express) {
+module.exports = function(app, express, passport) {
 
   app.post('/requrl', function(req, res) {
     mercury.parseAndSave(req.body,userId,req.body.requrl,function(result) {
@@ -61,21 +62,22 @@ module.exports = function(app, express) {
     });
   });
 
-  //AUTHENTICATION ROUTES:
-
   app.get('/signup', function(req,res) {
       res.send('this is our signup page :)');
   });
 
-  app.post('/login', function(req, res) {
+  app.get('/login', function(req, res) {
     res.send('this is our login page :)');
-  })
+  });
 
-  // app.post('/signup',
-  //   passport.authenticate('local', { successRedirect: '/',
-  //                                    failureRedirect: '/login',
-  //                                    failureFlash: true })
-  // );
+  app.post('/signup',
+    passport.authenticate('local-signup',{
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true
+  }))
+
+
 };
 
 // other routes we wrote to test and may use in future:
