@@ -14,7 +14,8 @@ class ArticleEntry extends React.Component {
 		return(
 			<div className="voice-chooser">
 				<FormGroup controlId="voiceSelect">
-	      	<FormControl componentClass="select" value={this.state.voice} onChange={this.handleVoiceChange.bind(this)} placeholder="Voice Choice">
+	      	<FormControl componentClass="select" value={this.state.voice} onChange={this.handleVoiceChange.bind(this)} placeholder="banana">
+	      	<option value="banana">Voice Choice</option>
 	      	{voices.map((voice,i) => {
 	      		return voice.flag ? (<option key={i} value={voice.name} >{voice.name}</option>) :
 	      			(<option key={i} disabled="disabled" >{voice.name}</option>)
@@ -35,7 +36,8 @@ class ArticleEntry extends React.Component {
 		return(
 			<div className="conversion-chooser">
 				<FormGroup controlId="conversionSelect">
-	      	<FormControl componentClass="select" value={this.state.method} onChange={this.handleMethodChange.bind(this)} placeholder="File Options">
+	      	<FormControl componentClass="select" value={this.state.method} onChange={this.handleMethodChange.bind(this)} placeholder="banana">
+	      	<option value="banana">Delivery Method</option>
 	      	{methods.map((option,i) => (
 						<option key={i} value={option.id} >{option.method}</option>
 					))}
@@ -54,12 +56,16 @@ class ArticleEntry extends React.Component {
 	showInfo() {console.log('article:', this.props.article);};
 
 	export() {
-		let articleObj = {
-			method: this.state.method,
-			voice: this.state.voice,
-			article: this.props.article
-		};
-		this.props.convertIt(articleObj);
+		if (!this.state.method || !this.state.voice) {
+			alert('Please be sure to choose both a voice and a delivery method!');
+		} else {
+			let articleObj = {
+				method: this.state.method,
+				voice: this.state.voice,
+				article: this.props.article
+			};
+			this.props.convertIt(articleObj);
+		}
 	}
 
 	render() {
@@ -67,7 +73,7 @@ class ArticleEntry extends React.Component {
 			<Row>
 				<Col md={12} className="list-group-item article-entry">
 					<Col md={3} className="articleImage">
-						{this.props.article.image && <img className="article-sampleImage img-responsive img-rounded" src={this.props.article.image} />}
+						{this.props.article.image && <img className="article-sampleImage img-responsive img-rounded center-block" src={this.props.article.image} />}
 					</Col>
 					<Col md={7} className="article-info">
 		  			{this.props.article.title && <div className="article-title"><span><a href={this.props.article.url}><b>{this.props.article.title}</b></a></span></div>}

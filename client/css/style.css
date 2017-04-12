@@ -28,6 +28,10 @@ body {
   border-radius: 10px !important;
 }
 
+.article-sampleImage{
+
+}
+
 .article-title{
   font: arial;
   font-size: 1.75em;
@@ -55,6 +59,13 @@ body {
 
 .modal-container .modal, .modal-container .modal-backdrop {
   position: absolute;
+  top: -20px;
+}
+
+.modal-dialog {
+  position: relative;
+  top: 200px;
+
 }
 /*.voice-chooser {
   width: 130px;

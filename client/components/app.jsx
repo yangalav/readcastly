@@ -29,9 +29,9 @@ class App extends React.Component {
 				stream: 'stream',
 				link: 'link',
 				email: 'arfechner@gmail.com',
-				phone: '+19734602180',
+				phone: '+19734602180'
 				// first_name:,
-				voice_pref: 'Mama'
+				// voice_pref: 'Mama'
 				// avatar:,
 			},
 			showConfirm: false,
@@ -68,6 +68,9 @@ class App extends React.Component {
 	addOne(obj) {
 		let result = this.state.items;
 		obj.est_time = this.cleanTime(obj.est_time);
+		if (obj.publication_date) {
+			obj.publication_date = this.cleanDate(obj.publication_date);
+		}
 		console.log(obj);
 		result.unshift(obj);
 		this.toggleConfirm();
@@ -128,6 +131,7 @@ class App extends React.Component {
 		let exportObj = {
 			userId: this.state.user.id,
 			destination: this.state.user[articleObject.method],
+			voice: articleObject.voice,
 			article: articleObject.article
 		};
 		let route = '/'+ articleObject.method;
@@ -165,18 +169,16 @@ class App extends React.Component {
 	render() {
 
 		return(
-			<div>
+			<div className="modal-container">
 				<Title title='Welcome to Read.Cast.ly!'/>
 				{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
 				<TransFormEr postIt={this.postUserLink.bind(this)}/>
 				{this.state.isLoading && <Loading />}
-				<div className="modal-container">
 					<ArticleList articles={this.state.items} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} />
-					<Confirm deleteArticle={this.deleteArticle.bind(this)} user={this.state.user} method={this.state.lastMethod} toggleConfirm={this.toggleConfirm.bind(this)} url={this.state.lastUrl} showConfirm={this.state.showConfirm} />
-				</div>
 				<div id="player_container">
 					<Player track={this.state.nowPlaying}/>
 				</div>
+				<Confirm deleteArticle={this.deleteArticle.bind(this)} user={this.state.user} method={this.state.lastMethod} toggleConfirm={this.toggleConfirm.bind(this)} url={this.state.lastUrl} showConfirm={this.state.showConfirm} />
 			</div>
 		);
 

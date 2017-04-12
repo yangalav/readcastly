@@ -6,6 +6,7 @@ import {Grid} from 'react-bootstrap';
 import ArticleEntry from './ArticleEntry.jsx';
 
 function ArticleList(props) {
+
   let exportOptions = {
     voices : [
       {name: '--American English--'},
@@ -30,10 +31,16 @@ function ArticleList(props) {
     ],
     methods : [
       {id: "stream", method: 'Stream It'},
-      {id: "email", method: 'Email It'},
-      {id: "phone", method: 'Text It'},
       {id: "link", method: 'Link It'}
     ]
+  }
+
+  if (props.user.email) {
+    exportOptions.methods.push({id: "email", method: 'Email It'});
+  }
+
+  if (props.user.phone) {
+    exportOptions.methods.push({id: "phone", method: 'Text It'});
   }
 
 	return (

@@ -71,7 +71,9 @@ const dbStats = function(dbContents) {
       console.log('i.e., the avg. word count if we remove the ', arr[z], ' longest articles = ', newAvg);
     }
   }
-  variedAverages([10, 7, 5, 3, 1]) // these are the scenarios to run: # of highest word counts to remove
+  variedAverages([10, 7, 5, 3, 1]) ;
+  // these are the scenarios to run: # of highest word counts to remove
+}
 
 const readcastBuilder = function(articleObj) {
 // placeholder
@@ -82,6 +84,6 @@ const readcastBuilder = function(articleObj) {
 module.exports = {
   errors: errors,
   domainExtractor: domainExtractor,
-  dbStats: dbStats
+  dbStats: dbStats,
   readcastBuilder: readcastBuilder
 };
