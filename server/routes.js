@@ -6,6 +6,7 @@ const mercury = require('./apis/mercuryController');
 const news = require('./apis/newsController');
 const mailer = require('./apis/mailController');
 const texter = require('./apis/textController');
+const polly = require('./apis/pollyController');
 
 // To be written and passed into routes between endpoint and function
 // const isLoggedIn = function(){};
@@ -45,8 +46,16 @@ module.exports = function(app, express) {
 
   app.post('/stream', function(req,res) {
     console.log('IN STREAM ENDPOINT');
-    console.log('PAYLOAD === ', req.body.payload);
-    res.send({"method": 'SUCCESSFUL STREAM RETURN'});
+    // console.log('PAYLOAD === ', req.body.payload);
+
+
+    polly.textToSpeech(req, res, function(result) {
+      console.log('SUCCESSFUL STREAM RETURN')
+      res.send({url: result})
+    });
+
+    // res.send({"method": 'SUCCESSFUL STREAM RETURN'});
+
     // let readcast = utils.readcastBuilder(req.body.payload.article);
     //req.body will need all fields required for conversion, including title, author, and source, at a minimum, in addition to text
     //invoke function that converts article to speech, grab path
