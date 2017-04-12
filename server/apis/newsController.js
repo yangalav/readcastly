@@ -17,7 +17,7 @@ const newsApiImport = function(sources) {
   console.log('NEWS API SOURCE LIBRARY SUCCESSSFULLY IMPORTED');
 };
 
-const newsApiBuilder = function(sourceId,callback) {
+const newsApiBuilder = function(source,callback) {
   // new Source({id:sourceId}).fetch() // takes sourceId from client req & queries db; gets source id in newsapi format (e.g., "id": "abc-news-au")
     // .then(function(source) { // creates options obj so routes.js endpoint /topStories can make req to newsapi & res.send back to client; Andrew set up using newsAPI.json data but not tested yet
       var options = {
@@ -29,7 +29,7 @@ const newsApiBuilder = function(sourceId,callback) {
               },
             qs: {
               // source: source.attributes.most_read,
-              source: 'abc-news-au', // hardcode this for test
+              source: source, // hardcode this for test
               sortBy: 'top'
               }
             };

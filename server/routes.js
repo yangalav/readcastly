@@ -14,7 +14,8 @@ const texter = require('./apis/textController');
 module.exports = function(app, express) {
 
   app.post('/requrl', function(req, res) {
-    mercury.parseAndSave(req.body.userId,req.body.requrl,function(result) {
+    // console.log('server.js received POST req at /requrl. req.body = ', req.body);
+    mercury.parseAndSave(req.body.userId, req.body.requrl, function(result) {
       res.send(result);
     });
   });
@@ -34,17 +35,25 @@ module.exports = function(app, express) {
     });
   });
 
-  app.get('/topStories', function(req,res) {
-    // console.log('routes.js GET req to /topStories, l 37. req.body = ', req.body);
-    // console.log('routes.js GET req to /topStories, l 37. req.source_id = ', req.source_id);
+  app.post('/topStories', function(req,res) {
+    console.log('routes.js GET req to /topStories, l 37. req.body.sources = ', req.body.sources);
+    // var parsedReq = JSON.parse(req);
+    var parsedSources = JSON.parse(req.body.sources);
+    console.log('parsedSources = ', parsedSources);
+    // console.log('routes.js GET req to /topStories, l 37. req.body.sources = ', parsedSources);
+    // console.log('routes.js GET req to /topStories, l 37. req.body.sources[0] = ', req.body.sources[0]);
+    //
+    // console.log('routes.js POST req to /topStories, l 39. req.body = ', parsedSources);
+    // console.log('routes.js POST req to /topStories, l 39. req.sources = ', parsedSources.sources);
+
     var options = {};
-    news.newsApiBuilder(req.source_id, function(optionsObj){
+    news.newsApiBuilder(req.body.sources[1], function(optionsObj){
       options = optionsObj;
     });
     request(options, function(error, response, body) {
 
       var parsedNewsObj = JSON.parse(body);
-      console.log('\n\nroutes.js GET req to /topStories, l 44. res body.articles from newsApi = ', parsedNewsObj.articles);
+      // console.log('\n\nroutes.js GET req to /topStories, l 48. res body.articles from newsApi = ', parsedNewsObj.articles);
       res.send(parsedNewsObj.articles);
     });
   });
