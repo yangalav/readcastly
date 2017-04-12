@@ -74,6 +74,7 @@ const dbStats = function(dbContents) {
   variedAverages([10, 7, 5, 3, 1]) // these are the scenarios to run: # of highest word counts to remove
 };
 
+
 const readcastBuilder = function(articleObj) {
 // placeholder
   return articleObj.title;

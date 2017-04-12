@@ -17,7 +17,7 @@ class Confirm extends React.Component {
     let destination = this.props.user[this.props.method];
 
     return (
-      <div className="modal-container" style={{height: 200}}>
+      <div style={{height: 200}}>
         <Modal
           show={this.props.showConfirm}
           onHide={close}
