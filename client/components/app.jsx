@@ -4,6 +4,9 @@ import React from 'react';
 import axios from 'axios';
 
 import Title from './Title.jsx';
+import Subtitle from './Subtitle.jsx';
+import WhichView from './ReadcastTopstories.jsx';
+// import HeaderNavigation from './Navbar.jsx';
 // {import SignupButton from './SignupButton'; }
 import SignUpForm from './SignupForm.jsx';
 import TransFormEr from './TransFormer.jsx';
@@ -23,7 +26,7 @@ class App extends React.Component {
 			hasErrored: false,
 			isLoading: false,
 			failMessage: '',
-			nowPlaying: {url: 'http://www.netprophet.net/charts/charts/Badfinger%20-%20No%20Matter%20What.mp3', title: 'No Matter What // testing scroll. Last word is "initially". This is a song by the legendary Badfinger, who were on Apple Records. Apple Computer told the Beatles they would never be in music so that settled the court case initially'},
+			nowPlaying: {url: 'http://www.netprophet.net/charts/charts/Badfinger%20-%20No%20Matter%20What.mp3', title: 'No Matter What'},
 			user:{
 				id: 99,
 				stream: 'stream',
@@ -166,14 +169,20 @@ class App extends React.Component {
 
 		return(
 			<div>
-				<Title title='Welcome to Read.Cast.ly!'/>
+
+
+
+				<Title title='Read.Cast.ly'/>
+				<Subtitle subtitle='your reading backlog solved'/>
 				{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
 				<TransFormEr postIt={this.postUserLink.bind(this)}/>
 				{this.state.isLoading && <Loading />}
+				<WhichView readcast='Your Read.casts'/>
 				<div className="modal-container">
 					<ArticleList articles={this.state.items} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} />
 					<Confirm deleteArticle={this.deleteArticle.bind(this)} user={this.state.user} method={this.state.lastMethod} toggleConfirm={this.toggleConfirm.bind(this)} url={this.state.lastUrl} showConfirm={this.state.showConfirm} />
 				</div>
+
 				<div id="player_container">
 					<Player track={this.state.nowPlaying}/>
 				</div>
@@ -214,3 +223,8 @@ class App extends React.Component {
 }
 
 export default App;
+
+	// <ReadcastTopstories readcast='Your Read.casts'/>
+	// => TODO: // get player scroll to work. Test text: Last word is "initially". This is a song by the legendary Badfinger, who were on Apple Records. Apple Computer told the Beatles they would never be in music so that settled the court case initially
+
+					// <div id="navbar"></div>
