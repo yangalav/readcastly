@@ -30,13 +30,16 @@ class TransFormEr extends React.Component {
 			<Grid>
 				<Row className="transformer">
 					<Form inline onSubmit={this.handleSubmit}>
-						<Col md={10}>
+						<Col md={8}>
 							<FormControl type="text" id="add-library-input" placeholder="Enter an article URL" value={this.state.value} onChange={this.handleChange} />
 						</Col>
 						<Col md={2}>
 					    <Button type="submit" bsStyle="success" id="listen-now-btn">Listen now</Button>
+						</Col>
+            <Col md={2}>
 							<Button type="submit" bsStyle="primary" id="add-library-btn">Add to Library</Button>
 						</Col>
+
 						</Form>
 						<hr/>
 				</Row>

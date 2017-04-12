@@ -23,7 +23,7 @@ body {
 }
 
 .urlInput {
-  min-width: 680px;
+  min-width: 600px;
   width: auto;
   border-radius: 10px !important;
 }
@@ -68,7 +68,7 @@ body {
 
 }
 
-#add-library-input, #add-library-btn {
+#add-library-input, #add-library-btn, #listen-now-btn {
   width: 100%;
 }
 
