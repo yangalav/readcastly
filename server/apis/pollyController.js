@@ -1,18 +1,17 @@
 // controller for Amazon Polly API
-
-// 1. Load SDK, set config variables, then create a Polly Instance;  
+// 1. Load SDK, set config variables, then create a Polly Instance;
 require('dotenv').config();
 const Promise = require('bluebird')
 const AWS = require('aws-sdk')
 AWS.config.accessKeyId = process.env.AWS_AKID
 AWS.config.secretAccessKey = process.env.AWS_SAK
-AWS.config.region = process.env.AWS_REGION 
-const polly = new AWS.Polly(); 
+AWS.config.region = process.env.AWS_REGION
+const polly = new AWS.Polly();
 const s3 = new AWS.S3();
 // FOR DEBUGGING ***********************
 const log = console.log; //*************
 
-// // 2. helper function to chop up text data for Polly into manageable segments of text 
+// // 2. helper function to chop up text data for Polly into manageable segments of text
 //   // (i.e., within Polly input-length limits)
 //   // e.g. Input: 'long chunks of text' => Output: [['long'], ['chunks'], ['of'], ['text']]
 
@@ -28,10 +27,10 @@ const log = console.log; //*************
 //       return memo
 //     }
 //   }, [[]])
-// } 
+// }
 
 
-// 3. Function that generates Audio Stream by making API call to Polly; => returns a promise object  
+// 3. Function that generates Audio Stream by making API call to Polly; => returns a promise object
 const generatePollyAudio = (text, voiceId) => {
   log ('INSIDE generatePollyAudio') //*************
   const params = {
@@ -39,7 +38,7 @@ const generatePollyAudio = (text, voiceId) => {
     TextType: 'text',
     OutputFormat: 'mp3',
     VoiceId: voiceId,
-    SampleRate: '22050' 
+    SampleRate: '22050'
   }
   // log('PARAMS:========> ', params);
   return polly.synthesizeSpeech(params).promise()
@@ -56,8 +55,8 @@ const generatePollyAudio = (text, voiceId) => {
   })
   .catch(err => {
     console.error('AudioStream is not a Buffer.')
-  }) 
-  // .catch( err => throw 'AudioStream is not a Buffer.') 
+  })
+  // .catch( err => throw 'AudioStream is not a Buffer.')
 };
 
 // 4. helper function to upload to S3 => it returns a promise object
@@ -67,7 +66,7 @@ const putObject = (bucket, key, body, contentType) =>
     Key: key,
     Body: body,
     ContentType: contentType
-  }).promise() 
+  }).promise()
 
 // 5. Function that Uploads Polly mp3 audio to Amazon S3, generating a url to serve to client
 const writeAudioStreamToS3 = ( audioStream, filename ) => {
@@ -84,7 +83,7 @@ const writeAudioStreamToS3 = ( audioStream, filename ) => {
       msg: 'File successfully generated.',
       ETag: res.ETag,
       url: `https://s3.amazonaws.com/${bucketName}/${filename}`
-    }    
+    }
   })
 }
 
@@ -93,20 +92,20 @@ const writeAudioStreamToS3 = ( audioStream, filename ) => {
 // const textToSpeech = async (req, res) => {
 const textToSpeech = (req, res, callback) => {
   log('INSIDE textToSpeech') //*************
-  
+
   // Extract needed info from request object
   const articleTitle = req.body.payload.article.title
   const voiceId = req.body.payload.voice || 'Joanna' /*name of voice*/
   let text = req.body.payload.article.text || '' /*text of the article*/
-  const filename = req.body.payload.article.article_id.toString() + '.mp3' || '999999999.mp3' /*unique article_id number*/ 
+  const filename = req.body.payload.article.article_id.toString() + '.mp3' || '999999999.mp3' /*unique article_id number*/
   // also available: req.body.destination => /*e-mail address if e-mail, phone number if phone, 'stream' if stream, 'link' if link */
-  log('INSIDE textToSpeech: voiceId: ', voiceId, ' FILENAME: ', filename) //************* 
+  log('INSIDE textToSpeech: voiceId: ', voiceId, ' FILENAME: ', filename) //*************
 
 
   // SEE #2 (ABOVE): Break in parts small enough to be handled by Polly API
   // const textParts = chopUpText(text) //>>>>>>>>>>>>>>>>
   // log('>>>>>>>>>>>>textParts: ', textParts)
-  
+
   var maxWords = 230;
   var words = text.split(" ");
   var textArray = [];
@@ -132,17 +131,16 @@ const textToSpeech = (req, res, callback) => {
     textArray.push(text);
   }
   log('TEXT-ARRAY: >>>>>>>>> ', textArray);
-
-
+  log('INSIDE textToSpeech: voiceId: ', voiceId, ' text: ', text, ' filename: ', filename) //*************
   // SEE #3 (ABOVE): feed segments of text into polly to generate audio segments
   Promise.all(textArray.map(function(item) {
     log('ONE ITEM being mapped to generatePollyAudio call...')
     return generatePollyAudio(item, voiceId)
-  }))  
+  }))
   .then(function(audios) { // isArray!
     log('textToSpeech pc1')
     log('audios[0].AudioStream instanceof Buffer ', audios[0].AudioStream instanceof Buffer)
-    log('AUDIOS>>>>>>>>: [0] ', audios[0]) 
+    log('AUDIOS>>>>>>>>: [0] ', audios[0])
     return Promise.all(audios.map(a => a.AudioStream))
   })
   // Concatenate audio segments into single buffer object
@@ -154,7 +152,7 @@ const textToSpeech = (req, res, callback) => {
     return (Buffer.concat(audioStreams, audioStreams.reduce((len, a) => len + a.length, 0))) // 1567168
   })
   // SEE #5 (ABOVE): save unifiedBuffer to s3 as mp3 file
-  .then(function(unifiedBuffer) { 
+  .then(function(unifiedBuffer) {
     log('PC-3-UNIFIED BUFFER isBuffer?: ', unifiedBuffer instanceof Buffer)
     // log('PC-3-UNIFIED BUFFER.AudioStream isBuffer?: ', unifiedBuffer.AudioStream instanceof Buffer)
 
@@ -171,15 +169,9 @@ const textToSpeech = (req, res, callback) => {
   .catch(function(err) {
     log('textToSpeech pc5-ERR', err)
     if(err.errorCode && err.error) res.status(err.errorCode).send(err.error)
-    else res.status(500).send(err)    
+    else res.status(500).send(err)
   });
 }
 // export default textToSpeech;
 module.exports = {textToSpeech};
-
-
-
-
-
-
 
