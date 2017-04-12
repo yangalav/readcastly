@@ -169,10 +169,7 @@ class App extends React.Component {
 
 		return(
 			<div>
-
-
-
-				<Title title='Read.Cast.ly'/>
+        <br></br>
 				<Subtitle subtitle='your reading backlog solved'/>
 				{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
 				<TransFormEr postIt={this.postUserLink.bind(this)}/>
@@ -226,5 +223,7 @@ export default App;
 
 	// <ReadcastTopstories readcast='Your Read.casts'/>
 	// => TODO: // get player scroll to work. Test text: Last word is "initially". This is a song by the legendary Badfinger, who were on Apple Records. Apple Computer told the Beatles they would never be in music so that settled the court case initially
+
+		// <Title title='Read.Cast.ly'/>
 
 					// <div id="navbar"></div>
