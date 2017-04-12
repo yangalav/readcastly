@@ -1,5 +1,6 @@
 require('dotenv').config();
 const request = require('request');
+const bodyParser = require('body-parser');
 const Articles = require('./database/controllers/articlesController');
 const utils = require('./utils.js');
 const mercury = require('./apis/mercuryController');
@@ -41,7 +42,10 @@ module.exports = function(app, express) {
       options = optionsObj;
     });
     request(options, function(error, response, body) {
-      res.send(body);
+
+      var parsedNewsObj = JSON.parse(body);
+      console.log('\n\nroutes.js GET req to /topStories, l 44. res body.articles from newsApi = ', parsedNewsObj.articles);
+      res.send(parsedNewsObj.articles);
     });
   });
 
