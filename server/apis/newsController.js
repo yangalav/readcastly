@@ -6,7 +6,7 @@ const Source = require('../database/models/source');
 const newsApiImport = function(sources) {
   newsApiSources.sources.forEach(function(source){
     Sources.create({
-      name: source.name,
+      name: source.name, // is this meant to be sources[0].name...url...id, etc.? Is that sample data from NewsAPI? (As of 4/11 no more source logos)
       homepage: source.url,
       most_read: source.id,
       image: urlsToLogos.medium
@@ -17,9 +17,9 @@ const newsApiImport = function(sources) {
   console.log('NEWS API SOURCE LIBRARY SUCCESSSFULLY IMPORTED');
 };
 
-const newsApiBuilder = function(sourceId,callback) {
-  new Source({id:sourceId}).fetch()
-    .then(function(source) {
+const newsApiBuilder = function(source,callback) {
+  // new Source({id:sourceId}).fetch() // takes sourceId from client req & queries db; gets source id in newsapi format (e.g., "id": "abc-news-au")
+    // .then(function(source) { // creates options obj so routes.js endpoint /topStories can make req to newsapi & res.send back to client; Andrew set up using newsAPI.json data but not tested yet
       var options = {
             method: 'GET',
             url: 'https://newsapi.org/v1/articles',
@@ -28,13 +28,14 @@ const newsApiBuilder = function(sourceId,callback) {
               'content-type': 'application/json'
               },
             qs: {
-              source: source.attributes.most_read,
+              // source: source.attributes.most_read,
+              source: source, // hardcode this for test
               sortBy: 'top'
               }
             };
       callback(options);
-    })
-    .catch(function(error){console.log('ERROR BUILDING NEWSAPI REQUEST OBJ ', error);});
+    // })
+    // .catch(function(error){console.log('ERROR BUILDING NEWSAPI REQUEST OBJ ', error);});
 };
 
 module.exports = {
