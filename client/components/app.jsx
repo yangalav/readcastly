@@ -199,7 +199,7 @@ class App extends React.Component {
 		let route = '/'+ articleObject.method; //**************
 		// let route = '/stream';
 		this.setState({lastMethod: articleObject.method, lastUrl: articleObject.article.url});
-		console.log('EXPORT-OBJ: ', exportObj);
+		console.log('FRONT-A->>>EXPORT-OBJ: ', exportObj);
 		console.log('ROUTE: ', route);
 		axios.post(route, {payload: exportObj})
 			// .then((res) => {
@@ -209,7 +209,7 @@ class App extends React.Component {
 			// 	console.log(articleObject.method, err);
 			// });
 		.then((res) => {
-			console.log('>>>>>>>>XXXXXX====RES: ', res.data.url)
+			console.log('FRONT-B->>>RES: ', res.data.url)
 			if (articleObject.method = "stream") {
 				this.setState({nowPlaying: {url: res.data.url, title: res.data.title}});
 			} else {

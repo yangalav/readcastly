@@ -77,7 +77,7 @@ const writeAudioStreamToS3 = ( audioStream, filename ) => {
   return putObject(bucketName, filename, audioStream, contentType)
   .then((res) => {
     log('INSIDE writeAudioStreamToS3 - res.etag: ', res.ETag)
-    log('>>>>INSIDE writeAudioStreamToS3 - RES: ', res)
+    log('XXXXXXXXX=========>>>>INSIDE writeAudioStreamToS3 - RES: ', res)
     if(!res.ETag) throw res
     else return {
       msg: 'File successfully generated.',
@@ -91,83 +91,120 @@ const writeAudioStreamToS3 = ( audioStream, filename ) => {
 // 6. contains main logic of pollyController
 // const textToSpeech = async (req, res) => {
 const textToSpeech = (req, res, callback) => {
-  log('INSIDE textToSpeech') //*************
+  log('======BACK-B-pollyController-textToSpeech') //*************
 
   // Extract needed info from request object
   const articleTitle = req.body.payload.article.title
   const voiceId = req.body.payload.voice || 'Joanna' /*name of voice*/
-  let text = req.body.payload.article.text || '' /*text of the article*/
-  const filename = req.body.payload.article.article_id.toString() + '.mp3' || '999999999.mp3' /*unique article_id number*/
+  const textIn = req.body.payload.article.text /*text of the article*/
+  const filename = req.body.payload.article.article_id.toString() + '.mp3'
+  // || '999999999.mp3' // /*unique article_id number*/
   // also available: req.body.destination => /*e-mail address if e-mail, phone number if phone, 'stream' if stream, 'link' if link */
-  log('INSIDE textToSpeech: voiceId: ', voiceId, ' FILENAME: ', filename) //*************
-
+  log('======BACK-C-textToSpeech: voiceId: ', voiceId, ' FILENAME: ', filename) //*************
 
   // SEE #2 (ABOVE): Break in parts small enough to be handled by Polly API
   // const textParts = chopUpText(text) //>>>>>>>>>>>>>>>>
   // log('>>>>>>>>>>>>textParts: ', textParts)
 
+  const strHeadCleaner = (str) => {
+    let result = str.slice();
+    let index = 0;
+    console.log('result.length: ', result.length);
+    while(result[index] === '\n' || result[index] === ' ') {
+      index++;
+    }
+    console.log('index: ', index);
+    if (index > 0) {
+      result = result.slice(index);
+    }
+    return result;
+  }
+  let text = strHeadCleaner(textIn);
+  log('======BACK-D-textToSpeech: typeof TEXT>>>: ', typeof text)
+  
+  const arrHeadCleaner = (arr) => {
+    let result = arr.slice();
+    while(result[0][0] === '\n' || result[0] === '') { 
+      result.shift()
+    }
+    return result;
+  }
+
   var maxWords = 230;
-  var words = text.split(" ");
-  var textArray = [];
+  var roughWords = text.split(" ");
+  var words = arrHeadCleaner(roughWords);
+  // var words = preWords.filter((char) => )
+
   var bufferarray = [];
 
+  log('======BACK-D2-textToSpeech: WORDS>>>: ', words);
+  log('======words.length: ', words.length);
+
   //Checks length of desired text to send to Polly. If the amount of Words are longer than 230 then break text into an array.
-  if (words.length > maxWords){
-    x = 0;
-    while(x < words.length){
-       textArray.push(text.match(/^(?:\w+\W+){0,230}/g).join(" "));
-       var check = text.split(/^(?:\w+\W+){230}/g);
-       var y = 0;
-       check.forEach(function(element) {
-         if(element === ""){
-           check.splice(y, 1);
-         }
-         y++;
-      });
-      text = check[0];
-      x += maxWords;
-     }
-  } else {
-    textArray.push(text);
+  const chopper = (arr) => {
+    let palabras = words.slice();
+    var result = [];
+    let x;
+    if (palabras.length > maxWords){
+      x = 0;
+      while(x < palabras.length){
+         result.push(text.match(/^(?:\w+\W+){0,230}/g).join(" "));
+         var check = text.split(/^(?:\w+\W+){230}/g);
+         var y = 0;
+         check.forEach(function(element) {
+           if(element === ""){
+             check.splice(y, 1);
+           }
+           y++;
+        });
+        text = check[0];
+        x += maxWords;
+       }
+    } else {
+      result.push(text);
+    }
+    return result;
   }
-  log('TEXT-ARRAY: >>>>>>>>> ', textArray);
-  log('INSIDE textToSpeech: voiceId: ', voiceId, ' text: ', text, ' filename: ', filename) //*************
+  var textArray = chopper(words);
+
+  log('======BACK-E-TEXT-ARRAY: >>>>>>>>> ', textArray);
+  // log('INSIDE textToSpeech: voiceId: ', voiceId, ' text: ', text, ' filename: ', filename) //*************
   // SEE #3 (ABOVE): feed segments of text into polly to generate audio segments
   Promise.all(textArray.map(function(item) {
     log('ONE ITEM being mapped to generatePollyAudio call...')
     return generatePollyAudio(item, voiceId)
   }))
   .then(function(audios) { // isArray!
-    log('textToSpeech pc1')
+    log('======BACK-F-textToSpeech >>>PC1')
     log('audios[0].AudioStream instanceof Buffer ', audios[0].AudioStream instanceof Buffer)
-    log('AUDIOS>>>>>>>>: [0] ', audios[0])
+    // log('AUDIOS>>>>>>>>: [0] ', audios[0])
     return Promise.all(audios.map(a => a.AudioStream))
   })
   // Concatenate audio segments into single buffer object
   .then(function(audioStreams) {
-    log('>>>>>>>>PC2-audioStreams BUFFER?: ', audioStreams) // Array of Buffers (length: 3)
+    log('======BACK-G-textToSpeech >>PC2')
+    // log('>>PC2-audioStreams BUFFER?: ', audioStreams) // Array of Buffers (length: 3)
     log('LENGTH: ', audioStreams.reduce((len, a) => len + a.length, 0))
-    log('textToSpeech pc2')
     // Buffer.concat(arrayOfBuffers, totalLengthOfBuffers)
     return (Buffer.concat(audioStreams, audioStreams.reduce((len, a) => len + a.length, 0))) // 1567168
   })
   // SEE #5 (ABOVE): save unifiedBuffer to s3 as mp3 file
   .then(function(unifiedBuffer) {
-    log('PC-3-UNIFIED BUFFER isBuffer?: ', unifiedBuffer instanceof Buffer)
+    log('======BACK-H-textToSpeech >>PC3')
+    log('>>PC-3-UNIFIED BUFFER isBuffer?: ', unifiedBuffer instanceof Buffer)
     // log('PC-3-UNIFIED BUFFER.AudioStream isBuffer?: ', unifiedBuffer.AudioStream instanceof Buffer)
 
-    log('textToSpeech pc3')
     return writeAudioStreamToS3(unifiedBuffer, filename)
   })
   // Return URL of audio to front-end
   .then(function(response) {
-    log('PC4-RESPONSE: ', response)
-    log('textToSpeech pc4')
+    log('======BACK-I-textToSpeech >>PC4')
+    log('>>PC4-RESPONSE: >>> ', response)
     callback(response.url, articleTitle)
     // res.send({url: response.url})
   })
   .catch(function(err) {
-    log('textToSpeech pc5-ERR', err)
+    log('textToSpeech PC5-ERR', err)
     if(err.errorCode && err.error) res.status(err.errorCode).send(err.error)
     else res.status(500).send(err)
   });

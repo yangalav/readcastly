@@ -51,7 +51,7 @@ const dbStats = function(dbContents) {
     console.log('\n\nTotal # words in all articles in db = ', total);
     console.log('# of articles in db = ', count);
     console.log('Average word count = ', Math.floor(total / count));
-    console.log('\n', numOfHighestCountsToTrack, ' articles with highest word counts: ', highestArray);
+    // console.log('\n', numOfHighestCountsToTrack, ' articles with highest word counts: ', highestArray);
   };
   avg1(dbContents);
 
@@ -62,13 +62,13 @@ const dbStats = function(dbContents) {
       var reduced = subArray.reduce(function(acc, val) {
         return acc + val;
       });
-      console.log('\nReducing # words by: ', reduced);
+      // console.log('\nReducing # words by: ', reduced);
       return reduced;
     }
 
     for(var z=0; z < arr.length; z++) {
       var newAvg = Math.floor((total - reduction(arr[z])) / (count - arr[z]));
-      console.log('i.e., the avg. word count if we remove the ', arr[z], ' longest articles = ', newAvg);
+      // console.log('i.e., the avg. word count if we remove the ', arr[z], ' longest articles = ', newAvg);
     }
   }
   variedAverages([10, 7, 5, 3, 1]) // these are the scenarios to run: # of highest word counts to remove

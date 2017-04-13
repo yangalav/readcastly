@@ -60,7 +60,7 @@ module.exports = function(app, express, passport) {
   });
 
   app.post('/stream', function(req,res) {
-    console.log('IN STREAM ENDPOINT');
+    console.log('======BACK-A-routes.js-IN STREAM ENDPOINT');
     // console.log('PAYLOAD === ', req.body.payload);
 
 
