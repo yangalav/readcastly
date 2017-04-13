@@ -7,11 +7,8 @@ const mercury = require('./apis/mercuryController');
 const news = require('./apis/newsController');
 const mailer = require('./apis/mailController');
 const texter = require('./apis/textController');
-<<<<<<< HEAD
 const polly = require('./apis/pollyController');
-=======
-// const passport = require('passport');
->>>>>>> new users able to be added to database from signup form
+const path = require('path');
 
 // To be written and passed into routes between endpoint and function
 // const isLoggedIn = function(){};
@@ -121,6 +118,7 @@ module.exports = function(app, express, passport) {
     // });
   });
 
+<<<<<<< HEAD
   app.get('/signup', function(req,res) {
       res.send('this is our signup page :)');
   });
@@ -136,6 +134,35 @@ module.exports = function(app, express, passport) {
     failureFlash: true
   }))
 
+=======
+  app.get('/api/signup', function(req,res) {
+      res.send('this is our signup page :)');
+  });
+
+  app.get('/api/login', function(req, res) {
+    res.send('this is our login page :)');
+  });
+
+  app.get('/api/', function(req, res) {
+    console.log('RENDER INDEX')
+    app.use(express.static(path.join(__dirname, '../client')));
+    res.sendFile(path.join(__dirname, '../client/index.html'))
+  });
+
+  app.post('/api/signup',
+    passport.authenticate('local-signup', {
+    successRedirect: '/',
+    failureRedirect: '/',
+    failureFlash: true
+  }))
+
+  app.post('api/login',
+    passport.authenticate('local-login', {
+    successRedirect: '/',
+    failureRedirect: '/',
+    failureFlash: true
+  }))
+>>>>>>> PassportSignup
 
 };
 
