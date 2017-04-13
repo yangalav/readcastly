@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
+import { hashHistory } from 'react-router'
 
 class SignupForm extends React.Component {
   constructor() {
@@ -34,7 +35,7 @@ class SignupForm extends React.Component {
     console.log("The phone is: " + this.state.phone);
     console.log("The voice pref is: " + this.state.voicePref);
     console.log("The avatar is: " + this.state.avatar);
-    axios.post('/signup', {
+    axios.post('/api/signup', {
       email: this.state.email,
       password: this.state.password,
       firstName: this.state.firstName,
@@ -44,12 +45,14 @@ class SignupForm extends React.Component {
       avatar: this.state.avatar,
     })
 		.then((res) => {
-			console.log("POST REQUESTTTTTTTTTTTTTTTTTTTTTT");
-			return;
-		})
+			console.log("POST REQUESTTTTTTTTTTTTTTTTTTTTTT" + res);
+      hashHistory.push('/login');
+      return;
+		});
   }
 
   handleFirstNameChange(e) {
+    console.log(e.target.value)
     this.setState({ firstName: e.target.value });
   }
 

@@ -2,12 +2,17 @@ const db = require('../dbConfig');
 const Users = require('../collections/users');
 const User = require('../models/user');
 
-const getByID = function(userId,callback) {
-  console.log('get by ID ', userId);
+const getByID = function(id) {
+  console.log('get by ID ', id);
   return db.knex('Users')
-    .where({ userId: userId })
-    .select('*')
-    .then(callback);
+    .where({ id: id })
+    .then(function(id){
+      console.log(id)
+      return id;
+    })
+    .catch(function(err){
+      console.error(err)
+    });
 };
 
 const findByEmail = function(email) {
