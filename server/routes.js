@@ -82,7 +82,10 @@ module.exports = function(app, express) {
   app.post('/email', function(req,res) {
     console.log('IN EMAIL ENDPOINT');
     console.log('PAYLOAD === ', req.body.payload);
-    res.send({"method": 'SUCCESSFUL EMAIL RETURN'});
+    mailer.sendMail(req,res,function(confirmation) {
+      res.send(confirmation);
+    })
+    // res.send({"method": 'SUCCESSFUL EMAIL RETURN'});
     // let readcast = utils.readcastBuilder(req.body.payload.article);
     // //req.body will need all fields required for conversion, including title, author, and source, at a minimum, in addition to text
     // //invoke function that converts article to speech, grab path
