@@ -160,6 +160,10 @@ hr {
 .radio label input[type="radio"]:disabled + .cr {
     opacity: .5;
 }
+
+.btn {
+    white-space: normal;
+}
 /*.voice-chooser {
   width: 130px;
 }
