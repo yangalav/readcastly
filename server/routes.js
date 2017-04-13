@@ -118,23 +118,6 @@ module.exports = function(app, express, passport) {
     // });
   });
 
-<<<<<<< HEAD
-  app.get('/signup', function(req,res) {
-      res.send('this is our signup page :)');
-  });
-
-  app.get('/login', function(req, res) {
-    res.send('this is our login page :)');
-  });
-
-  app.post('/signup',
-    passport.authenticate('local-signup',{
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: true
-  }))
-
-=======
   app.get('/api/signup', function(req,res) {
       res.send('this is our signup page :)');
   });
@@ -162,7 +145,6 @@ module.exports = function(app, express, passport) {
     failureRedirect: '/',
     failureFlash: true
   }))
->>>>>>> PassportSignup
 
 };
 
