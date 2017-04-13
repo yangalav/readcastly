@@ -71,6 +71,7 @@ class App extends React.Component {
 			showConfirm: false,
 			lastMethod: '',
 			lastUrl: '',
+			lastLink: '',
 			topStoryMode: false
 		};
 	}
@@ -130,7 +131,6 @@ class App extends React.Component {
 		}
 		console.log(obj);
 		result.unshift(obj);
-		this.toggleConfirm();
 		return result;
 	}
 
@@ -197,28 +197,21 @@ class App extends React.Component {
 			article: articleObject.article
 		};
 		let route = '/'+ articleObject.method; //**************
-		// let route = '/stream';
 		this.setState({lastMethod: articleObject.method, lastUrl: articleObject.article.url});
-		console.log('EXPORT-OBJ: ', exportObj);
-		console.log('ROUTE: ', route);
+		// console.log('EXPORT-OBJ: ', exportObj);
+		// console.log('ROUTE: ', route);
 		axios.post(route, {payload: exportObj})
-			// .then((res) => {
-			// 	console.log(res.data.method);
-			// })
-			// .catch((err) => {
-			// 	console.log(articleObject.method, err);
-			// });
-		.then((res) => {
-			console.log('>>>>>>>>XXXXXX====RES: ', res);
-			console.log(articleObject.method);
-			if (articleObject.method === "stream") {
-				this.setState({nowPlaying: {url: res.data.url, title: res.data.title}});
-			} else {
-				console.log('IN HERE');
-				console.log('Message successfully sent to' + res.data.destination + '.');
-			}
-		})
-		.catch((err) => this.setState({ hasErrored: true, failMessage: ('Error in conversion to speech: ' + err)}));
+			.then((res) => {
+				// console.log('>>>>>>>>XXXXXX====RES: ', res);
+				// console.log(articleObject.method);
+				if (articleObject.method === "stream") {
+					this.setState({nowPlaying: {url: res.data.url, title: res.data.title}});
+				} else {
+					// console.log('Message successfully sent to ' + res.data.destination + '.');
+					this.setState({lastLink: res.data.url, showConfirm: true});
+				}
+			})
+			.catch((err) => this.setState({ hasErrored: true, failMessage: ('Error in conversion to speech: ' + err)}));
 	}
 
 	// {invokes ajax call to fetch data for the ArticleList component}
@@ -260,7 +253,7 @@ class App extends React.Component {
 				<div id="player_container">
 					<Player track={this.state.nowPlaying}/>
 				</div>
-				<Confirm deleteArticle={this.deleteArticle.bind(this)} user={this.state.user} method={this.state.lastMethod} toggleConfirm={this.toggleConfirm.bind(this)} url={this.state.lastUrl} showConfirm={this.state.showConfirm} />
+				<Confirm deleteArticle={this.deleteArticle.bind(this)} user={this.state.user} method={this.state.lastMethod} link={this.state.lastLink} toggleConfirm={this.toggleConfirm.bind(this)} url={this.state.lastUrl} showConfirm={this.state.showConfirm} />
 			</div>
 		);
 

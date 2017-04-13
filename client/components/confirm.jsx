@@ -9,9 +9,9 @@ class Confirm extends React.Component {
   render () {
     let close = () => this.props.toggleConfirm();
     let deleteClose = () => {
-      this.props.deleteArticle(this.props.url)
-        .then( () => close() )
-        .catch( (err) => console.log('ERROR DELETE-CLOSE', err))
+      console.log('URL FOR MODAL === ', this.props.url);
+      this.props.deleteArticle(this.props.url);
+      this.props.toggleConfirm();
     }
 
     let destination = this.props.user[this.props.method];
@@ -27,9 +27,10 @@ class Confirm extends React.Component {
           <Modal.Header closeButton>
             <Modal.Title id="contained-modal-title">Success!</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            Congratulations!  Your Readcast has been delivered to {destination}.
-          </Modal.Body>
+          {this.props.method === 'link' ?
+            (<Modal.Body>Thank you for using Readcast.ly!  Your Readcast can be downloaded <a href={this.props.link}>here</a>.</Modal.Body>) :
+            (<Modal.Body>Congratulations!  Your Readcast has been delivered to {destination}.</Modal.Body>)
+          }
           <Modal.Footer>
             <Button bsStyle="danger" onClick={deleteClose}>Remove article from library</Button>
             <Button bsStyle="success" onClick={close}>Close</Button>

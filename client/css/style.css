@@ -93,7 +93,7 @@ hr {
 
 .modal-container .modal, .modal-container .modal-backdrop {
   position: absolute;
-  top: -20px;
+  top: -150px;
 }
 
 .modal-dialog {
