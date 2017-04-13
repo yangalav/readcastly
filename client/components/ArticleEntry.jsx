@@ -15,7 +15,7 @@ class ArticleEntry extends React.Component {
 			<div className="voice-chooser">
 				<FormGroup controlId="voiceSelect">
 	      	<FormControl componentClass="select" value={this.state.voice} onChange={this.handleVoiceChange.bind(this)} placeholder="banana">
-	      	<option value="banana">Voice Choice</option>
+	      	<option value="Joanna">Voice Choice</option>
 	      	{voices.map((voice,i) => {
 	      		return voice.flag ? (<option key={i} value={voice.name} >{voice.name}</option>) :
 	      			(<option key={i} disabled="disabled" >{voice.name}</option>)
@@ -37,7 +37,7 @@ class ArticleEntry extends React.Component {
 			<div className="conversion-chooser">
 				<FormGroup controlId="conversionSelect">
 	      	<FormControl componentClass="select" value={this.state.method} onChange={this.handleMethodChange.bind(this)} placeholder="banana">
-	      	<option value="banana">Delivery Method</option>
+	      	<option value="stream">Delivery Method</option>
 	      	{methods.map((option,i) => (
 						<option key={i} value={option.id} >{option.method}</option>
 					))}
@@ -81,7 +81,8 @@ class ArticleEntry extends React.Component {
 		  			{this.props.article.publication_date && <div className="article-publishDate"><span>{this.props.article.publication_date}</span></div>}
 		  			{this.props.article.source_name && <div className="article-source"><span><i>{this.props.article.source_name}</i></span></div>}
 		  			{this.props.article.excerpt && <div className="article-excerpt"><span>Excerpt: </span><span>{this.props.article.excerpt}</span></div>}
-		  			{this.props.article && <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.props.deleteIt(this.props.article.url)}>Remove From Library</Button>}
+		  			{!this.props.topStoryMode && <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.props.deleteIt(this.props.article.url)}>Remove From Library</Button>}
+		  			{this.props.topStoryMode && <Button bsStyle="warning" bsSize="xsmall" onClick={() => this.props.deleteIt(this.props.article.url)}>Add to Library</Button>}
 		  		</Col>
 		  	<Col md={2}>
 		  		<div className="article-buttons">
