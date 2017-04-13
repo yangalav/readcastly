@@ -37,10 +37,10 @@ module.exports = function(app, express, passport) {
   });
 
   app.post('/topStories', function(req,res) {
-    console.log('routes.js GET req to /topStories, l 37. req.body.sources = ', req.body.sources);
+    // console.log('routes.js GET req to /topStories, l 37. req.body.sources = ', req.body.sources);
     // var parsedReq = JSON.parse(req);
-    var parsedSources = JSON.parse(req.body.sources);
-    console.log('parsedSources = ', parsedSources);
+    // var parsedSources = JSON.parse(req.body.sources);
+    // console.log('parsedSources = ', parsedSources);
     // console.log('routes.js GET req to /topStories, l 37. req.body.sources = ', parsedSources);
     // console.log('routes.js GET req to /topStories, l 37. req.body.sources[0] = ', req.body.sources[0]);
     //
@@ -48,11 +48,12 @@ module.exports = function(app, express, passport) {
     // console.log('routes.js POST req to /topStories, l 39. req.sources = ', parsedSources.sources);
 
     var options = {};
-    news.newsApiBuilder(req.body.sources[1], function(optionsObj){
+    // news.newsApiBuilder(req.body.sources[1], function(optionsObj){
+    news.newsApiBuilder(null, function(optionsObj){
       options = optionsObj;
     });
     request(options, function(error, response, body) {
-
+      console.log('\n\nroutes.js POST req to /topStories');
       var parsedNewsObj = JSON.parse(body);
       // console.log('\n\nroutes.js GET req to /topStories, l 48. res body.articles from newsApi = ', parsedNewsObj.articles);
       res.send(parsedNewsObj.articles);

@@ -250,9 +250,9 @@ class App extends React.Component {
 					<ArticleList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} />
 				</ToggleDisplay>
 				<ToggleDisplay show={this.state.topStoryMode}>
-					{/*<div>
+					{<div>
 						<h1>Oh hi!</h1>
-					</div>*/}
+					</div>}
 					<TopStories getTopStories={this.getTopStories.bind(this)} headlines={this.state.headlines} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} />
 				</ToggleDisplay>
 				<div id="player_container">

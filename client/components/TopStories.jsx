@@ -46,7 +46,7 @@ class TopStories extends React.Component {
         <Grid>
           <Row>
             <Col md={4} mdOffset={4}>
-              <Button bsStyle="success" bsSize="large" onClick={this.randomizer} block>Get headlines from a random source</Button>
+              <Button bsStyle="success" bsSize="large" onClick={this.randomizer} block>Get headlines</Button>
             </Col>
           </Row>
         </Grid>

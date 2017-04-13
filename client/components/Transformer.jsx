@@ -46,7 +46,7 @@ class TransFormEr extends React.Component {
 		);
 	}
 	// => TODO: write function & connect Listen now button to process URL & begin playing when available;
-
+        //  => app.jsx line 214: this.setState({nowPlaying: {url: res.data.url, title: res.data.title}});
 	// render() {
 	// 	return (
 	// 		<form class="transformer" onSubmit={this.handleSubmit}>

@@ -12,6 +12,8 @@ class WhichView extends React.Component {
   render() {
     return (
       <Col md={8} mdOffset={2} className="readcasts-topstories">
+      <a className="subtitle">Your Read.casts or Top Stories?</a>
+      <div><br></br></div>
           <Switch bsSize="large" onColor="warning" offColor="warning" onChange={this.props.toggleView.bind(this)} />
           <div><br></br></div>
       </Col>
