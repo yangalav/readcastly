@@ -39,7 +39,7 @@ const mailIt = function(email,article,url,callback) {
             return console.log('ERROR SENDING MAIL ', error);
         }
         console.log('Message %s sent: %s', info.messageId, info.response);
-        callback(info);
+        callback(info.accepted[0]);
     });
 };
 

@@ -82,8 +82,9 @@ module.exports = function(app, express) {
   app.post('/email', function(req,res) {
     console.log('IN EMAIL ENDPOINT');
     console.log('PAYLOAD === ', req.body.payload);
-    mailer.sendMail(req,res,function(confirmation) {
-      res.send(confirmation);
+    mailer.sendMail(req,res,function(destination) {
+      console.log(destination);
+      res.send({"destination" : destination});
     })
     // res.send({"method": 'SUCCESSFUL EMAIL RETURN'});
     // let readcast = utils.readcastBuilder(req.body.payload.article);

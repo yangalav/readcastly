@@ -209,11 +209,13 @@ class App extends React.Component {
 			// 	console.log(articleObject.method, err);
 			// });
 		.then((res) => {
-			console.log('>>>>>>>>XXXXXX====RES: ', res.data.url)
-			if (articleObject.method = "stream") {
+			console.log('>>>>>>>>XXXXXX====RES: ', res);
+			console.log(articleObject.method);
+			if (articleObject.method === "stream") {
 				this.setState({nowPlaying: {url: res.data.url, title: res.data.title}});
 			} else {
-				console.log('Message successfully sent to' + exportObj.destination + '.');
+				console.log('IN HERE');
+				console.log('Message successfully sent to' + res.data.destination + '.');
 			}
 		})
 		.catch((err) => this.setState({ hasErrored: true, failMessage: ('Error in conversion to speech: ' + err)}));
