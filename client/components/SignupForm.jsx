@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
-import { hashHistory } from 'react-router'
+import { hashHistory } from 'react-router';
 
 class SignupForm extends React.Component {
   constructor() {
@@ -78,24 +78,6 @@ class SignupForm extends React.Component {
 
   handleAvatarChange(e) {
     this.setState({ avatar: e.target.value });
-  }
-
-  handleSignUp(e) {
-    console.log("The email is: " + this.state.email);
-    console.log("The password is: " + this.state.password);
-    axios.post('/signup', {email: this.state.email, password: this.state.password})
-		.then((res) => {
-			console.log("POST REQUESTTTTTTTTTTTTTTTTTTTTTT");
-			return;
-		})
-  }
-
-  handleEmailChange(e) {
-    this.setState({email: e.target.value});
-  }
-
-  handlePasswordChange(e) {
-    this.setState({password: e.target.value});
   }
 
   render() {

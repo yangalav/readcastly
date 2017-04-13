@@ -135,16 +135,16 @@ module.exports = function(app, express, passport) {
   app.post('/api/signup',
     passport.authenticate('local-signup', {
     successRedirect: '/',
-    failureRedirect: '/',
+    failureRedirect: '/signup',
     failureFlash: true
   }))
 
-  app.post('api/login',
-    passport.authenticate('local-login', {
-    successRedirect: '/',
-    failureRedirect: '/',
-    failureFlash: true
-  }))
+  // app.post('/api/login',
+  //   passport.authenticate('local-login', {
+  //   successRedirect: '/',
+  //   failureRedirect: '/',
+  //   failureFlash: true
+  // }))
 
 };
 
