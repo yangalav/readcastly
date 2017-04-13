@@ -7,7 +7,11 @@ const mercury = require('./apis/mercuryController');
 const news = require('./apis/newsController');
 const mailer = require('./apis/mailController');
 const texter = require('./apis/textController');
+<<<<<<< HEAD
 const polly = require('./apis/pollyController');
+=======
+// const passport = require('passport');
+>>>>>>> new users able to be added to database from signup form
 
 // To be written and passed into routes between endpoint and function
 // const isLoggedIn = function(){};
