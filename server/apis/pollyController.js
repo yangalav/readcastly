@@ -50,8 +50,8 @@ const generatePollyAudio = (text, voiceId) => {
   // })
 
   .then( data => {
-    log ('--INSIDE generatePollyAudio-PC') //*************
-    log('--data.AudioStream instanceof Buffer: ', data.AudioStream instanceof Buffer)
+    log ('>INSIDE generatePollyAudio-PC') //*************
+    log('>DATA.AudioStream instanceof Buffer: ', data.AudioStream instanceof Buffer)
     if (data.AudioStream instanceof Buffer) return data
   })
   .catch(err => {
@@ -71,17 +71,19 @@ const putObject = (bucket, key, body, contentType) =>
 
 // 5. Function that Uploads Polly mp3 audio to Amazon S3, generating a url to serve to client
 const writeAudioStreamToS3 = ( audioStream, filename ) => {
-  log('INSIDE writeAudioStreamToS3 filename: ', filename) //*************
+  log('>>>>INSIDE writeAudioStreamToS3 filename: ', filename) //*************
   const bucketName = 'readcastly-user-files'
   const contentType = 'audio/mp3'
+
   return putObject(bucketName, filename, audioStream, contentType)
   .then((res) => {
-    console.log('INSIDE writeAudioStreamToS3 - res.etag: ', res.ETag)
+    log('INSIDE writeAudioStreamToS3 - res.etag: ', res.ETag)
+    log('>>>>INSIDE writeAudioStreamToS3 - RES: ', res)
     if(!res.ETag) throw res
     else return {
       msg: 'File successfully generated.',
       ETag: res.ETag,
-      url: `https://s3.amazonaws.com/${bucketName}/${filename}.mp3`
+      url: `https://s3.amazonaws.com/${bucketName}/${filename}`
     }    
   })
 }
@@ -93,9 +95,10 @@ const textToSpeech = (req, res, callback) => {
   log('INSIDE textToSpeech') //*************
   
   // Extract needed info from request object
+  const articleTitle = req.body.payload.article.title
   const voiceId = req.body.payload.voice || 'Joanna' /*name of voice*/
   let text = req.body.payload.article.text || '' /*text of the article*/
-  const filename = req.body.payload.article.article_id.toString() || '999999999' /*unique article_id number*/ 
+  const filename = req.body.payload.article.article_id.toString() + '.mp3' || '999999999.mp3' /*unique article_id number*/ 
   // also available: req.body.destination => /*e-mail address if e-mail, phone number if phone, 'stream' if stream, 'link' if link */
   log('INSIDE textToSpeech: voiceId: ', voiceId, ' FILENAME: ', filename) //************* 
 
@@ -144,22 +147,25 @@ const textToSpeech = (req, res, callback) => {
   })
   // Concatenate audio segments into single buffer object
   .then(function(audioStreams) {
-    log('PC2-audioStreams: ', audioStreams)
+    log('>>>>>>>>PC2-audioStreams BUFFER?: ', audioStreams) // Array of Buffers (length: 3)
+    log('LENGTH: ', audioStreams.reduce((len, a) => len + a.length, 0))
     log('textToSpeech pc2')
-    return (Buffer.concat(audioStreams, audioStreams.reduce((len, a) => len + a.length, 0))) // audioStreams.reduce((len, a) => len + a.length, 0)
+    // Buffer.concat(arrayOfBuffers, totalLengthOfBuffers)
+    return (Buffer.concat(audioStreams, audioStreams.reduce((len, a) => len + a.length, 0))) // 1567168
   })
   // SEE #5 (ABOVE): save unifiedBuffer to s3 as mp3 file
   .then(function(unifiedBuffer) { 
-    log('PC-3-UNIFIED BUFFER: ', Array.isArray(unifiedBuffer))
+    log('PC-3-UNIFIED BUFFER isBuffer?: ', unifiedBuffer instanceof Buffer)
+    // log('PC-3-UNIFIED BUFFER.AudioStream isBuffer?: ', unifiedBuffer.AudioStream instanceof Buffer)
 
     log('textToSpeech pc3')
-    return writeAudioStreamToS3(unifiedBuffer.AudioStream, filename)
+    return writeAudioStreamToS3(unifiedBuffer, filename)
   })
   // Return URL of audio to front-end
   .then(function(response) {
     log('PC4-RESPONSE: ', response)
     log('textToSpeech pc4')
-    callback(response.url)
+    callback(response.url, articleTitle)
     // res.send({url: response.url})
   })
   .catch(function(err) {

@@ -142,8 +142,8 @@ class App extends React.Component {
 			voice: articleObject.voice || 'Joanna',
 			article: articleObject.article
 		};
-		// let route = '/'+ articleObject.method; //**************
-		let route = '/stream';
+		let route = '/'+ articleObject.method; //**************
+		// let route = '/stream';
 		this.setState({lastMethod: articleObject.method, lastUrl: articleObject.article.url});
 		console.log('EXPORT-OBJ: ', exportObj);
 		console.log('ROUTE: ', route);
@@ -155,8 +155,9 @@ class App extends React.Component {
 			// 	console.log(articleObject.method, err);
 			// });
 		.then((res) => {
+			console.log('>>>>>>>>XXXXXX====RES: ', res.data.url)
 			if (articleObject.method = "stream") {
-				this.setState({nowPlaying: res.url});
+				this.setState({nowPlaying: {url: res.data.url, title: res.data.title}});
 			} else {
 				console.log('Message successfully sent to' + exportObj.destination + '.');
 			}

@@ -64,9 +64,9 @@ module.exports = function(app, express) {
     // console.log('PAYLOAD === ', req.body.payload);
 
 
-    polly.textToSpeech(req, res, function(result) {
-      console.log('SUCCESSFUL STREAM RETURN')
-      res.send({url: result})
+    polly.textToSpeech(req, res, function(url, title) {
+      console.log('SUCCESSFUL STREAM RETURN--url: ', url, 'title: ', title)
+      res.send({url, title})
     });
 
     // res.send({"method": 'SUCCESSFUL STREAM RETURN'});
