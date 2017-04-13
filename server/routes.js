@@ -8,6 +8,7 @@ const news = require('./apis/newsController');
 const mailer = require('./apis/mailController');
 const texter = require('./apis/textController');
 const polly = require('./apis/pollyController');
+const path = require('path');
 
 // To be written and passed into routes between endpoint and function
 // const isLoggedIn = function(){};
@@ -117,21 +118,33 @@ module.exports = function(app, express, passport) {
     // });
   });
 
-  app.get('/signup', function(req,res) {
+  app.get('/api/signup', function(req,res) {
       res.send('this is our signup page :)');
   });
 
-  app.get('/login', function(req, res) {
+  app.get('/api/login', function(req, res) {
     res.send('this is our login page :)');
   });
 
-  app.post('/signup',
-    passport.authenticate('local-signup',{
+  app.get('/api/', function(req, res) {
+    console.log('RENDER INDEX')
+    app.use(express.static(path.join(__dirname, '../client')));
+    res.sendFile(path.join(__dirname, '../client/index.html'))
+  });
+
+  app.post('/api/signup',
+    passport.authenticate('local-signup', {
     successRedirect: '/',
-    failureRedirect: '/login',
+    failureRedirect: '/',
     failureFlash: true
   }))
 
+  app.post('api/login',
+    passport.authenticate('local-login', {
+    successRedirect: '/',
+    failureRedirect: '/',
+    failureFlash: true
+  }))
 
 };
 

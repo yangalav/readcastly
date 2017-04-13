@@ -2,12 +2,17 @@ const db = require('../dbConfig');
 const Users = require('../collections/users');
 const User = require('../models/user');
 
-const getByID = function(userId,callback) {
-  console.log('get by ID ', userId);
+const getByID = function(id) {
+  console.log('get by ID ', id);
   return db.knex('Users')
-    .where({ userId: userId })
-    .select('*')
-    .then(callback);
+    .where({ id: id })
+    .then(function(id){
+      console.log(id)
+      return id;
+    })
+    .catch(function(err){
+      console.error(err)
+    });
 };
 
 const findByEmail = function(email) {
@@ -24,13 +29,18 @@ const findByEmail = function(email) {
 };
 
 
-const addUser = function(email,password) {
+const addUser = function(email,password,firstName,lastName,phone,voicePref,avatar) {
   console.log('adding ' + email + ' and ' + password);
   return db.knex('Users')
     .insert(
     {
       email: email,
-      password: password
+      password: password,
+      first_name: firstName,
+      last_name: lastName,
+      phone: phone,
+      voice_pref: voicePref,
+      avatar: avatar,
     }
   )
   .catch(function(err) {
