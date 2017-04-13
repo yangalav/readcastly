@@ -12,7 +12,7 @@ const polly = require('./apis/pollyController');
 // To be written and passed into routes between endpoint and function
 // const isLoggedIn = function(){};
 
-module.exports = function(app, express) {
+module.exports = function(app, express, passport) {
 
   app.post('/requrl', function(req, res) {
     // console.log('server.js received POST req at /requrl. req.body = ', req.body);
@@ -117,21 +117,22 @@ module.exports = function(app, express) {
     // });
   });
 
-  //AUTHENTICATION ROUTES:
-
   app.get('/signup', function(req,res) {
       res.send('this is our signup page :)');
   });
 
-  app.post('/login', function(req, res) {
+  app.get('/login', function(req, res) {
     res.send('this is our login page :)');
-  })
+  });
 
-  // app.post('/signup',
-  //   passport.authenticate('local', { successRedirect: '/',
-  //                                    failureRedirect: '/login',
-  //                                    failureFlash: true })
-  // );
+  app.post('/signup',
+    passport.authenticate('local-signup',{
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true
+  }))
+
+
 };
 
 // other routes we wrote to test and may use in future:
