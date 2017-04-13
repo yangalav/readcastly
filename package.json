@@ -19,7 +19,6 @@
   "dependencies": {
     "aws-sdk": "^2.41.0",
     "axios": "^0.16.0",
-    "axios": "^0.16.1",
     "babel": "^6.23.0",
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.5.0",
