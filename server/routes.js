@@ -97,6 +97,26 @@ module.exports = function(app, express, passport) {
     });
   });
 
+  app.get('/guestStories', function(req,res) {
+    var options = {};
+    news.newsApiBuilder(req.query.source, function(optionsObj){
+      options = optionsObj;
+    });
+    request(options, function(error, response, body) {
+      if (error) {
+        console.log('ERROR GETTING GUEST STORIES FROM NEWSAPI ===', error);
+      } else {
+        let headlines=[]
+        response.articles.forEach(function(article) {
+          mercury.parseAndSave(99, article.url, function(result) {
+            headlines.push(result);
+          });
+        });
+        res.send(headlines);
+      }
+    });
+  });
+
   app.get('/api/signup', function(req,res) {
       res.send('this is our signup page :)');
   });
