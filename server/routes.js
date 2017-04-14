@@ -63,7 +63,7 @@ module.exports = function(app, express, passport) {
   });
 
   app.post('/stream', function(req,res) {
-    console.log('IN STREAM ENDPOINT');
+    console.log('======BACK-A-routes.js-IN STREAM ENDPOINT');
     // console.log('PAYLOAD === ', req.body.payload);
     polly.textToSpeech(req, res, function(url, title) {
       console.log('SUCCESSFUL STREAM RETURN--url: ', url, 'title: ', title)

@@ -203,20 +203,22 @@ class App extends React.Component {
 		};
 		let route = '/'+ articleObject.method; //**************
 		this.setState({lastMethod: articleObject.method, lastUrl: articleObject.article.url});
-		// console.log('EXPORT-OBJ: ', exportObj);
-		// console.log('ROUTE: ', route);
+
+		console.log('FRONT-A->>>EXPORT-OBJ: ', exportObj);
+		console.log('ROUTE: ', route);
+
 		axios.post(route, {payload: exportObj})
-			.then((res) => {
-				// console.log('>>>>>>>>XXXXXX====RES: ', res);
-				// console.log(articleObject.method);
-				if (articleObject.method === "stream") {
-					this.setState({nowPlaying: {url: res.data.url, title: res.data.title}, isConverting: false});
-				} else {
-					// console.log('Message successfully sent to ' + res.data.destination + '.');
-					this.setState({lastLink: res.data.url, showConfirm: true, isConverting: false});
-				}
-			})
-			.catch((err) => this.setState({ hasErrored: true, failMessage: ('Error in conversion to speech: ' + err)}));
+		.then((res) => {
+			console.log('FRONT-B->>>RES: ', res.data.url)
+			if (articleObject.method = "stream") {
+				this.setState({nowPlaying: {url: res.data.url, title: res.data.title}, isConverting: false});				
+
+			} else {
+				// console.log('Message successfully sent to ' + res.data.destination + '.');
+				this.setState({lastLink: res.data.url, showConfirm: true, isConverting: false});
+			}
+		})
+		.catch((err) => this.setState({ hasErrored: true, failMessage: ('Error in conversion to speech: ' + err)}));
 	}
 
 	// {invokes ajax call to fetch data for the ArticleList component}
