@@ -36,20 +36,13 @@ class TopStories extends React.Component {
   }
 
   // componentDidMount() {
-  //   this.randomizer();
+  //   // this.randomizer();
+  //   this.getTopStories();
   // }
 
   render() {
     return (
       <div className="topStories">
-        {/*<Checkboxes sources={sources} getTopStories={this.props.getTopStories.bind(this)} />*/}
-        <Grid>
-          <Row>
-            <Col md={4} mdOffset={4}>
-              <Button bsStyle="success" bsSize="large" onClick={this.randomizer} block>Get headlines</Button>
-            </Col>
-          </Row>
-        </Grid>
         {this.props.headlines && <ArticleList articles={this.props.headlines} user={this.props.user} deleteIt={this.props.deleteIt.bind(this)} convertIt={this.props.convertIt.bind(this)} exportOptions={this.props.exportOptions} topStoryMode={this.props.topStoryMode}/>}
       </div>
     );
@@ -58,3 +51,12 @@ class TopStories extends React.Component {
 }
 
 export default TopStories;
+
+// {/*<Checkboxes sources={sources} getTopStories={this.props.getTopStories.bind(this)} />*/}
+// <Grid>
+//   <Row>
+//     <Col md={4} mdOffset={4}>
+//       <Button bsStyle="success" bsSize="large" onClick={this.randomizer} block>Get headlines</Button>
+//     </Col>
+//   </Row>
+// </Grid>

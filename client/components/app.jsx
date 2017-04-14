@@ -99,14 +99,17 @@ class App extends React.Component {
 	}
 
 	getTopStories(sources){
+    console.log('app.js getTopStories, l 102. about to make GET req...');
 		this.setState({ isLoading: true });
-		axios.post('/topStories', {sources: sources})
+		axios.get('/topStories', {sources: sources})
 		.then((res) => {
+      console.log('app.js getTopStories, l 105. res from BE = ', res.data);
 				res.data.forEach((article) => {
-					if (article.publication_date) {article.publication_date = this.cleanDate(article.publication_date)};
+					if (article.publishedAt) {article.publishedAt = this.cleanDate(article.publishedAt)};
 					article.est_time = this.cleanTime(article.est_time);
 				});
-				this.setState({ isLoading: false, headlines: (res.data.reverse()) });
+				this.setState({ isLoading: false, headlines: (res.data) });
+        console.log('app.js getTopStories, l 112. cleaned date data =', res.data);
 			})
 			.catch((err) => this.setState({ failMessage: ('Unable to retrieve headlines'), hasErrored: true }));
 	}
@@ -224,6 +227,7 @@ class App extends React.Component {
 		this.addDeliveryMethods();
 		this.getReadingList();
 						// console.log('app.js getReadingList l 42. full db returned: ', res.data;
+    this.getTopStories();
 	}
 
 	toggleView() {
@@ -250,9 +254,6 @@ class App extends React.Component {
 					<ArticleList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} />
 				</ToggleDisplay>
 				<ToggleDisplay show={this.state.topStoryMode}>
-					{<div>
-						<h1>Oh hi!</h1>
-					</div>}
 					<TopStories getTopStories={this.getTopStories.bind(this)} headlines={this.state.headlines} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} />
 				</ToggleDisplay>
 				<div id="player_container">

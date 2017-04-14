@@ -24,8 +24,9 @@ module.exports = function(app, express, passport) {
   app.get('/getAll', function(req, res) {
     console.log('server.js received GET req at /getAll . Returning array of objects with contents of Readcastly db!');
     Articles.getAll(req.query.userId, function(library) {
-      console.log('server/routes.js l 25, about to call utils.dbstats...');
-      utils.dbStats(library);
+      // console.log('server/routes.js l 25, about to call utils.dbstats...');
+      // utils.dbStats(library);
+      // console.log('server/routes.js l 29, library sending to client = ', library);
       res.send(library);
     });
   });
@@ -36,7 +37,7 @@ module.exports = function(app, express, passport) {
     });
   });
 
-  app.post('/topStories', function(req,res) {
+  app.get('/topStories', function(req,res) {
     // console.log('routes.js GET req to /topStories, l 37. req.body.sources = ', req.body.sources);
     // var parsedReq = JSON.parse(req);
     // var parsedSources = JSON.parse(req.body.sources);
