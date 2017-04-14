@@ -20,7 +20,7 @@ const sources = [
   {id: 'techcrunch', name: 'TechCrunch'},
   {id: 'time', name: 'Time'},
   {id: 'the-washington-post', name: 'The Washington Post'},
-  {id: 'usa-today', name: 'Time'}
+  {id: 'usa-today', name: 'USA Today'}
 ];
 
 class TopStories extends React.Component {
