@@ -33,24 +33,25 @@ module.exports = function(app, passport) {
             return done(null, req.body.email);
           }
         });
-      }))
-  };
+      }));
 
-// ----LOGIN ROUTE----
-// passport.use('local-login', new LocalStrategy({
-//     usernameField: 'email',
-//     passwordField: 'password',
-//     passReqToCallback: true
-//   },
-//   function(req, email, password, done) {
-//     console.log('Local login strategy working');
-//     User.findByEmail(email).then(function(user) {
-//       if(!user.length) {
-//         console.log('Email not found');
-//         return done(null, false, { message: 'Email already taken'});
-//       } else {
-//         console.log('hahahahahahaha');
-//         return done(null, false, { message: 'Email'});
-//       }
-//     })
-//   }));
+      // ----LOGIN ROUTE----
+      passport.use('local-login', new LocalStrategy({
+          usernameField: 'email',
+          passwordField: 'password',
+          passReqToCallback: true
+        },
+        function(req, email, password, done) {
+          console.log('Local login strategy working');
+          User.findByEmail(email).then(function(user) {
+            if(!user.length) {
+              console.log('Email not found');
+              return done(null, false, { message: 'Email already taken'});
+            } else {
+              console.log('hahahahahahaha');
+              return done(null, false, { message: 'Email'});
+            }
+          })
+        }));
+
+  };
