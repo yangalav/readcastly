@@ -1,4 +1,5 @@
-// controller for Amazon Polly API
+/* controller for Amazon Polly API */
+
 // 1. Load SDK, set config variables, then create a Polly Instance;
 require('dotenv').config();
 const Promise = require('bluebird')
@@ -8,31 +9,17 @@ AWS.config.secretAccessKey = process.env.AWS_SAK
 AWS.config.region = process.env.AWS_REGION
 const polly = new AWS.Polly();
 const s3 = new AWS.S3();
-const utils = require('../utils.js');
-// FOR DEBUGGING ***********************
-const log = console.log; //*************
-// // 2. helper function to chop up text data for Polly into manageable segments of text
-//   // (i.e., within Polly input-length limits)
-//   // e.g. Input: 'long chunks of text' => Output: [['long'], ['chunks'], ['of'], ['text']]
+const utils = require('../utils.js'); /* May no longer be needed due to pollyHelpers */
+const pollyHelpers = require('../pollyHelpers');
 
-// const chopUpText = (text, charSeparator = '\n', maxLength = 1000) => {
-//   log('INSIDE chopUpText') //*************
-//   return text.split(charSeparator).reduce((memo, p) => {
-//     if(memo[memo.length - 1].length < maxLength) {
-//       memo[memo.length - 1] += charSeparator + p
-//       return memo
-//     }
-//     else {
-//       memo[memo.length] = p
-//       return memo
-//     }
-//   }, [[]])
-// }
+const log = console.log; /* FOR DEBUGGING */
+const line = '=========';
 
+// >>>>>>>marker A
 
 // 3. Function that generates Audio Stream by making API call to Polly; => returns a promise object
 const generatePollyAudio = (text, voiceId) => {
-  log ('INSIDE generatePollyAudio') //*************
+  log ('INSIDE generatePollyAudio')
   const params = {
     Text: text,
     TextType: 'text',
@@ -42,11 +29,6 @@ const generatePollyAudio = (text, voiceId) => {
   }
   // log('PARAMS:========> ', params);
   return polly.synthesizeSpeech(params).promise()
-  // Promise.promisify(polly.synthesizeSpeech(params))
-  // .then( audio => {
-  //   if (audio.AudioStream instanceof Buffer) return audio
-  //   else throw 'AudioStream is not a Buffer.'
-  // })
 
   .then( data => {
     log ('>INSIDE generatePollyAudio-PC') //*************
@@ -56,7 +38,6 @@ const generatePollyAudio = (text, voiceId) => {
   .catch(err => {
     console.error('AudioStream is not a Buffer.')
   })
-  // .catch( err => throw 'AudioStream is not a Buffer.')
 };
 
 // 4. helper function to upload to S3 => it returns a promise object
@@ -98,7 +79,7 @@ const textToSpeech = (req, res, callback) => {
   const voiceId = req.body.payload.voice || 'Joanna' /*name of voice*/
 
   const textIn = req.body.payload.article.text /*text of the article*/
-  const convertedTextIn = utils.unescapeHtml(textIn);
+  const convertedTextIn = pollyHelpers.unescapeHtml(textIn);
   const filename = (req.body.payload.article.article_id || 'temp').toString() + '.mp3' /*unique article_id number*/
   // || '999999999.mp3' // /*unique article_id number*/
 
@@ -109,69 +90,88 @@ const textToSpeech = (req, res, callback) => {
   // const textParts = chopUpText(text) //>>>>>>>>>>>>>>>>
   // log('>>>>>>>>>>>>textParts: ', textParts)
 
-  const strHeadCleaner = (str) => {
-    let result = str.slice();
-    let index = 0;
-    console.log('result.length: ', result.length);
-    while(result[index] === '\n' || result[index] === ' ') {
-      index++;
-    }
-    console.log('index: ', index);
-    if (index > 0) {
-      result = result.slice(index);
-    }
-    return result;
-  }
-  let text = strHeadCleaner(convertedTextIn);
-  // log('======BACK-D-textToSpeech: typeof TEXT>>>: ', typeof text)
+  // const strHeadCleaner = (str) => {
+  //   let result = str.slice();
+  //   let index = 0;
+  //   console.log('result.length: ', result.length);
+  //   while(result[index] === '\n' || result[index] === ' ') {
+  //     index++;
+  //   }
+  //   console.log('index: ', index);
+  //   if (index > 0) {
+  //     result = result.slice(index);
+  //   }
+  //   return result;
+  // }
 
-  const arrHeadCleaner = (arr) => {
-    let result = arr.slice();
-    while(result[0][0] === '\n' || result[0] === '') {
-      result.shift()
-    }
-    return result;
-  }
+  // remove any leading white-spaces and carriage-returns from string input  
+  let text = pollyHelpers.strHeadCleaner(convertedTextIn);
+  log(line, 'BACK-D-textToSpeech: typeof TEXT>>>: ', typeof text)
 
-  var maxWords = 230;
+
+  // const arrHeadCleaner = (arr) => {
+  //   let result = arr.slice();
+  //   while(result[0][0] === '\n' || result[0] === '') {
+  //     result.shift()
+  //   }
+  //   return result;
+  // }
+
+  // var maxWords = 230;
+  // var roughWords = text.split(" ");
+  // var words = arrHeadCleaner(roughWords);
+  // // var words = preWords.filter((char) => )
+
+  // var bufferarray = [];
+
+  // // log('======BACK-D2-textToSpeech: WORDS>>>: ', words);
+  // // log('======words.length: ', words.length);
+
+  // //Checks length of desired text to send to Polly. If the amount of Words are longer than 230 then break text into an array.
+  // const chopper = (arr) => {
+  //   let palabras = words.slice();
+  //   var result = [];
+  //   let x;
+  //   if (palabras.length > maxWords){
+  //     x = 0;
+  //     while(x < palabras.length){
+  //        result.push(text.match(/^(?:\w+\W+){0,230}/g).join(" "));
+  //        var check = text.split(/^(?:\w+\W+){230}/g);
+  //        var y = 0;
+  //        check.forEach(function(element) {
+  //          if(element === ""){
+  //            check.splice(y, 1);
+  //          }
+  //          y++;
+  //       });
+  //       text = check[0];
+  //       x += maxWords;
+  //      }
+  //   } else {
+  //     result.push(text);
+  //   }
+  //   return result;
+  // }
+  // var textArray = chopper(words);
+
+
+  // >>>>>>>marker C
+  
   var roughWords = text.split(" ");
-  var words = arrHeadCleaner(roughWords);
-  // var words = preWords.filter((char) => )
+  var words = pollyHelpers.arrHeadCleaner(roughWords);
 
-  var bufferarray = [];
+  // log(line, 'BACK-D2-textToSpeech: WORDS>>>: ', words); // LOTS
+  log(line, 'words.length: ', words.length);
 
-  // log('======BACK-D2-textToSpeech: WORDS>>>: ', words);
-  // log('======words.length: ', words.length);
+  // >>>>>>>marker D
 
-  //Checks length of desired text to send to Polly. If the amount of Words are longer than 230 then break text into an array.
-  const chopper = (arr) => {
-    let palabras = words.slice();
-    var result = [];
-    let x;
-    if (palabras.length > maxWords){
-      x = 0;
-      while(x < palabras.length){
-         result.push(text.match(/^(?:\w+\W+){0,230}/g).join(" "));
-         var check = text.split(/^(?:\w+\W+){230}/g);
-         var y = 0;
-         check.forEach(function(element) {
-           if(element === ""){
-             check.splice(y, 1);
-           }
-           y++;
-        });
-        text = check[0];
-        x += maxWords;
-       }
-    } else {
-      result.push(text);
-    }
-    return result;
-  }
-  var textArray = chopper(words);
+  // ...Check length of desired text to send to Polly; If longer than 230 words, break up into subarrays.
+  var textArray = pollyHelpers.chopper(words, text, 230);
 
-  // log('======BACK-E-TEXT-ARRAY: >>>>>>>>> ', textArray);
+
+  // log('======BACK-E-TEXT-ARRAY: >>>>>>>>> ', textArray); // LOTS
   // log('INSIDE textToSpeech: voiceId: ', voiceId, ' text: ', text, ' filename: ', filename) //*************
+
   // SEE #3 (ABOVE): feed segments of text into polly to generate audio segments
   Promise.all(textArray.map(function(item) {
     log('ONE ITEM being mapped to generatePollyAudio call...')
