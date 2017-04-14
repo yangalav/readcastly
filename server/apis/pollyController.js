@@ -8,6 +8,7 @@ AWS.config.secretAccessKey = process.env.AWS_SAK
 AWS.config.region = process.env.AWS_REGION
 const polly = new AWS.Polly();
 const s3 = new AWS.S3();
+const utils = require('../utils.js');
 // FOR DEBUGGING ***********************
 const log = console.log; //*************
 
@@ -97,6 +98,7 @@ const textToSpeech = (req, res, callback) => {
   const articleTitle = req.body.payload.article.title
   const voiceId = req.body.payload.voice || 'Joanna' /*name of voice*/
   const textIn = req.body.payload.article.text /*text of the article*/
+  const convertedTextIn = utils.unescapeHtml(textIn);
   const filename = req.body.payload.article.article_id.toString() + '.mp3'
   // || '999999999.mp3' // /*unique article_id number*/
   // also available: req.body.destination => /*e-mail address if e-mail, phone number if phone, 'stream' if stream, 'link' if link */
@@ -119,7 +121,7 @@ const textToSpeech = (req, res, callback) => {
     }
     return result;
   }
-  let text = strHeadCleaner(textIn);
+  let text = strHeadCleaner(convertedTextIn);
   log('======BACK-D-textToSpeech: typeof TEXT>>>: ', typeof text)
   
   const arrHeadCleaner = (arr) => {

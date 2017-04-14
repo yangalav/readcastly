@@ -81,9 +81,29 @@ const readcastBuilder = function(articleObj) {
 
 }
 
+const unescapeHtml = function(unsafe) {
+  return unsafe
+    .replace(/&#x22;/g, "\"")
+    .replace(/&#x2013;/g, "–")    
+    .replace(/&#x2014;/g, "—")
+    .replace(/&#x2018;/g, "\'")    
+    .replace(/&#x2019;/g, "\'")
+    .replace(/&#x2026;/g, "...")
+    .replace(/&#x201C;/g, "\"")
+    .replace(/&#x201D;/g, "\"")
+    .replace(/&#xAD;/g, "-")
+    .replace(/&apos;/g, "\'")
+    .replace(/&#x200A;/g, "–")
+}
+
+
+
+
+
 module.exports = {
   errors: errors,
   domainExtractor: domainExtractor,
   dbStats: dbStats,
-  readcastBuilder: readcastBuilder
+  readcastBuilder: readcastBuilder,
+  unescapeHtml: unescapeHtml
 };
