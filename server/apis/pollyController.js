@@ -99,7 +99,7 @@ const textToSpeech = (req, res, callback) => {
 
   const textIn = req.body.payload.article.text /*text of the article*/
   const convertedTextIn = utils.unescapeHtml(textIn);
-  const filename = req.body.payload.article.article_id.toString() + '.mp3'
+  const filename = (req.body.payload.article.article_id || 'temp').toString() + '.mp3' /*unique article_id number*/
   // || '999999999.mp3' // /*unique article_id number*/
 
   // also available: req.body.destination => /*e-mail address if e-mail, phone number if phone, 'stream' if stream, 'link' if link */
@@ -124,10 +124,10 @@ const textToSpeech = (req, res, callback) => {
   }
   let text = strHeadCleaner(convertedTextIn);
   // log('======BACK-D-textToSpeech: typeof TEXT>>>: ', typeof text)
-  
+
   const arrHeadCleaner = (arr) => {
     let result = arr.slice();
-    while(result[0][0] === '\n' || result[0] === '') { 
+    while(result[0][0] === '\n' || result[0] === '') {
       result.shift()
     }
     return result;
@@ -214,4 +214,3 @@ const textToSpeech = (req, res, callback) => {
 }
 // export default textToSpeech;
 module.exports = {textToSpeech};
-
