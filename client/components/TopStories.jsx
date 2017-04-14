@@ -31,7 +31,7 @@ class TopStories extends React.Component {
 
   randomizer(){
     let randomSource = sources[Math.floor(Math.random()*sources.length)];
-    // this.props.getTopStories([randomSource.id]);
+    this.props.getTopStories([randomSource.id]);
     console.log('YOUR RANDOM SOURCE WOULD HAVE BEEN: ', randomSource.name);
   }
 
