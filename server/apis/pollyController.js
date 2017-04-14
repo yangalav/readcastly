@@ -10,7 +10,6 @@ const polly = new AWS.Polly();
 const s3 = new AWS.S3();
 // FOR DEBUGGING ***********************
 const log = console.log; //*************
-
 // // 2. helper function to chop up text data for Polly into manageable segments of text
 //   // (i.e., within Polly input-length limits)
 //   // e.g. Input: 'long chunks of text' => Output: [['long'], ['chunks'], ['of'], ['text']]
@@ -72,7 +71,7 @@ const putObject = (bucket, key, body, contentType) =>
 const writeAudioStreamToS3 = ( audioStream, filename ) => {
   log('>>>>INSIDE writeAudioStreamToS3 filename: ', filename) //*************
   const bucketName = 'readcastly-user-files'
-  const contentType = 'audio/mp3'
+  const contentType = 'audio/mpeg'
 
   return putObject(bucketName, filename, audioStream, contentType)
   .then((res) => {
@@ -97,7 +96,7 @@ const textToSpeech = (req, res, callback) => {
   const articleTitle = req.body.payload.article.title
   const voiceId = req.body.payload.voice || 'Joanna' /*name of voice*/
   let text = req.body.payload.article.text || '' /*text of the article*/
-  const filename = req.body.payload.article.article_id.toString() + '.mp3' || '999999999.mp3' /*unique article_id number*/
+  const filename = (req.body.payload.article.article_id || 'temp').toString() + '.mp3' /*unique article_id number*/
   // also available: req.body.destination => /*e-mail address if e-mail, phone number if phone, 'stream' if stream, 'link' if link */
   log('INSIDE textToSpeech: voiceId: ', voiceId, ' FILENAME: ', filename) //*************
 

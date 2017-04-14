@@ -93,7 +93,7 @@ hr {
 
 .modal-container .modal, .modal-container .modal-backdrop {
   position: absolute;
-  top: -20px;
+  top: -150px;
 }
 
 .modal-dialog {
@@ -159,6 +159,10 @@ hr {
 .checkbox label input[type="checkbox"]:disabled + .cr,
 .radio label input[type="radio"]:disabled + .cr {
     opacity: .5;
+}
+
+.btn {
+    white-space: normal;
 }
 /*.voice-chooser {
   width: 130px;
