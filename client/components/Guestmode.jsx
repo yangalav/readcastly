@@ -35,6 +35,21 @@ class GuestMode extends React.Component {
     console.log('YOUR RANDOM SOURCE WOULD HAVE BEEN: ', randomSource.name);
   }
 
+  makeSourcesMenu(sources) {
+    return(
+      <div className="source-chooser">
+        <FormGroup controlId="sourceSelect">
+          <FormControl componentClass="select" value={this.state.voice} onChange={this.handleVoiceChange.bind(this)} placeholder="banana">
+          <option value="banana">Choose a News Source</option>
+          {sources.map((source,i) => (<option key={i} value={source.id} >{source.name}</option>))}
+          </FormControl>
+        </FormGroup>
+      </div>
+    );
+  }
+
+  sourceMenu() {return (this.makeSourceMenu(this.props.topStoriesSources));}
+
   // componentDidMount() {
   //   // this.randomizer();
   //   this.getTopStories();
@@ -59,4 +74,8 @@ export default GuestMode;
 //       <Button bsStyle="success" bsSize="large" onClick={this.randomizer} block>Get headlines</Button>
 //     </Col>
 //   </Row>
+<<<<<<< HEAD
 // </Grid>
+=======
+// </Grid>
+>>>>>>> Saving and moving to new branch
