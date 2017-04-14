@@ -110,6 +110,7 @@ class App extends React.Component {
 				});
 				this.setState({ isLoading: false, headlines: (res.data) });
         console.log('app.js getTopStories, l 112. cleaned date data =', res.data);
+        console.log('app.js getTopStories, l 112. [0]description =', res.data[0].description);
 			})
 			.catch((err) => this.setState({ failMessage: ('Unable to retrieve headlines'), hasErrored: true }));
 	}

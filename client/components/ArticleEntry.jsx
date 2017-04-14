@@ -78,9 +78,9 @@ class ArticleEntry extends React.Component {
 					<Col md={7} className="article-info">
 		  			{this.props.article.title && <div className="article-title"><span><a href={this.props.article.url}><b>{this.props.article.title}</b></a></span></div>}
 		  			{this.props.article.author && <div className="article-author"><span>{this.props.article.author}</span></div>}
-		  			{this.props.article.publication_date && <div className="article-publishDate"><span>{this.props.article.publication_date}</span></div>}
+		  			{this.props.article.publication_date && <div className="article-publishDate"><span>{this.props.article.publication_date || this.props.article.publishedAt}</span></div>}
 		  			{this.props.article.source_name && <div className="article-source"><span><i>{this.props.article.source_name}</i></span></div>}
-		  			{this.props.article.excerpt && <div className="article-excerpt"><span>Excerpt: </span><span>{this.props.article.excerpt}</span></div>}
+		  			{this.props.article.excerpt && <div className="article-excerpt"><span>Excerpt: </span><span>{this.props.article.excerpt || this.props.article.description}</span></div>}
 		  			{!this.props.topStoryMode && <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.props.deleteIt(this.props.article.url)}>Remove From Library</Button>}
 		  			{this.props.topStoryMode && <Button bsStyle="warning" bsSize="xsmall" onClick={() => this.props.deleteIt(this.props.article.url)}>Add to Library</Button>}
 		  		</Col>
