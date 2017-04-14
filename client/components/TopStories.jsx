@@ -20,7 +20,7 @@ const sources = [
   {id: 'techcrunch', name: 'TechCrunch'},
   {id: 'time', name: 'Time'},
   {id: 'the-washington-post', name: 'The Washington Post'},
-  {id: 'usa-today', name: 'Time'}
+  {id: 'usa-today', name: 'USA Today'}
 ];
 
 class TopStories extends React.Component {
@@ -31,7 +31,7 @@ class TopStories extends React.Component {
 
   randomizer(){
     let randomSource = sources[Math.floor(Math.random()*sources.length)];
-    // this.props.getTopStories([randomSource.id]);
+    this.props.getTopStories([randomSource.id]);
     console.log('YOUR RANDOM SOURCE WOULD HAVE BEEN: ', randomSource.name);
   }
 

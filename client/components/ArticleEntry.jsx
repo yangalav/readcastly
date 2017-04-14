@@ -74,22 +74,31 @@ class ArticleEntry extends React.Component {
 			<Row>
 				<Col md={12} className="list-group-item article-entry">
 					<Col md={3} className="articleImage">
-						{this.props.article.image && <img className="article-sampleImage img-responsive img-rounded center-block" src={this.props.article.image} />}
+						{!this.props.topStoryMode && this.props.article.image && <img className="article-sampleImage img-responsive img-rounded center-block" src={this.props.article.image} />}
+						{this.props.topStoryMode && this.props.article.urlToImage && <img className="article-sampleImage-TS img-responsive img-rounded center-block" src={this.props.article.urlToImage} />}
 					</Col>
 					<Col md={7} className="article-info">
-		  			{this.props.article.title && <div className="article-title"><span><a href={this.props.article.url}><b>{this.props.article.title}</b></a></span></div>}
+		  			{!this.props.topStoryMode && this.props.article.title && <div className="article-title"><span><a href={this.props.article.url}>{this.props.article.title}</a></span></div>}
+						{this.props.topStoryMode && this.props.article.title && <div className="article-title-TS"><span><a href={this.props.article.url}>{this.props.article.title}</a></span></div>}
+
 		  			{this.props.article.author && <div className="article-author"><span>{this.props.article.author}</span></div>}
-		  			{this.props.article.publication_date && <div className="article-publishDate"><span>{this.props.article.publication_date || this.props.article.publishedAt}</span></div>}
+
+		  			{!this.props.topStoryMode && this.props.article.publication_date && <div className="article-publishDate"><span>{this.props.article.publication_date}</span></div>}
+						{this.props.topStoryMode && this.props.article.publishedAt && <div className="article-publishDate"><span>{this.props.article.publishedAt}</span></div>}
+
 		  			{this.props.article.source_name && <div className="article-source"><span><i>{this.props.article.source_name}</i></span></div>}
-		  			{this.props.article.excerpt && <div className="article-excerpt"><span>Excerpt: </span><span>{this.props.article.excerpt || this.props.article.description}</span></div>}
+
+		  			{!this.props.topStoryMode && this.props.article.excerpt && <div className="article-excerpt"><span>Excerpt: </span><span>{this.props.article.excerpt }</span></div>}
+						{this.props.topStoryMode && this.props.article.description && <div className="article-excerpt"><span>Description: </span><span>{this.props.article.description }</span></div>}
+
 		  			{!this.props.topStoryMode && <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.props.deleteIt(this.props.article.url)}>Remove From Library</Button>}
-		  			{this.props.topStoryMode && <Button bsStyle="warning" bsSize="xsmall" onClick={() => this.props.deleteIt(this.props.article.url)}>Add to Library</Button>}
+		  			{this.props.topStoryMode && <Button bsStyle="warning" bsSize="xsmall" onClick={() => this.props.convertIt(this.props.article.url)}>Add to Library</Button>}
 		  		</Col>
 		  	<Col md={2}>
 		  		<div className="article-buttons">
-						{this.props.article && this.voiceMenu()}
-						{this.props.article && this.exportMenu()}
-						{this.props.article && <Button bsStyle="success" onClick={!this.props.isConverting ? this.export.bind(this) : null} disabled={this.props.isConverting} block>{this.props.isConverting ? (<div>Stand by for your Readcast</div>) : (<div>Read To Me!<br /><i>Est. Time: {this.props.article.est_time}</i></div>)}</Button>}
+						{!this.props.topStoryMode && this.props.article && this.voiceMenu()}
+						{!this.props.topStoryMode && this.props.article && this.exportMenu()}
+						{!this.props.topStoryMode && this.props.article && <Button bsStyle="success" onClick={!this.props.isConverting ? this.export.bind(this) : null} disabled={this.props.isConverting} block>{this.props.isConverting ? (<div>Stand by for your Readcast</div>) : (<div>Read To Me!<br /><i>Est. Time: {this.props.article.est_time}</i></div>)}</Button>}
 					</div>
 					</Col>
 		  	</Col>
