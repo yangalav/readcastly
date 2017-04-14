@@ -60,12 +60,21 @@ hr {
 }
 
 .article-sampleImage{
+  height: 150px;
+}
 
+.article-sampleImage-TS{
+  height: 80px;
 }
 
 .article-title{
   font: arial;
   font-size: 1.75em;
+}
+
+.article-title-TS{
+  font: arial;
+  font-size: 1.25em;
 }
 
 .article-author{

@@ -73,7 +73,8 @@ class App extends React.Component {
 			lastMethod: '',
 			lastUrl: '',
 			lastLink: '',
-			topStoryMode: false
+			topStoryMode: false,
+      sources: "ars-technica"
 		};
 	}
 
@@ -100,10 +101,10 @@ class App extends React.Component {
 			.catch((err) => this.setState({ failMessage: ('Unable to retrieve articles'), hasErrored: true }));
 	}
 
-	getTopStories(sources){
+	getTopStories(){
     console.log('app.js getTopStories, l 102. about to make GET req...');
 		this.setState({ isLoading: true });
-		axios.get('/topStories', {sources: sources})
+		axios.get('/topStories', {params: {sources: this.state.sources}})
 		.then((res) => {
       console.log('app.js getTopStories, l 105. res from BE = ', res.data);
 				res.data.forEach((article) => {
@@ -255,14 +256,18 @@ class App extends React.Component {
 				<Subtitle subtitle='your reading backlog solved'/>
 				{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
 				<TransFormEr postIt={this.postUserLink.bind(this)} isLoading={this.state.isLoading} toggleLoading={this.toggleLoading.bind(this)}/>
+
 				<WhichView toggleView={this.toggleView.bind(this)} topStoryMode={this.state.topStoryMode}/>
 				{/*this.state.isLoading && <Loading />*/}
+
 				<ToggleDisplay show={!this.state.topStoryMode}>
 					<ArticleList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} />
 				</ToggleDisplay>
+
 				<ToggleDisplay show={this.state.topStoryMode}>
 					<TopStories getTopStories={this.getTopStories.bind(this)} headlines={this.state.headlines} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} />
 				</ToggleDisplay>
+
 				<div id="player_container">
 					<Player track={this.state.nowPlaying}/>
 				</div>
