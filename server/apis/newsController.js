@@ -28,7 +28,7 @@ const newsApiImport = function(callback) {
     request(storySourceOptions, function(error, response, body) {
       console.log('\n\nnewsController GET req to newsApi sources');
       var parsedSourcesObj = JSON.parse(body);
-      console.log('\nnewsApi sources = ', parsedSourcesObj.sources);
+      // console.log('\nnewsApi sources = ', parsedSourcesObj.sources);
       callback(parsedSourcesObj.sources);
       })
       // .catch(function(error){console.log('ERROR pulling sources from NEWSAPI:', error);});
