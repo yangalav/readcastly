@@ -70,7 +70,5 @@ const parseAndSave = function(userId, url,callback){
   })
 };
 
-const justParse
-
 
 module.exports = { parseAndSave : parseAndSave };

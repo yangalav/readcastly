@@ -97,9 +97,9 @@ module.exports = function(app, express, passport) {
     });
   });
 
-  app.get('/guestStories', function(req,res) {
+  app.post('/guestStories', function(req,res) {
     var options = {};
-    news.newsApiBuilder(req.query.source, function(optionsObj){
+    news.newsApiBuilder(req.body.source, function(optionsObj){
       options = optionsObj;
     });
     request(options, function(error, response, body) {
@@ -107,8 +107,9 @@ module.exports = function(app, express, passport) {
         console.log('ERROR GETTING GUEST STORIES FROM NEWSAPI ===', error);
       } else {
         let headlines=[]
-        response.articles.forEach(function(article) {
-          mercury.parseAndSave(99, article.url, function(result) {
+        var parsedNewsObj = JSON.parse(body);
+        parsedNewsObj.articles.forEach(function(article) {
+          mercury.parseAndSave(99, article.url, function(result) {;
             headlines.push(result);
           });
         });

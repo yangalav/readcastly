@@ -44,7 +44,8 @@ class GuestMode extends React.Component {
 
   handleSourceChange(source) {
     if (source.target.value !== 'banana') {
-      axios.get('/guestStories', {params: {source: [source.target.value]}})
+      console.log(source.target.value);
+      axios.post('/guestStories', {source: source.target.value})
         .then((res) => {
           res.data.forEach((article) => {
             if (article.publication_date) {
@@ -52,7 +53,10 @@ class GuestMode extends React.Component {
             }
             article.est_time = this.props.cleanTime(article.est_time);
           });
-          this.setState({ headlines: res.data});
+          let localHeadlines = this.state.headlines;
+          localHeadlines.push(res.data);
+          this.setState({ headlines: localHeadlines});
+          console.log(this.state.headlines);
         })
         .catch((err) => console.log('Unable to retrieve headlines', err));
       }
@@ -60,14 +64,20 @@ class GuestMode extends React.Component {
 
   makeSourcesMenu(sources) {
     return(
-      <div className="source-chooser">
-        <FormGroup controlId="sourceSelect">
-          <FormControl componentClass="select" value={this.state.source} onChange={this.handleSourceChange.bind(this)} placeholder="banana">
-          <option value="banana">Choose a News Source</option>
-          {sources.map((source,i) => (<option key={i} value={source.id} >{source.name}</option>))}
-          </FormControl>
-        </FormGroup>
-      </div>
+      <Grid>
+        <Row>
+          <Col md={8} >
+            <div className="source-chooser">
+              <FormGroup controlId="sourceSelect">
+                <FormControl componentClass="select" value={this.state.source} onChange={this.handleSourceChange.bind(this)} placeholder="banana">
+                <option value="banana">Choose a News Source</option>
+                {sources.map((source,i) => (<option key={i} value={source.id} >{source.name}</option>))}
+                </FormControl>
+              </FormGroup>
+            </div>
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 
