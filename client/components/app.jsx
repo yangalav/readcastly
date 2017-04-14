@@ -16,6 +16,7 @@ import ArticleEntry from './ArticleEntry.jsx';
 import TopStories from './TopStories.jsx';
 import Player from './Player.jsx';
 import Confirm from './confirm.jsx';
+import GuestMode from './GuestMode.jsx';
 import isValidUrl from '../helpers/urlValidation.js';
 import {Loading, ErrorAlert} from './Alerts.jsx';
 
@@ -52,6 +53,7 @@ class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			isGuest: false,
 			library: [],
 			headlines: [],
 			hasErrored: false,
@@ -258,15 +260,20 @@ class App extends React.Component {
 				{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
 				<TransFormEr postIt={this.postUserLink.bind(this)} isLoading={this.state.isLoading} toggleLoading={this.toggleLoading.bind(this)}/>
 
-				<WhichView toggleView={this.toggleView.bind(this)} topStoryMode={this.state.topStoryMode}/>
-				{/*this.state.isLoading && <Loading />*/}
+				<ToggleDisplay show={!this.state.isGuest}>
+					<WhichView toggleView={this.toggleView.bind(this)} topStoryMode={this.state.topStoryMode}/>
+					{/*this.state.isLoading && <Loading />*/}
+					<ToggleDisplay show={!this.state.topStoryMode}>
+						<ArticleList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} />
+					</ToggleDisplay>
 
-				<ToggleDisplay show={!this.state.topStoryMode}>
-					<ArticleList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} />
+					<ToggleDisplay show={this.state.topStoryMode}>
+						<TopStories getTopStories={this.getTopStories.bind(this)} headlines={this.state.headlines} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} />
+					</ToggleDisplay>
 				</ToggleDisplay>
 
-				<ToggleDisplay show={this.state.topStoryMode}>
-					<TopStories getTopStories={this.getTopStories.bind(this)} headlines={this.state.headlines} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} />
+				<ToggleDisplay show={this.state.isGuest}>
+						<GuestMode getTopStories={this.getTopStories.bind(this)} headlines={this.state.headlines} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting}/>
 				</ToggleDisplay>
 
 				<div id="player_container">
