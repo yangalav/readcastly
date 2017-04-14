@@ -19,6 +19,7 @@ class TransFormEr extends React.Component {
 	}
 
 	handleSubmit(event) {
+		this.props.toggleLoading();
 		console.log('VALUE === ', this.state.value)
 		event.preventDefault();
 		this.props.postIt(this.state.value);
@@ -30,7 +31,7 @@ class TransFormEr extends React.Component {
 			<Grid>
 						<hr/>
 				<Row className="transformer">
-					<Form inline onSubmit={this.handleSubmit}>
+					<Form inline onSubmit={!this.props.isLoading ? this.handleSubmit : null}>
 						<Col md={8}>
 							<FormControl type="text" id="add-library-input" placeholder="Enter an article URL" value={this.state.value} onChange={this.handleChange} />
 						</Col>
@@ -38,7 +39,7 @@ class TransFormEr extends React.Component {
 					    <Button type="submit" bsStyle="success" id="listen-now-btn">Listen now</Button>
 						</Col>
             <Col md={2}>
-							<Button type="submit" bsStyle="default" id="add-library-btn">Add to Library</Button>
+							<Button type="submit" bsStyle="default" id="add-library-btn" disabled={this.props.isLoading}>{this.props.isLoading ? 'Loading...' : 'Add to Library'}</Button>
 						</Col>
 						</Form>
 				</Row>

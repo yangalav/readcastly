@@ -59,6 +59,7 @@ class ArticleEntry extends React.Component {
 		if (!this.state.method || !this.state.voice) {
 			alert('Please be sure to choose both a voice and a delivery method!');
 		} else {
+			this.props.toggleConvert();
 			let articleObj = {
 				method: this.state.method,
 				voice: this.state.voice,
@@ -88,7 +89,7 @@ class ArticleEntry extends React.Component {
 		  		<div className="article-buttons">
 						{this.props.article && this.voiceMenu()}
 						{this.props.article && this.exportMenu()}
-						{this.props.article && <Button bsStyle="success" onClick={this.export.bind(this)} block>Read To Me!<br /><i>Est. Time: {this.props.article.est_time}</i></Button>}
+						{this.props.article && <Button bsStyle="success" onClick={!this.props.isConverting ? this.export.bind(this) : null} disabled={this.props.isConverting} block>{this.props.isConverting ? (<div>Stand by for your Readcast</div>) : (<div>Read To Me!<br /><i>Est. Time: {this.props.article.est_time}</i></div>)}</Button>}
 					</div>
 					</Col>
 		  	</Col>

@@ -56,6 +56,7 @@ class App extends React.Component {
 			headlines: [],
 			hasErrored: false,
 			isLoading: false,
+			isConverting: false,
 			failMessage: '',
 			nowPlaying: {url: 'http://www.netprophet.net/charts/charts/Badfinger%20-%20No%20Matter%20What.mp3', title: 'No Matter What'},
 			user:{
@@ -71,6 +72,7 @@ class App extends React.Component {
 			showConfirm: false,
 			lastMethod: '',
 			lastUrl: '',
+			lastLink: '',
 			topStoryMode: false
 		};
 	}
@@ -130,7 +132,6 @@ class App extends React.Component {
 		}
 		console.log(obj);
 		result.unshift(obj);
-		this.toggleConfirm();
 		return result;
 	}
 
@@ -197,26 +198,21 @@ class App extends React.Component {
 			article: articleObject.article
 		};
 		let route = '/'+ articleObject.method; //**************
-		// let route = '/stream';
 		this.setState({lastMethod: articleObject.method, lastUrl: articleObject.article.url});
-		console.log('EXPORT-OBJ: ', exportObj);
-		console.log('ROUTE: ', route);
+		// console.log('EXPORT-OBJ: ', exportObj);
+		// console.log('ROUTE: ', route);
 		axios.post(route, {payload: exportObj})
-			// .then((res) => {
-			// 	console.log(res.data.method);
-			// })
-			// .catch((err) => {
-			// 	console.log(articleObject.method, err);
-			// });
-		.then((res) => {
-			console.log('>>>>>>>>XXXXXX====RES: ', res.data.url)
-			if (articleObject.method = "stream") {
-				this.setState({nowPlaying: {url: res.data.url, title: res.data.title}});
-			} else {
-				console.log('Message successfully sent to' + exportObj.destination + '.');
-			}
-		})
-		.catch((err) => this.setState({ hasErrored: true, failMessage: ('Error in conversion to speech: ' + err)}));
+			.then((res) => {
+				// console.log('>>>>>>>>XXXXXX====RES: ', res);
+				// console.log(articleObject.method);
+				if (articleObject.method === "stream") {
+					this.setState({nowPlaying: {url: res.data.url, title: res.data.title}, isConverting: false});
+				} else {
+					// console.log('Message successfully sent to ' + res.data.destination + '.');
+					this.setState({lastLink: res.data.url, showConfirm: true, isConverting: false});
+				}
+			})
+			.catch((err) => this.setState({ hasErrored: true, failMessage: ('Error in conversion to speech: ' + err)}));
 	}
 
 	// {invokes ajax call to fetch data for the ArticleList component}
@@ -236,6 +232,14 @@ class App extends React.Component {
 		this.setState({showConfirm: !currentState});
 	}
 
+	toggleLoading() {
+		this.setState({isLoading: true});
+	}
+
+	toggleConvert() {
+		this.setState({isConverting: true});
+	}
+
 	render() {
 
 		return(
@@ -243,22 +247,22 @@ class App extends React.Component {
 			  <br></br>
 				<Subtitle subtitle='your reading backlog solved'/>
 				{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
-				<TransFormEr postIt={this.postUserLink.bind(this)}/>
-				<WhichView toggleView={this.toggleView.bind(this)}/>
-				{this.state.isLoading && <Loading />}
+				<TransFormEr postIt={this.postUserLink.bind(this)} isLoading={this.state.isLoading} toggleLoading={this.toggleLoading.bind(this)}/>
+				<WhichView toggleView={this.toggleView.bind(this)} topStoryMode={this.state.topStoryMode}/>
+				{/*this.state.isLoading && <Loading />*/}
 				<ToggleDisplay show={!this.state.topStoryMode}>
-					<ArticleList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} />
+					<ArticleList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} />
 				</ToggleDisplay>
 				<ToggleDisplay show={this.state.topStoryMode}>
 					{/*<div>
 						<h1>Oh hi!</h1>
 					</div>*/}
-					<TopStories getTopStories={this.getTopStories.bind(this)} headlines={this.state.headlines} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} />
+					<TopStories getTopStories={this.getTopStories.bind(this)} headlines={this.state.headlines} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} />
 				</ToggleDisplay>
 				<div id="player_container">
 					<Player track={this.state.nowPlaying}/>
 				</div>
-				<Confirm deleteArticle={this.deleteArticle.bind(this)} user={this.state.user} method={this.state.lastMethod} toggleConfirm={this.toggleConfirm.bind(this)} url={this.state.lastUrl} showConfirm={this.state.showConfirm} />
+				<Confirm deleteArticle={this.deleteArticle.bind(this)} user={this.state.user} method={this.state.lastMethod} link={this.state.lastLink} toggleConfirm={this.toggleConfirm.bind(this)} url={this.state.lastUrl} showConfirm={this.state.showConfirm} />
 			</div>
 		);
 

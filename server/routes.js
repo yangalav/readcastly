@@ -63,59 +63,37 @@ module.exports = function(app, express, passport) {
   app.post('/stream', function(req,res) {
     console.log('IN STREAM ENDPOINT');
     // console.log('PAYLOAD === ', req.body.payload);
-
-
     polly.textToSpeech(req, res, function(url, title) {
       console.log('SUCCESSFUL STREAM RETURN--url: ', url, 'title: ', title)
       res.send({url, title})
     });
-
-    // res.send({"method": 'SUCCESSFUL STREAM RETURN'});
-
-    // let readcast = utils.readcastBuilder(req.body.payload.article);
-    //req.body will need all fields required for conversion, including title, author, and source, at a minimum, in addition to text
-    //invoke function that converts article to speech, grab path
-    // amazon.stream(readcast, function(url) {
-      // res.send(url);
-    // });
   });
 
   app.post('/email', function(req,res) {
-    console.log('IN EMAIL ENDPOINT');
-    console.log('PAYLOAD === ', req.body.payload);
-    res.send({"method": 'SUCCESSFUL EMAIL RETURN'});
-    // let readcast = utils.readcastBuilder(req.body.payload.article);
-    // //req.body will need all fields required for conversion, including title, author, and source, at a minimum, in addition to text
-    // //invoke function that converts article to speech, grab path
-    // readcast.location = //path to file;
-    // mailer.sendMail(req.body.payload.destination,readcast,function(confirmation){
-    //   res.send(confirmation);
-    // });
+    // console.log('IN EMAIL ENDPOINT');
+    // console.log('PAYLOAD === ', req.body.payload);
+    mailer.sendMail(req,res,function(destination) {
+      console.log(destination);
+      res.send({"destination" : destination});
+    });
   });
 
   app.post('/phone', function(req,res) {
-    console.log('IN PHONE ENDPOINT');
-    console.log('PAYLOAD === ', req.body.payload);
-    res.send({"method": 'SUCCESSFUL PHONE RETURN'});
-    // let readcast = utils.readcastBuilder(req.body.payload.article);
-    // //req.body will need all fields required for conversion, including title, author, and source, at a minimum, in addition to text
-    // //invoke function that converts article to speech, grab path - AUDIO FORMAT RETURNED MUST BE MP4, MPEG, OR OGG
-    // readcast.location = //path to file;
-    // texter.sendText(req.body.payload.destination,readcast,function(confirmation){
-    //   res.send(confirmation);
-    // });
+    // console.log('IN PHONE ENDPOINT');
+    // console.log('PAYLOAD === ', req.body.payload);
+    texter.sendText(req,res,function(destination) {
+      console.log('TEXT RES === ', destination);
+      res.send({"destination" : destination})
+    });
   });
 
   app.post('/link', function(req,res) {
     console.log('IN LINK ENDPOINT');
-    console.log('PAYLOAD === ', req.body.payload);
-    res.send({"method": 'SUCCESSFUL LINK RETURN'});
-    // let readcast = utils.readcastBuilder(req.body.payload.article);
-    //req.body will need all fields required for conversion, including title, author, and source, at a minimum, in addition to text
-    //invoke function that converts article to speech, grab path
-    // amazon.stream(readcast, function(url) {
-      // res.send(url);
-    // });
+    // console.log('PAYLOAD === ', req.body.payload);
+    polly.textToSpeech(req, res, function(url, title) {
+      console.log('SUCCESSFUL STREAM RETURN--url: ', url, 'title: ', title)
+      res.send({url, title})
+    });
   });
 
   app.get('/api/signup', function(req,res) {
