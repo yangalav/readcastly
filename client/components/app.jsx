@@ -16,7 +16,7 @@ import ArticleEntry from './ArticleEntry.jsx';
 import TopStories from './TopStories.jsx';
 import Player from './Player.jsx';
 import Confirm from './confirm.jsx';
-import GuestMode from './GuestMode.jsx';
+import GuestMode from './Guestmode.jsx';
 import isValidUrl from '../helpers/urlValidation.js';
 import {Loading, ErrorAlert} from './Alerts.jsx';
 
