@@ -29,7 +29,8 @@ const newsApiBuilder = function(source,callback) {
               },
             qs: {
               // source: source.attributes.most_read,
-              source: source, // hardcode this for test
+              source: 'ars-technica', // hardcode this for test
+              // source: source,
               sortBy: 'top'
               }
             };
