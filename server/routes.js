@@ -39,19 +39,18 @@ module.exports = function(app, express, passport) {
   });
 
   app.get('/topStories', function(req,res) {
-      console.log('routes.js POST req to /topStories, l 37. req.query.sources = ', req.query.sources);
-    // var parsedReq = JSON.parse(req);
-    // var parsedSources = JSON.parse(req.body.sources);
-    // console.log('parsedSources = ', parsedSources);
-    // console.log('routes.js GET req to /topStories, l 37. req.body.sources = ', parsedSources);
-    // console.log('routes.js GET req to /topStories, l 37. req.body.sources[0] = ', req.body.sources[0]);
-    //
-    // console.log('routes.js POST req to /topStories, l 39. req.body = ', parsedSources);
-    // console.log('routes.js POST req to /topStories, l 39. req.sources = ', parsedSources.sources);
-
+    console.log('routes.js GET req to /topStories, l 37. req.query.sources = ', req.query.sources);
+    var newsSources = [];
+    var sourceFromClient = req.query.sources;
+    if(req.query.sources === 'pull-from-api') {
+      sourceFromClient = 'ars-technica';
+      news.newsApiImport(function(apiSources){
+        newsSources = apiSources});
+    }
+    // else {newsSources = req.query.sources}
     var options = {};
     // news.newsApiBuilder(req.body.sources[1], function(optionsObj){
-    news.newsApiBuilder(req.query.sources, function(optionsObj){
+    news.newsApiBuilder(sourceFromClient, function(optionsObj){
       options = optionsObj;
     });
     request(options, function(error, response, body) {

@@ -74,7 +74,8 @@ class App extends React.Component {
 			lastUrl: '',
 			lastLink: '',
 			topStoryMode: false,
-      sources: "ars-technica"
+      // sources: 'ars-technica'
+      sources: "pull-from-api" // in server/routes.js /topStories this invokes newsApiImport & sends request for articles from ars-technica (to be updated)
 		};
 	}
 
@@ -212,7 +213,7 @@ class App extends React.Component {
 		.then((res) => {
 			console.log('FRONT-B->>>RES: ', res.data.url)
 			if (articleObject.method = "stream") {
-				this.setState({nowPlaying: {url: res.data.url, title: res.data.title}, isConverting: false});				
+				this.setState({nowPlaying: {url: res.data.url, title: res.data.title}, isConverting: false});
 
 			} else {
 				// console.log('Message successfully sent to ' + res.data.destination + '.');
