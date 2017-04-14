@@ -212,7 +212,7 @@ class App extends React.Component {
 		axios.post(route, {payload: exportObj})
 		.then((res) => {
 			console.log('FRONT-B->>>RES: ', res.data.url)
-			if (articleObject.method = "stream") {
+			if (articleObject.method === "stream") {
 				this.setState({nowPlaying: {url: res.data.url, title: res.data.title}, isConverting: false});
 
 			} else {
