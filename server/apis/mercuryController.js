@@ -28,6 +28,7 @@ const optionsBuilder = function(url) {
 const articleObjFinisher = function(obj,source) {
   obj.title = source.title;
   obj.text = stripper(source.content);
+  console.log('======MERC-CONTROLLER-obj.text returned from stripper: ', obj.text) // ***
   obj.author = source.author || "Dave Winfield" // "Author not available";
   obj.publication_date = source.date_published;
   obj.image = source.lead_image_url ||   "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcT8-E0VKkso9wu60MnVZor7_HqEJIAm8DMB6iJGgFvG1m57WHz0";
@@ -40,7 +41,9 @@ const articleObjFinisher = function(obj,source) {
 
 const parseAndSave = function(userId, url,callback){
   let article = articleObjStarter(url,userId);
+  // call to mercury
   request(optionsBuilder(url), function(error, response, body) {
+    // error if request doesn't go through
     if(error) {
         console.log('routes.js l 20, GET req to Mercury. error! = ', error);
         res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
@@ -48,11 +51,12 @@ const parseAndSave = function(userId, url,callback){
     try {
         console.log('routes.js l24, in try block after Mercury response...');
         var parsedBody = JSON.parse(body);
-        // console.log('...result: parsedBody = ', parsedBody);
+        console.log('======MERC-CONTROLLER-...result: parsedBody = ', parsedBody); //***
         if(parsedBody === null) {
           callback(utils.errors.mercuryCantParse);
           return;
         }
+        // error if mercury responds eith error
       } catch (parseError) {
         console.log('routes.js l28, in catch block, try block not able to parse Mercury response. parseError = ', parseError, '\n\n');
         var parsedBody;

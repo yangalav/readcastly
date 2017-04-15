@@ -76,7 +76,7 @@ const textToSpeech = (req, res, callback) => {
   const voiceId = req.body.payload.voice || 'Joanna' /*name of voice*/
   const textIn = req.body.payload.article.text /*text of the article from request object*/
   const convertedTextIn = pollyHelpers.unescapeHtml(textIn); /*text of the article after converting hex characters*/
-  const filename = (req.body.payload.article.article_id || 'temp').toString() + '.mp3' /*unique article_id number*/
+  const filename = (req.body.payload.article.article_id || 'temp').toString() + '-' + voiceId + '.mp3' /*unique article_id number*/
   // || '999999999.mp3' // /*unique article_id number*/
   // also available: req.body.destination => /*e-mail address if e-mail, phone number if phone, 'stream' if stream, 'link' if link */
 

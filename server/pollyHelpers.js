@@ -12,11 +12,14 @@ const unescapeHtml = function(unsafe) {
     .replace(/&#x201C;/g, "\"")
     .replace(/&#x201D;/g, "\"")
     .replace(/&#xAD;/g, "-")
-    .replace(/&apos;/g, "\'")
     .replace(/&#x200A;/g, "–")
     .replace(/&#xA0;/g, " ")
+    .replace(/&apos;/g, "\'")    
     .replace(/&quot;/g, "\"")
+    .replace(/&#?\w+;/g, "-")
 }
+
+    // .replace(/&#x\w{1,5}?;/g, "-")
 
 // function to break up any array of text longer than maxWords (230) words into an array of text subarrays;
 const chopper = (arr, text, maxWords) => {
