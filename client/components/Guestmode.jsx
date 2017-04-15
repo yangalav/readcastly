@@ -30,6 +30,8 @@ let user = {
         link: 'link'
       };
 
+let randomId = 10**9;
+
 class GuestMode extends React.Component {
   constructor(props) {
     super(props);
@@ -47,15 +49,18 @@ class GuestMode extends React.Component {
       console.log(source.target.value);
       axios.post('/guestStories', {source: source.target.value})
         .then((res) => {
+          console.log(res.data);
           res.data.forEach((article) => {
             if (article.publication_date) {
               article.publication_date = this.props.cleanDate(article.publication_date);
             }
             article.est_time = this.props.cleanTime(article.est_time);
+            randomId++
+            article.id = randomId;
           });
-          let localHeadlines = this.state.headlines;
-          localHeadlines.push(res.data);
-          this.setState({ headlines: localHeadlines});
+          // let localHeadlines = [];
+          // localHeadlines.push(res.data);
+          this.setState({ headlines: res.data });
           console.log(this.state.headlines);
         })
         .catch((err) => console.log('Unable to retrieve headlines', err));
@@ -80,8 +85,6 @@ class GuestMode extends React.Component {
       </Grid>
     );
   }
-
-  sourceMenu() {return (this.makeSourcesMenu(this.props.topStoriesSources));}
 
   // componentDidMount() {
   //   // this.randomizer();

@@ -1,6 +1,7 @@
 require('dotenv').config();
 const request = require('request');
 const bodyParser = require('body-parser');
+const Promise = require('bluebird');
 const Articles = require('./database/controllers/articlesController');
 const utils = require('./utils.js');
 const mercury = require('./apis/mercuryController');
@@ -9,6 +10,7 @@ const mailer = require('./apis/mailController');
 const texter = require('./apis/textController');
 const polly = require('./apis/pollyController');
 const path = require('path');
+const async = require('async');
 
 // To be written and passed into routes between endpoint and function
 // const isLoggedIn = function(){};
@@ -103,17 +105,53 @@ module.exports = function(app, express, passport) {
       options = optionsObj;
     });
     request(options, function(error, response, body) {
+      let headlines = [];
+      console.log('BEGINNING HEADLINES LENGTH === ', headlines.length);
       if (error) {
         console.log('ERROR GETTING GUEST STORIES FROM NEWSAPI ===', error);
-      } else {
-        let headlines=[]
+      } else {;
         var parsedNewsObj = JSON.parse(body);
-        parsedNewsObj.articles.forEach(function(article) {
-          mercury.parseAndSave(99, article.url, function(result) {;
-            headlines.push(result);
+        let top5 = parsedNewsObj.articles.slice(0,5);
+        console.log('TOP 5 FROM SERVER ===== ');
+        top5.forEach(function(article) {
+          console.log(article.title);
+        })
+        const bundler = function(article){
+          console.log('PROCESSED ARTICLE === ', article.title);
+          headlines.push(article);
+          if (headlines.length === 5) {
+            console.log('HEADLINES TO BE SENT BACK ==== ');
+            headlines.forEach(function(article) {
+              console.log(article.title);
+            });
+            res.send(headlines);
+          }
+        };
+        // const containedMercury = function(article,callback) {
+        //   return callback(null, mercury.parseAndSave(99,article.url,function(result) {
+        //     headlines.push(result);
+        //   })
+        // )};
+        top5.forEach(function(article) {
+          console.log('ARTICLE BEING PROCESSED === ', article.title);
+          mercury.parseAndSave(99, article.url, function(result) {
+            console.log('results for : ', article.url, result.title)
+            bundler(result);
           });
         });
-        res.send(headlines);
+        // Promise.all(headlines)
+        //   .then(function(data) {
+        //     console.log('DATA DATA', data);
+        //     res.send(data);
+        //   })
+      // async.map(top5,containedMercury,function(err,results) {
+      //   console.log('ENDING LENGTH === ', headlines.length);
+      //   res.send(headlines);
+      // });
+
+
+
+
       }
     });
   });

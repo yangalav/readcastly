@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/readcastly/readcastly#readme",
   "dependencies": {
+    "async": "^2.3.0",
     "aws-sdk": "^2.41.0",
     "axios": "^0.16.0",
     "babel": "^6.23.0",
