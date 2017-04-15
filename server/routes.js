@@ -149,9 +149,9 @@ module.exports = function(app, express, passport) {
   }))
 
   app.get('/api/logout', function(req, res) {
-    console.log('req.isAuthentication() = ' + req.isAuthenticated());
+    console.log('req.isAuthenticated() = ' + req.isAuthenticated());
     req.logout();
-    console.log('req.isAuthentication() is now ' + req.isAuthenticated());
+    console.log('req.isAuthenticated() is now ' + req.isAuthenticated());
     res.end('/login');
   })
 
