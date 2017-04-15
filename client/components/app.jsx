@@ -19,6 +19,8 @@ import Confirm from './confirm.jsx';
 import isValidUrl from '../helpers/urlValidation.js';
 import {Loading, ErrorAlert} from './Alerts.jsx';
 
+import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
+
 const exportOptions = {
     voices : [
       {name: '--American English--'},
@@ -93,6 +95,7 @@ class App extends React.Component {
 		this.setState({ isLoading: true });
 		axios.get('/getAll', {params: {userId: this.state.user.id} })
 			.then((res) => {
+        // console.log('res.data before clean: ', res.data);
 				res.data.forEach((article) => {
 					if (article.publication_date) {article.publication_date = this.cleanDate(article.publication_date)};
 					article.est_time = this.cleanTime(article.est_time);
@@ -103,18 +106,18 @@ class App extends React.Component {
 	}
 
 	getTopStories(){
-    console.log('app.js getTopStories, l 102. about to make GET req...');
+    console.log('app.js getTopStories, l 110. about to make GET req...');
 		this.setState({ isLoading: true });
 		axios.get('/topStories', {params: {sources: this.state.sources}})
 		.then((res) => {
-      console.log('app.js getTopStories, l 105. res from BE = ', res.data);
+      console.log('app.js getTopStories, l 114. res from BE = ', res.data);
 				res.data.forEach((article) => {
 					if (article.publishedAt) {article.publishedAt = this.cleanDate(article.publishedAt)};
 					article.est_time = this.cleanTime(article.est_time);
 				});
 				this.setState({ isLoading: false, headlines: (res.data) });
-        console.log('app.js getTopStories, l 112. cleaned date data =', res.data);
-        console.log('app.js getTopStories, l 112. [0]description =', res.data[0].description);
+        console.log('app.js getTopStories, l 120. cleaned date data =', res.data);
+        // console.log('app.js getTopStories, l 112. [0]description =', res.data[0].description);
 			})
 			.catch((err) => this.setState({ failMessage: ('Unable to retrieve headlines'), hasErrored: true }));
 	}
