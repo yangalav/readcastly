@@ -6,9 +6,10 @@ const findById = function(id) {
   console.log('find by ID ', id);
   return db.knex('Users')
     .where({ id: id })
-    .then(function(id){
-      console.log(id)
-      return id;
+    .then(function(user){
+      console.log('this thaaaa user:')
+      console.log(user[0])
+      return user[0];
     })
     .catch(function(err){
       console.error(err)

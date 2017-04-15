@@ -149,8 +149,10 @@ module.exports = function(app, express, passport) {
   }))
 
   app.get('/api/logout', function(req, res) {
+    console.log('req.isAuthentication() = ' + req.isAuthenticated());
     req.logout();
-    res.redirect('/login');
+    console.log('req.isAuthentication() is now ' + req.isAuthenticated());
+    res.end('/login');
   })
 
   //route middleware to make sure a user is logged in
