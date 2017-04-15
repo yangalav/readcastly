@@ -100,64 +100,7 @@ module.exports = function(app, express, passport) {
   });
 
   app.post('/guestStories', function(req,res) {
-    var options = {};
-    news.newsApiBuilder(req.body.source, function(optionsObj){
-      options = optionsObj;
-    });
-    request(options, function(error, response, body) {
-      let headlines = [];
-      console.log('BEGINNING HEADLINES LENGTH === ', headlines.length);
-      if (error) {
-        console.log('ERROR GETTING GUEST STORIES FROM NEWSAPI ===', error);
-      } else {;
-        var parsedNewsObj = JSON.parse(body);
-        let collection = parsedNewsObj.articles.length;
-        console.log('TOP 5 FROM SERVER ===== ');
-        parsedNewsObj.articles.forEach(function(article) {
-          console.log(article.title);
-        })
-        const bundler = function(article){
-          console.log('PROCESSED ARTICLE === ', article.title);
-          if (article.error) {
-            collection--;
-          } else {
-            headlines.push(article);
-          }
-          if (headlines.length === collection) {
-            console.log('HEADLINES TO BE SENT BACK ==== ');
-            headlines.forEach(function(article) {
-              console.log(article.title);
-            });
-            res.send(headlines);
-          }
-        };
-        // const containedMercury = function(article,callback) {
-        //   return callback(null, mercury.parseAndSave(99,article.url,function(result) {
-        //     headlines.push(result);
-        //   })
-        // )};
-        parsedNewsObj.articles.forEach(function(article) {
-          console.log('ARTICLE BEING PROCESSED === ', article.title);
-          mercury.parseAndSave(99, article.url, true, function(result) {
-            console.log('results for : ', article.url, result.title)
-            bundler(result);
-          });
-        });
-        // Promise.all(headlines)
-        //   .then(function(data) {
-        //     console.log('DATA DATA', data);
-        //     res.send(data);
-        //   })
-      // async.map(top5,containedMercury,function(err,results) {
-      //   console.log('ENDING LENGTH === ', headlines.length);
-      //   res.send(headlines);
-      // });
-
-
-
-
-      }
-    });
+    news.guestStories(req.body.source, res);
   });
 
   app.get('/api/signup', function(req,res) {

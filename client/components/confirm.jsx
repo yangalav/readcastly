@@ -32,7 +32,7 @@ class Confirm extends React.Component {
             (<Modal.Body>Congratulations!  Your Readcast has been delivered to {destination}.</Modal.Body>)
           }
           <Modal.Footer>
-            <Button bsStyle="danger" onClick={deleteClose}>Remove article from library</Button>
+            {!this.props.isGuest && <Button bsStyle="danger" onClick={deleteClose}>Remove article from library</Button>}
             <Button bsStyle="success" onClick={close}>Close</Button>
           </Modal.Footer>
         </Modal>

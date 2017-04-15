@@ -58,6 +58,9 @@ class ArticleEntry extends React.Component {
 	export() {
 		if (!this.state.method || !this.state.voice || this.state.method === 'banana' || this.state.voice === 'banana') {
 			alert('Please be sure to choose both a voice and a delivery method!');
+		}
+		if (this.props.isGuest && (this.state.method === 'email' || this.state.method === 'phone')) {
+			this.props.toggleMembersOnly();
 		} else {
 			this.props.toggleConvert();
 			let articleObj = {

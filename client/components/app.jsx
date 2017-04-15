@@ -128,8 +128,9 @@ class App extends React.Component {
 
 	cleanTime(entry) {
 		let mins = Math.floor(entry);
-		let secs = (''+(entry-mins)*60).slice(0,2);
-		return secs === '0' ? mins + ":" + '00' : mins + ":" + secs;
+		let secs = (entry-mins)*60;
+		secs = !(secs < 10) ? (''+secs).slice(0,2) : '0'+(''+secs).slice(0,1);
+		return secs === '00' ? mins + ":" + '00' : mins + ":" + secs;
 	}
 
 // {helper function for postUserLink}
@@ -274,7 +275,7 @@ class App extends React.Component {
 			  <br></br>
 				<Subtitle subtitle='your reading backlog solved'/>
 				{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
-				<TransFormEr postIt={this.postUserLink.bind(this)} isLoading={this.state.isLoading} toggleLoading={this.toggleLoading.bind(this)}/>
+				<TransFormEr postIt={this.postUserLink.bind(this)} isLoading={this.state.isLoading} toggleLoading={this.toggleLoading.bind(this)} isGuest={this.state.isGuest} />
 
 				<ToggleDisplay show={!this.state.isGuest}>
 					<WhichView toggleView={this.toggleView.bind(this)} topStoryMode={this.state.topStoryMode}/>
@@ -295,7 +296,7 @@ class App extends React.Component {
 				<div id="player_container">
 					<Player track={this.state.nowPlaying}/>
 				</div>
-				<Confirm deleteArticle={this.deleteArticle.bind(this)} user={this.state.user} method={this.state.lastMethod} link={this.state.lastLink} toggleConfirm={this.toggleConfirm.bind(this)} url={this.state.lastUrl} showConfirm={this.state.showConfirm} />
+				<Confirm deleteArticle={this.deleteArticle.bind(this)} user={this.state.user} method={this.state.lastMethod} link={this.state.lastLink} toggleConfirm={this.toggleConfirm.bind(this)} url={this.state.lastUrl} showConfirm={this.state.showConfirm} isGuest={this.state.isGuest}/>
 				<MembersOnly showMembersOnly={this.state.showMembersOnly} toggleMembersOnly={this.toggleMembersOnly.bind(this)} />
 			</div>
 		);

@@ -3,6 +3,7 @@ import axios from 'axios';
 import Checkboxes from './Checkboxes.jsx'
 import ArticleList from './ArticleList.jsx'
 import {Grid, Button, Col, Row, FormGroup, FormControl } from 'react-bootstrap';
+import Loading from 'react-loading';
 
 // const sources = [
 //   {id: "associated-press", name: 'Associated Press'},
@@ -35,7 +36,11 @@ let randomId = 10**9;
 class GuestMode extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { source: '', headlines : [] };
+    this.state = {
+                    source: '',
+                    headlines : [],
+                    gettingHeadlines: true
+                     };
   }
 
   // randomizer(){
@@ -46,15 +51,15 @@ class GuestMode extends React.Component {
 
   handleSourceChange(source) {
     if(source.target.value !== 'banana') {
-      console.log(source.target.value);
-      this.getHeadlines(source.target.value);
+      this.setState({gettingHeadlines: true})
+      this.getHeadlines(source.target.value,source.target.data);
     }
   }
 
-  getHeadlines(source) {
+  getHeadlines(source,banner) {
     axios.post('/guestStories', {source: source})
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         res.data.forEach((article) => {
           if (article.publication_date) {
             article.publication_date = this.props.cleanDate(article.publication_date);
@@ -63,10 +68,10 @@ class GuestMode extends React.Component {
            randomId++
            article.id = randomId;
          });
-        // let localHeadlines = [];
-        // localHeadlines.push(res.data);
-        this.setState({ headlines: res.data });
-        console.log(this.state.headlines);
+        this.setState({ headlines: res.data}, function() {
+          this.setState({source: banner, gettingHeadlines: false});
+        });
+        // console.log(this.state.headlines);
       })
       .catch((err) => console.log('Unable to retrieve headlines', err));
   }
@@ -80,7 +85,7 @@ class GuestMode extends React.Component {
               <FormGroup controlId="sourceSelect">
                 <FormControl componentClass="select" value={this.state.source} onChange={this.handleSourceChange.bind(this)} placeholder="banana">
                 <option value="banana">Choose a News Source</option>
-                {sources.map((source,i) => (<option key={i} value={source.id} >{source.name}</option>))}
+                {sources.map((source,i) => (<option key={i} value={source.id} data={source.name}>{source.name}</option>))}
                 </FormControl>
               </FormGroup>
             </div>
@@ -92,14 +97,21 @@ class GuestMode extends React.Component {
 
   componentWillMount() {
     // this.randomizer();
-    this.getHeadlines('google-news');
+    this.getHeadlines('google-news',null);
   }
 
   render() {
     return (
-      <div className="topStories">
+      <div className="guestMode">
+        <h1 style={{textAlign:'center',color:'red'}}>welcome to GUEST MODE</h1>
         {this.makeSourcesMenu(this.props.topStoriesSources)}
+        <div id="guestStories">
         {this.state.headlines && <ArticleList articles={this.state.headlines} user={user} deleteIt={this.props.deleteIt.bind(this)} convertIt={this.props.convertIt.bind(this)} exportOptions={this.props.exportOptions} isGuest={this.props.isGuest} topStoryMode={this.props.topStoryMode} toggleConvert={this.props.toggleConvert.bind(this)} isConverting={this.props.isConverting} toggleMembersOnly={this.props.toggleMembersOnly.bind(this)} />}
+        {this.state.gettingHeadlines &&
+          <div id="loadingOverlay">
+            <Loading type="spin" color="red" />
+          </div>}
+        </div>
       </div>
     );
   }
