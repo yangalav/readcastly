@@ -5,6 +5,7 @@ import axios from 'axios';
 import ToggleDisplay from 'react-toggle-display';
 
 import Title from './Title.jsx';
+import LogoutButton from './LogoutButton.jsx';
 import Subtitle from './Subtitle.jsx';
 import WhichView from './WhichView.jsx';
 // import HeaderNavigation from './Navbar.jsx';
@@ -254,6 +255,7 @@ class App extends React.Component {
 		return(
 			<div className="modal-container">
 			  <br></br>
+				<LogoutButton />
 				<Subtitle subtitle='your reading backlog solved'/>
 				{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
 				<TransFormEr postIt={this.postUserLink.bind(this)} isLoading={this.state.isLoading} toggleLoading={this.toggleLoading.bind(this)}/>

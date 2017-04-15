@@ -105,10 +105,12 @@ module.exports = function(app, express, passport) {
     res.send('this is our login page :)');
   });
 
-  app.get('/api/', function(req, res) {
+  app.get('/api/', isLoggedIn, function(req, res) {
     console.log('RENDER INDEX')
     app.use(express.static(path.join(__dirname, '../client')));
-    res.sendFile(path.join(__dirname, '../client/index.html'))
+    res.sendFile(path.join(__dirname, '../client/index.html'), {
+      user: req.user,
+    });
   });
 
   app.post('/api/signup',
@@ -118,12 +120,27 @@ module.exports = function(app, express, passport) {
     failureFlash: true
   }))
 
-  // app.post('/api/login',
-  //   passport.authenticate('local-login', {
-  //   successRedirect: '/',
-  //   failureRedirect: '/',
-  //   failureFlash: true
-  // }))
+  app.post('/api/login',
+    passport.authenticate('local-login', {
+    successRedirect: '/',
+    failureRedirect: '/signup',
+    failureFlash: true
+  }))
+
+  app.get('/api/logout', function(req, res) {
+    console.log('req.isAuthenticated() = ' + req.isAuthenticated());
+    req.logout();
+    console.log('req.isAuthenticated() is now ' + req.isAuthenticated());
+    res.end('/login');
+  })
+
+  //route middleware to make sure a user is logged in
+  function isLoggedIn(req, res, next) {
+    if(req.isAuthenticated())
+      return next();
+
+    res.redirect('/login');
+  }
 
 };
 

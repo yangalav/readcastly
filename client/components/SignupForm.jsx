@@ -27,7 +27,8 @@ class SignupForm extends React.Component {
     this.handleSignUp = this.handleSignUp.bind(this);
   }
 
-  handleSignUp() {
+  handleSignUp(e) {
+    e.preventDefault();
     console.log("The email is: " + this.state.email);
     console.log("The password is: " + this.state.password);
     console.log("The first name is: " + this.state.firstName);
@@ -83,7 +84,7 @@ class SignupForm extends React.Component {
   render() {
     return (
       <div>
-        <form>
+        <form onSubmit={this.handleSignUp}>
           First Name:<br/>
         <input type="text" name="firstName" value={this.state.firstName} onChange={this.handleFirstNameChange}/><br/>
           Last Name:<br/>
@@ -98,7 +99,7 @@ class SignupForm extends React.Component {
         <input type="text" name="voicePref" value={this.state.voicePref} onChange={this.handleVoicePrefChange}/><br/>
           Avatar:<br/>
         <input type="url" name="avatar" value={this.state.avatar} onChange={this.handleAvatarChange}/><br/>
-        <Button bsStyle="success" onClick={this.handleSignUp}>Sign Up</Button>
+        <Button type="submit" bsStyle="success">Sign Up</Button>
         </form>
       </div>
   	);
