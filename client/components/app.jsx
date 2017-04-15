@@ -19,8 +19,6 @@ import Confirm from './confirm.jsx';
 import isValidUrl from '../helpers/urlValidation.js';
 import {Loading, ErrorAlert} from './Alerts.jsx';
 
-import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
-
 const exportOptions = {
     voices : [
       {name: '--American English--'},
@@ -154,7 +152,7 @@ class App extends React.Component {
 		this.setState({ isLoading: true });
 		axios.post('/requrl', {userId: this.state.user.id, requrl: url})
 		.then((res) => {
-			this.setState({ isLoading: false, library: (this.addOne(res.data)) });
+			this.setState({ isLoading: false, library: (this.addOne(res.data)) }); // QQ: THIS UPDATES ENTIRE LIBRARY, NOT JUST NEW ARTICLE, CORRECT?
 			return;
 		})
 		.catch((err) => this.setState({ failMessage: (res.data.error || 'Unable to fetch that link'), hasErrored: true }));
@@ -263,6 +261,8 @@ class App extends React.Component {
 
 				<WhichView toggleView={this.toggleView.bind(this)} topStoryMode={this.state.topStoryMode}/>
 				{/*this.state.isLoading && <Loading />*/}
+
+// <SortableComponent/>
 
 				<ToggleDisplay show={!this.state.topStoryMode}>
 					<ArticleList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} />
