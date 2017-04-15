@@ -100,7 +100,17 @@ class App extends React.Component {
 					if (article.publication_date) {article.publication_date = this.cleanDate(article.publication_date)};
 					article.est_time = this.cleanTime(article.est_time);
 				});
-				this.setState({ isLoading: false, library: (res.data.reverse()) });
+        var smallerDataSet = function(data) {
+          // console.log('app.js, smallerDataSet. data = ', data);
+          var subset = [];
+          for(var x=0; x<21; x++) {
+            subset.push(data[x]);
+          }
+          console.log('subset array of 20 = ', subset);
+          return subset;
+        }
+				// this.setState({ isLoading: false, library: (res.data.reverse()) });
+        this.setState({ isLoading: false, library: (smallerDataSet(res.data.reverse())) });
 			})
 			.catch((err) => this.setState({ failMessage: ('Unable to retrieve articles'), hasErrored: true }));
 	}
@@ -271,7 +281,7 @@ console.log('this.state.library = ', this.state.library)
 				{/*this.state.isLoading && <Loading />*/}
 
 				<ToggleDisplay show={!this.state.topStoryMode}>
-					<SortableList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} onSortEnd={this.onSortEnd}/>
+					<SortableList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} onSortEnd={this.onSortEnd.bind(this)}/>
 				</ToggleDisplay>
 
 				<ToggleDisplay show={this.state.topStoryMode}>

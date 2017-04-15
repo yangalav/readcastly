@@ -72,7 +72,7 @@ class ArticleEntry extends React.Component {
 
 	render() {
 		return (
-			<Row> // properties w/ both !this...Mode && this...Mode => toggle views (Readcasts vs Top Stories)
+			<Row> 
 				<Col md={12} className="list-group-item article-entry">
 					<Col md={3} className="articleImage">
 						{!this.props.topStoryMode && this.props.article.image && <img className="article-sampleImage img-responsive img-rounded center-block" src={this.props.article.image} />}
