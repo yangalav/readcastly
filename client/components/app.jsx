@@ -12,7 +12,7 @@ import WhichView from './WhichView.jsx';
 // {import SignupButton from './SignupButton'; }
 import SignUpForm from './SignupForm.jsx';
 import TransFormEr from './TransFormer.jsx';
-import ArticleList from './ArticleList.jsx';
+import SortableList from './ArticleList.jsx';
 import ArticleEntry from './ArticleEntry.jsx';
 import TopStories from './TopStories.jsx';
 import Player from './Player.jsx';
@@ -101,7 +101,17 @@ class App extends React.Component {
 					if (article.publication_date) {article.publication_date = this.cleanDate(article.publication_date)};
 					article.est_time = this.cleanTime(article.est_time);
 				});
-				this.setState({ isLoading: false, library: (res.data.reverse()) });
+        var smallerDataSet = function(data) {
+          // console.log('app.js, smallerDataSet. data = ', data);
+          var subset = [];
+          for(var x=0; x<21; x++) {
+            subset.push(data[x]);
+          }
+          console.log('subset array of 20 = ', subset);
+          return subset;
+        }
+				// this.setState({ isLoading: false, library: (res.data.reverse()) });
+        this.setState({ isLoading: false, library: (smallerDataSet(res.data.reverse())) });
 			})
 			.catch((err) => this.setState({ failMessage: ('Unable to retrieve articles'), hasErrored: true }));
 	}
@@ -155,7 +165,7 @@ class App extends React.Component {
 		this.setState({ isLoading: true });
 		axios.post('/requrl', {userId: this.state.user.id, requrl: url})
 		.then((res) => {
-			this.setState({ isLoading: false, library: (this.addOne(res.data)) });
+			this.setState({ isLoading: false, library: (this.addOne(res.data)) }); // QQ: THIS UPDATES ENTIRE LIBRARY, NOT JUST NEW ARTICLE, CORRECT?
 			return;
 		})
 		.catch((err) => this.setState({ failMessage: (res.data.error || 'Unable to fetch that link'), hasErrored: true }));
@@ -253,8 +263,14 @@ class App extends React.Component {
 		this.setState({isConverting: true});
 	}
 
-	render() {
+  onSortEnd ({oldIndex, newIndex}) {
+     this.setState({
+       library: arrayMove(this.state.library, oldIndex, newIndex),
+     });
+   };
 
+	render() {
+console.log('this.state.library = ', this.state.library)
 		return(
 			<div className="modal-container">
 			  <br></br>
@@ -267,7 +283,7 @@ class App extends React.Component {
 				{/*this.state.isLoading && <Loading />*/}
 
 				<ToggleDisplay show={!this.state.topStoryMode}>
-					<ArticleList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} />
+					<SortableList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} onSortEnd={this.onSortEnd.bind(this)}/>
 				</ToggleDisplay>
 
 				<ToggleDisplay show={this.state.topStoryMode}>
