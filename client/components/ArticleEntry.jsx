@@ -3,6 +3,7 @@
 
 import React from 'react';
 import {Button, Col, FormControl, FormGroup, Row} from 'react-bootstrap';
+import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 
 class ArticleEntry extends React.Component {
 	constructor(props) {
