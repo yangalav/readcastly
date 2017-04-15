@@ -7,14 +7,17 @@ const SourceCon = require('./sourcesController');
 const utils = require('../../utils');
 
 var exactFind = false;
-let articleToSend = {};
 
-const create = function(articleData,callback) {
+const create = function(articleData,guestMode,callback) {
+  let articleToSend = {};
   exactFind = false;
   return new Article({url: articleData.url}).fetch()
     .then(function(found) {
       if (found) {
         console.log('FOUND ==== ', found.id);
+        if (guestMode) {
+          callback(found)
+        }
         return new ArticleUser({article_id: found.attributes.id,user_id: articleData.user_id}).fetch()
           .then(function(alsoFound) {
             return alsoFound ? exactMatch(callback) : linkArticleUser(found,articleData);
@@ -23,7 +26,9 @@ const create = function(articleData,callback) {
       } else {
         return SourceCon.getSource(articleData.domain)
         .then(function(source){return makeArticle(source,articleData);})
-        .then(function(article){return linkArticleUser(article,articleData);})
+        .then(function(article){
+          articleToSend = article.attributes;
+          return linkArticleUser(article,articleData);})
         .catch(function(error) {console.log('ERROR DEALING WITH NEW ARTICLE', error);});
       }
     })
@@ -55,7 +60,6 @@ const exactMatch = function(callback) {
 };
 
 const linkArticleUser = function(article,articleData) {
-  articleToSend = article.attributes;
   return ArticlesUsers.create({
     article_id: article.id,
     user_id: articleData.user_id
@@ -63,7 +67,7 @@ const linkArticleUser = function(article,articleData) {
 };
 
 const makeArticle = function(source,articleData) {
-  console.log('SOURCE ID === ', source);
+  // console.log('SOURCE ID === ', source);
   return Articles.create({
     url: articleData.url,
     title: articleData.title,

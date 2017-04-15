@@ -32,14 +32,14 @@ class TransFormEr extends React.Component {
 						<hr/>
 				<Row className="transformer">
 					<Form inline onSubmit={!this.props.isLoading ? this.handleSubmit : null}>
-						<Col md={8}>
+						<Col md={this.props.isGuest ? 10 : 8}>
 							<FormControl type="text" id="add-library-input" placeholder="Enter an article URL" value={this.state.value} onChange={this.handleChange} />
 						</Col>
 						<Col md={2}>
 					    <Button type="submit" bsStyle="success" id="listen-now-btn">Listen now</Button>
 						</Col>
             <Col md={2}>
-							<Button type="submit" bsStyle="default" id="add-library-btn" disabled={this.props.isLoading}>{this.props.isLoading ? 'Loading...' : 'Add to Library'}</Button>
+							{!this.props.isGuest && <Button type="submit" bsStyle="default" id="add-library-btn" disabled={this.props.isLoading}>{this.props.isLoading ? 'Loading...' : 'Add to Library'}</Button>}
 						</Col>
 						</Form>
 				</Row>

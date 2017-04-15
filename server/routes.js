@@ -1,6 +1,7 @@
 require('dotenv').config();
 const request = require('request');
 const bodyParser = require('body-parser');
+const Promise = require('bluebird');
 const Articles = require('./database/controllers/articlesController');
 const utils = require('./utils.js');
 const mercury = require('./apis/mercuryController');
@@ -9,6 +10,7 @@ const mailer = require('./apis/mailController');
 const texter = require('./apis/textController');
 const polly = require('./apis/pollyController');
 const path = require('path');
+const async = require('async');
 
 // To be written and passed into routes between endpoint and function
 // const isLoggedIn = function(){};
@@ -17,7 +19,7 @@ module.exports = function(app, express, passport) {
 
   app.post('/requrl', function(req, res) {
     // console.log('server.js received POST req at /requrl. req.body = ', req.body);
-    mercury.parseAndSave(req.body.userId, req.body.requrl, function(result) {
+    mercury.parseAndSave(req.body.userId, req.body.requrl, false, function(result) {
       res.send(result);
     });
   });
@@ -95,6 +97,10 @@ module.exports = function(app, express, passport) {
       console.log('SUCCESSFUL STREAM RETURN--url: ', url, 'title: ', title)
       res.send({url, title})
     });
+  });
+
+  app.post('/guestStories', function(req,res) {
+    news.guestStories(req.body.source, res);
   });
 
   app.get('/api/signup', function(req,res) {
