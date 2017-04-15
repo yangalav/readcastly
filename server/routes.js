@@ -19,7 +19,7 @@ module.exports = function(app, express, passport) {
 
   app.post('/requrl', function(req, res) {
     // console.log('server.js received POST req at /requrl. req.body = ', req.body);
-    mercury.parseAndSave(req.body.userId, req.body.requrl, function(result) {
+    mercury.parseAndSave(req.body.userId, req.body.requrl, false, function(result) {
       res.send(result);
     });
   });
@@ -111,15 +111,19 @@ module.exports = function(app, express, passport) {
         console.log('ERROR GETTING GUEST STORIES FROM NEWSAPI ===', error);
       } else {;
         var parsedNewsObj = JSON.parse(body);
-        let top5 = parsedNewsObj.articles.slice(0,5);
+        let collection = parsedNewsObj.articles.length;
         console.log('TOP 5 FROM SERVER ===== ');
-        top5.forEach(function(article) {
+        parsedNewsObj.articles.forEach(function(article) {
           console.log(article.title);
         })
         const bundler = function(article){
           console.log('PROCESSED ARTICLE === ', article.title);
-          headlines.push(article);
-          if (headlines.length === 5) {
+          if (article.error) {
+            collection--;
+          } else {
+            headlines.push(article);
+          }
+          if (headlines.length === collection) {
             console.log('HEADLINES TO BE SENT BACK ==== ');
             headlines.forEach(function(article) {
               console.log(article.title);
@@ -132,9 +136,9 @@ module.exports = function(app, express, passport) {
         //     headlines.push(result);
         //   })
         // )};
-        top5.forEach(function(article) {
+        parsedNewsObj.articles.forEach(function(article) {
           console.log('ARTICLE BEING PROCESSED === ', article.title);
-          mercury.parseAndSave(99, article.url, function(result) {
+          mercury.parseAndSave(99, article.url, true, function(result) {
             console.log('results for : ', article.url, result.title)
             bundler(result);
           });

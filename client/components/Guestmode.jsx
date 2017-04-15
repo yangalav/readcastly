@@ -45,33 +45,37 @@ class GuestMode extends React.Component {
   // }
 
   handleSourceChange(source) {
-    if (source.target.value !== 'banana') {
+    if(source.target.value !== 'banana') {
       console.log(source.target.value);
-      axios.post('/guestStories', {source: source.target.value})
-        .then((res) => {
-          console.log(res.data);
-          res.data.forEach((article) => {
-            if (article.publication_date) {
-              article.publication_date = this.props.cleanDate(article.publication_date);
-            }
-            article.est_time = this.props.cleanTime(article.est_time);
-            randomId++
-            article.id = randomId;
-          });
-          // let localHeadlines = [];
-          // localHeadlines.push(res.data);
-          this.setState({ headlines: res.data });
-          console.log(this.state.headlines);
-        })
-        .catch((err) => console.log('Unable to retrieve headlines', err));
-      }
+      this.getHeadlines(source.target.value);
+    }
+  }
+
+  getHeadlines(source) {
+    axios.post('/guestStories', {source: source})
+      .then((res) => {
+        console.log(res.data);
+        res.data.forEach((article) => {
+          if (article.publication_date) {
+            article.publication_date = this.props.cleanDate(article.publication_date);
+          }
+          article.est_time = this.props.cleanTime(article.est_time);
+           randomId++
+           article.id = randomId;
+         });
+        // let localHeadlines = [];
+        // localHeadlines.push(res.data);
+        this.setState({ headlines: res.data });
+        console.log(this.state.headlines);
+      })
+      .catch((err) => console.log('Unable to retrieve headlines', err));
   }
 
   makeSourcesMenu(sources) {
     return(
       <Grid>
         <Row>
-          <Col md={8} >
+          <Col md={12} >
             <div className="source-chooser">
               <FormGroup controlId="sourceSelect">
                 <FormControl componentClass="select" value={this.state.source} onChange={this.handleSourceChange.bind(this)} placeholder="banana">
@@ -86,16 +90,16 @@ class GuestMode extends React.Component {
     );
   }
 
-  // componentDidMount() {
-  //   // this.randomizer();
-  //   this.getTopStories();
-  // }
+  componentWillMount() {
+    // this.randomizer();
+    this.getHeadlines('google-news');
+  }
 
   render() {
     return (
       <div className="topStories">
         {this.makeSourcesMenu(this.props.topStoriesSources)}
-        {this.state.headlines && <ArticleList articles={this.state.headlines} user={user} deleteIt={this.props.deleteIt.bind(this)} convertIt={this.props.convertIt.bind(this)} exportOptions={this.props.exportOptions} isGuest={this.props.isGuest} topStoryMode={this.props.topStoryMode} toggleConvert={this.props.toggleConvert.bind(this)} isConverting={this.props.isConverting} />}
+        {this.state.headlines && <ArticleList articles={this.state.headlines} user={user} deleteIt={this.props.deleteIt.bind(this)} convertIt={this.props.convertIt.bind(this)} exportOptions={this.props.exportOptions} isGuest={this.props.isGuest} topStoryMode={this.props.topStoryMode} toggleConvert={this.props.toggleConvert.bind(this)} isConverting={this.props.isConverting} toggleMembersOnly={this.props.toggleMembersOnly.bind(this)} />}
       </div>
     );
   }

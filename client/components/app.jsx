@@ -228,7 +228,10 @@ class App extends React.Component {
 
 	getTopStoriesSources() {
 		axios.get('https://newsapi.org/v1/sources?language=en')
-			.then((res) => this.setState({topStoriesSources: res.data.sources}))
+			.then((res) => {
+				let options = res.data.sources.filter((source) => source.sortBysAvailable.indexOf("top") !== -1)
+				this.setState({topStoriesSources: options})
+			})
 			.catch ((err) => console.log('ERROR GETTING TOP STORIES SOURCES', err))
 	}
 
@@ -251,7 +254,8 @@ class App extends React.Component {
 	}
 
 	toggleMembersOnly() {
-		this.setState({showMembersOnly: false});
+		let currentState = this.state.showMembersOnly;
+		this.setState({showMembersOnly: !currentState});
 	}
 
 	// {invokes ajax call to fetch data for the ArticleList component}
@@ -276,7 +280,7 @@ class App extends React.Component {
 					<WhichView toggleView={this.toggleView.bind(this)} topStoryMode={this.state.topStoryMode}/>
 					{/*this.state.isLoading && <Loading />*/}
 					<ToggleDisplay show={!this.state.topStoryMode}>
-						<ArticleList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} />
+						<ArticleList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} toggleMembersOnly={this.toggleMembersOnly.bind(this)} />
 					</ToggleDisplay>
 
 					<ToggleDisplay show={this.state.topStoryMode}>
@@ -285,7 +289,7 @@ class App extends React.Component {
 				</ToggleDisplay>
 
 				<ToggleDisplay show={this.state.isGuest}>
-						<GuestMode isGuest={this.state.isGuest} cleanDate={this.cleanDate.bind(this)} cleanTime={this.cleanTime.bind(this)} topStoriesSources={this.state.topStoriesSources} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} />
+						<GuestMode isGuest={this.state.isGuest} cleanDate={this.cleanDate.bind(this)} cleanTime={this.cleanTime.bind(this)} topStoriesSources={this.state.topStoriesSources} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} toggleMembersOnly={this.toggleMembersOnly.bind(this)}/>
 				</ToggleDisplay>}
 
 				<div id="player_container">

@@ -8,13 +8,16 @@ const utils = require('../../utils');
 
 var exactFind = false;
 
-const create = function(articleData,callback) {
+const create = function(articleData,guestMode,callback) {
   let articleToSend = {};
   exactFind = false;
   return new Article({url: articleData.url}).fetch()
     .then(function(found) {
       if (found) {
         console.log('FOUND ==== ', found.id);
+        if (guestMode) {
+          callback(found)
+        }
         return new ArticleUser({article_id: found.attributes.id,user_id: articleData.user_id}).fetch()
           .then(function(alsoFound) {
             return alsoFound ? exactMatch(callback) : linkArticleUser(found,articleData);

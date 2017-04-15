@@ -38,7 +38,7 @@ const articleObjFinisher = function(obj,source) {
   return obj;
 };
 
-const parseAndSave = function(userId, url,callback){
+const parseAndSave = function(userId, url, guestMode, callback){
   let article = articleObjStarter(url,userId);
   request(optionsBuilder(url), function(error, response, body) {
     if(error) {
@@ -63,7 +63,7 @@ const parseAndSave = function(userId, url,callback){
       callback(utils.errors.badUrl);
     } else {
       article = articleObjFinisher(article,parsedBody);
-      Articles.create(article,function(result){
+      Articles.create(article, guestMode, function(result){
         callback(result);
       });
     }

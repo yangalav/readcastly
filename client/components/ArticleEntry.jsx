@@ -91,8 +91,8 @@ class ArticleEntry extends React.Component {
 		  			{!this.props.topStoryMode && this.props.article.excerpt && <div className="article-excerpt"><span>Excerpt: </span><span>{this.props.article.excerpt }</span></div>}
 						{this.props.topStoryMode && this.props.article.description && <div className="article-excerpt"><span>Description: </span><span>{this.props.article.description }</span></div>}
 
-		  			{!this.props.topStoryMode && <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.props.deleteIt(this.props.article.url)}>Remove From Library</Button>}
-		  			{this.props.topStoryMode && <Button bsStyle="warning" bsSize="xsmall" onClick={() => this.props.convertIt(this.props.article.url)}>Add to Library</Button>}
+		  			{!this.props.topStoryMode && !this.props.isGuest && <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.props.deleteIt(this.props.article.url)}>Remove From Library</Button>}
+		  			{(this.props.topStoryMode || this.props.isGuest) && <Button bsStyle="warning" bsSize="xsmall" onClick={this.props.isGuest ? this.props.toggleMembersOnly.bind(this) : this.props.convertIt(this.props.article.url)}>Add to Library</Button>}
 		  		</Col>
 		  	<Col md={2}>
 		  		<div className="article-buttons">
