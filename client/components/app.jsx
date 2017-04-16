@@ -39,7 +39,9 @@ const exportOptions = {
       {name: '--Indian English--'},
       {flag: 'in', name: 'Raveena'},
       {name: '--Welsh English--'},
-      {flag: 'wa', name: 'Geraint'}
+      {flag: 'wa', name: 'Geraint'},
+      {name: '--Japanese English--'},   
+      {flag: 'jp', name: 'Mizuki'}
     ],
     methods : [
       {id: "stream", method: 'Stream It'},
@@ -206,12 +208,12 @@ class App extends React.Component {
 		let route = '/'+ articleObject.method; //**************
 		this.setState({lastMethod: articleObject.method, lastUrl: articleObject.article.url});
 
-		console.log('FRONT-A->>>EXPORT-OBJ: ', exportObj);
+		// console.log('FRONT-A->>>EXPORT-OBJ: ', exportObj);  /* MH: DEBUGGING */
 		console.log('ROUTE: ', route);
 
 		axios.post(route, {payload: exportObj})
 		.then((res) => {
-			console.log('FRONT-B->>>RES: ', res.data.url)
+			// console.log('FRONT-B->>>RES: ', res.data.url)  /* MH: DEBUGGING */
 			if (articleObject.method === "stream") {
 				this.setState({nowPlaying: {url: res.data.url, title: res.data.title}, isConverting: false});
 

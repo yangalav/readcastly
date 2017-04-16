@@ -29,9 +29,9 @@ module.exports = function(app, express, passport) {
       console.log('server/routes.js l 25, about to call utils.dbstats...'); // ***
       utils.dbStats(library); // ***
       var peskyCharacters = utils.textInspector(library);
-      // console.log('========(routes.js L-32) PESKY CHARACTERS: ', peskyCharacters);
-      // console.log('========Array.isArray(library): ', Array.isArray(library));
-      // console.log('server/routes.js l 29, library sending to client = ', library); // ***
+      // console.log('========(routes.js L-32) PESKY CHARACTERS: ', peskyCharacters); /* MH: DEBUGGING */
+      // console.log('========Array.isArray(library): ', Array.isArray(library)); /* MH: DEBUGGING */
+      // console.log('server/routes.js l 29, library sending to client = ', library); /* MH: DEBUGGING */
 
       res.send(library);
     });

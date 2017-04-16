@@ -24,20 +24,19 @@ const optionsBuilder = function(url) {
     };
 };
 
-
 const articleObjFinisher = function(obj,source) {
   obj.title = source.title;
-
-  // first, stripper module strips away html tags and extracts the article text
-  // next, utils.unescapeText removes/replaces hex codes and other problematic characters from article text
-  // obj.text = utils.unescapeText( stripper(source.content) );
-  console.log('======articleObjFinisher-A -- PRE-STRIP-source.content: ', source.content);
+  // Note: A series of console.log statements below track the changes before and after each step in processing the article text
+  // console.log('======articleObjFinisher-A -- PRE-STRIP-source.content: ', source.content); /* MH: DEBUGGING */
+  // ...put text through the stripper module, to strip away html tags from the article text
   const strippedText = stripper(source.content);
-  console.log('======articleObjFinisher-B -- POST-STRIP-strippedText: ', strippedText);  
+  // console.log('======articleObjFinisher-B -- POST-STRIP-strippedText: ', strippedText); /* MH: DEBUGGING */
+  // ...put stripped test through unescapeHex function to remove/replace hex character codes
   const strippedUnescapedText = utils.unescapeHex(strippedText);
-  console.log('======articleObjFinisher-C -- POST-Unescaped-strippedUnescapedText: ', strippedUnescapedText);  
+  // console.log('======articleObjFinisher-C -- POST-Unescaped-strippedUnescapedText: ', strippedUnescapedText); /* MH: DEBUGGING */
+  // ...put strippedUnescapedText through another function to fix spacing issues
   obj.text = utils.postStripSpacing( strippedUnescapedText );   
-  console.log('======articleObjFinisher-D -- postStripSpacing: ', obj.text); // ***
+  // console.log('======articleObjFinisher-D -- postStripSpacing: ', obj.text); /* MH: DEBUGGING */
   obj.author = source.author || "Dave Winfield" // "Author not available";
   obj.publication_date = source.date_published;
   obj.image = source.lead_image_url ||   "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcT8-E0VKkso9wu60MnVZor7_HqEJIAm8DMB6iJGgFvG1m57WHz0";
@@ -47,15 +46,7 @@ const articleObjFinisher = function(obj,source) {
   obj.domain = source.domain || domainExtractor(obj.url);
   return obj;
 };
-const addPausesToHtml = function(textInput) {
-  console.log('=======typeof textInput: ', typeof textInput)
-  console.log('=======textInput: ', textInput)  
-  // let manyTag = /(\<\/?\s?)(br|h\d?|li)(\s?\>)/g;
-  // let periodTag = /(\.)(\<)/g;
-  // return textInput
-  //   .replace(manyTag, " . $1$2$3")
-  //   .replace(periodTag, "$1 $2")
-}
+
 
 const parseAndSave = function(userId, url, callback){
   let article = articleObjStarter(url, userId);
@@ -84,27 +75,16 @@ const parseAndSave = function(userId, url, callback){
     if (parsedBody.error) {
       callback(utils.errors.badUrl);
     } else {
+      // console.log('=======PARSEDBODY A-PRE=======>>>: ', parsedBody); /* MH: DEBUGGING */
+      // console.log('=======PARSEDBODY.content A.1 =======typeof >>>: ', typeof parsedBody.content); /* MH: DEBUGGING */
 
-      // ADD CODE IN HERE TO PREPROCESS parsedBody before sending into articleObjectFinisher
-      console.log('=======PARSEDBODY A-PRE=======>>>: ', parsedBody);
-      console.log('=======PARSEDBODY.content A.1 =======typeof >>>: ', typeof parsedBody.content);
-
+      // ...address spacing issues in html before it is sent to stripper module
       parsedBody.content = utils.preStripSpacing(parsedBody.content);
-      console.log('=======PARSEDBODY B-Spaced =======>>>: ', parsedBody);
-      console.log('=======PARSEDBODY.content B.1 =======typeof >>>: ', typeof parsedBody.content);
-
-      // parsedBody.content = utils.unescapeHex(parsedBody.content);
-      // console.log('=======PARSEDBODY C-Unescaped =======>>>: ', parsedBody);
-
-      article = articleObjFinisher(article, parsedBody); /* goes to */
-
-      // article = articleObjFinisher(article, parsedBody); // ORIGINAL!
-
-      // // first: process html (to add pauses, etc.) before sending it to stripTags module
-      // let articleX = addPausesToHtml(article);
-      // // next: send processed html into function that will invoke stripTags module
-      // let articleY = articleObjFinisher(articleX, parsedBody);
-
+      // console.log('=======PARSEDBODY B-Spaced =======>>>: ', parsedBody); /* MH: DEBUGGING */
+      // console.log('=======PARSEDBODY.content B.1 =======typeof >>>: ', typeof parsedBody.content); /* MH: DEBUGGING */
+  
+      article = articleObjFinisher(article, parsedBody); /* send article through articleObjFinisher method, above */
+      // send article object on to database/controllers/articlesController.js
       Articles.create(article, function(result){ // ORIGINAL!
         callback(result);
       });
@@ -112,7 +92,8 @@ const parseAndSave = function(userId, url, callback){
   })
 };
 
-
-
-
 module.exports = { parseAndSave : parseAndSave };
+
+
+
+

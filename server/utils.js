@@ -95,13 +95,10 @@ const dbStats = function(dbContents) {
   variedAverages([10, 7, 5, 3, 1]) // these are the scenarios to run: # of highest word counts to remove
 };
 
-
 const readcastBuilder = function(articleObj) {
 // placeholder
   return articleObj.title;
-
 }
-
 
 // invoked (in mercuryController) when first posting an article / url
 const preStripSpacing = function(textInput) {
@@ -132,6 +129,7 @@ const unescapeHex = function(unsafe) {
     .replace(/&#?\w+;/g, "-")
 }
 
+// function to inspect text after it has gone through stripper, and insert spaces in order to facilitate polly reading
 const postStripSpacing = function(textInput) {
   let parenChar = /(\))(\w)/g
   let dotCaps = /\.([A-Z])/g  
@@ -139,26 +137,6 @@ const postStripSpacing = function(textInput) {
     .replace(parenChar, "$1 $2") // e.g., before(")a") => after(") a")
     .replace(dotCaps, "\.\s$1") // e.g., before(".A") => after(". A") // DOT - MELO
 }
-
-
-/*
-http://www.espn.com/nba/story/_/id/19159149/carmelo-anthony-better-somewhere-else-phil-jackson-says
-*/
-
-// const addPausesToHtml = function(textInput) {
-//   // let manyTag = /(\<\s?\/?\s?)(br|h\d?|li)\s?\>/g;
-//   // let periodTag = /(\.)(\<)/g;
-//   return textInput
-//       .replace(/(\<\s?\/?\s?)(br|h\d?|li)\s?\>/g, " . $1$2")
-//       .replace(/(\.)(\<)/g, "$1 $2")
-// }
-// const addPausesToHtml = function(textInput) {
-//   let manyTag = /(\<\s?\/?\s?)(br|h\d?|li)\s?\>/g;
-//   let periodTag = /(\.)(\<)/g;
-//   return textInput
-//     .replace(manyTag, " . $1$2")
-//     .replace(periodTag, "$1 $2")
-// }
 
 module.exports = { 
   errors, 
@@ -170,6 +148,4 @@ module.exports = {
   unescapeHex,
   postStripSpacing
 };
-
-
 

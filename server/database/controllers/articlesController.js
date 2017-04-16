@@ -9,6 +9,7 @@ const utils = require('../../utils');
 var exactFind = false;
 let articleToSend = {};
 
+
 const create = function(articleData,callback) {
   exactFind = false;
   return new Article({url: articleData.url}).fetch()
@@ -95,3 +96,4 @@ module.exports= {
   getAll : getAll,
   deleteOne : deleteOne
 };
+
