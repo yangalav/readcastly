@@ -75,32 +75,34 @@ const textToSpeech = (req, res, callback) => {
   const articleTitle = req.body.payload.article.title
   const voiceId = req.body.payload.voice || 'Joanna' /*name of voice*/
   const textIn = req.body.payload.article.text /*text of the article from request object*/
-  const convertedTextIn = pollyHelpers.unescapeHtml(textIn); /*text of the article after converting hex characters*/
+  const convertedTextIn = pollyHelpers.unescapeTextAgain(textIn); /*text of the article after converting hex characters*/
+
   const filename = (req.body.payload.article.article_id || 'temp').toString() + '-' + voiceId + '.mp3' /*unique article_id number*/
   // || '999999999.mp3' // /*unique article_id number*/
   // also available: req.body.destination => /*e-mail address if e-mail, phone number if phone, 'stream' if stream, 'link' if link */
 
   log(line, 'BACK-C-textToSpeech: voiceId: ', voiceId, ' FILENAME: ', filename) 
 
-  // remove any leading white-spaces and carriage-returns from string input  
+  // remove any leading white-spaces and carriage-returns from string input
+  // let text = pollyHelpers.strHeadCleaner(convertedTextIn);
   let text = pollyHelpers.strHeadCleaner(convertedTextIn);
   log(line, 'BACK-D-textToSpeech: typeof TEXT>>>: ', typeof text)
   
   var roughWords = text.split(" ");
   var words = pollyHelpers.arrHeadCleaner(roughWords);
 
-  log(line, 'BACK-D2-textToSpeech: WORDS>>>: ', words); // LOTS
+  // log(line, 'BACK-D2-textToSpeech: WORDS>>>: ', words); // LOTS
   log(line, 'BACK-D2-words.length: ', words.length);
 
   // ...Check length of desired text to send to Polly; If longer than 230 words, break up into subarrays.
   var textArray = pollyHelpers.chopper(words, text, 230);
 
-  log(line, 'BACK-E-TEXT-ARRAY: >>>>>>>>> ', textArray); // LOTS
+  // log(line, 'BACK-E-TEXT-ARRAY: >>>>>>>>> ', textArray); // LOTS
   log(line, 'BACK-E-textToSpeech: voiceId: ', voiceId, ' text: ', text, ' filename: ', filename) //***
 
   // ...SEE #3 (ABOVE): feed segments of text into polly to generate audio segments
   Promise.all(textArray.map(function(item) {
-    log('\nONE ITEM being mapped to generatePollyAudio call: ==> ', item)
+    // log('\nONE ITEM being mapped to generatePollyAudio call: ==> ', item) // LOTS
     return generatePollyAudio(item, voiceId)
   }))
   // ...audios is passed as an array of buffer objects

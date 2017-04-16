@@ -1,25 +1,23 @@
 /* file of helper methods used in pollyController */
 
-// function to convert hexadecimal character codes into their character equivalents; 
-const unescapeHtml = function(unsafe) {
+// // function to convert hexadecimal character codes into their character equivalents; 
+const unescapeTextAgain = function(unsafe) {
   return unsafe
+    .replace(/&quot;/g, "\"")    
+    .replace(/&apos;/g, "\'") 
+    .replace(/&amp;/g, "and") 
+    .replace(/\)(\w)/g, "\) $1")
+    .replace(/\.([A-Z])/g, "\. $1")
+    .replace(/(\w)(\<)/g, "$1 $2")
     .replace(/&#x22;/g, "\"")
-    .replace(/&#x2013;/g, "–")    
-    .replace(/&#x2014;/g, "—")
-    .replace(/&#x2018;/g, "\'")    
-    .replace(/&#x2019;/g, "\'")
+    .replace(/&#x201(C|D);/g, "\"")
+    .replace(/&#x201(8|9);/g, "\'")    
+    .replace(/&#xA0;/g, " ")    
     .replace(/&#x2026;/g, "...")
-    .replace(/&#x201C;/g, "\"")
-    .replace(/&#x201D;/g, "\"")
-    .replace(/&#xAD;/g, "-")
-    .replace(/&#x200A;/g, "–")
-    .replace(/&#xA0;/g, " ")
-    .replace(/&apos;/g, "\'")    
-    .replace(/&quot;/g, "\"")
+    // catch-all for other hexadecimal char patterns, replacing them with a "-"
     .replace(/&#?\w+;/g, "-")
 }
 
-    // .replace(/&#x\w{1,5}?;/g, "-")
 
 // function to break up any array of text longer than maxWords (230) words into an array of text subarrays;
 const chopper = (arr, text, maxWords) => {
@@ -64,9 +62,9 @@ const arrHeadCleaner = (arr) => {
 
 // export methods in order to expose them in pollyController
 module.exports = {
-  unescapeHtml: unescapeHtml,
-  chopper: chopper,
-  strHeadCleaner: strHeadCleaner,
-  arrHeadCleaner: arrHeadCleaner
+  unescapeTextAgain,
+  chopper,
+  strHeadCleaner,
+  arrHeadCleaner
 };
 

@@ -27,8 +27,17 @@ const optionsBuilder = function(url) {
 
 const articleObjFinisher = function(obj,source) {
   obj.title = source.title;
-  obj.text = stripper(source.content);
-  console.log('======MERC-CONTROLLER-obj.text returned from stripper: ', obj.text) // ***
+
+  // first, stripper module strips away html tags and extracts the article text
+  // next, utils.unescapeText removes/replaces hex codes and other problematic characters from article text
+  // obj.text = utils.unescapeText( stripper(source.content) );
+  console.log('======articleObjFinisher-A -- PRE-STRIP-source.content: ', source.content);
+  const strippedText = stripper(source.content);
+  console.log('======articleObjFinisher-B -- POST-STRIP-strippedText: ', strippedText);  
+  const strippedUnescapedText = utils.unescapeHex(strippedText);
+  console.log('======articleObjFinisher-C -- POST-Unescaped-strippedUnescapedText: ', strippedUnescapedText);  
+  obj.text = utils.postStripSpacing( strippedUnescapedText );   
+  console.log('======articleObjFinisher-D -- postStripSpacing: ', obj.text); // ***
   obj.author = source.author || "Dave Winfield" // "Author not available";
   obj.publication_date = source.date_published;
   obj.image = source.lead_image_url ||   "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcT8-E0VKkso9wu60MnVZor7_HqEJIAm8DMB6iJGgFvG1m57WHz0";
@@ -38,10 +47,19 @@ const articleObjFinisher = function(obj,source) {
   obj.domain = source.domain || domainExtractor(obj.url);
   return obj;
 };
+const addPausesToHtml = function(textInput) {
+  console.log('=======typeof textInput: ', typeof textInput)
+  console.log('=======textInput: ', textInput)  
+  // let manyTag = /(\<\/?\s?)(br|h\d?|li)(\s?\>)/g;
+  // let periodTag = /(\.)(\<)/g;
+  // return textInput
+  //   .replace(manyTag, " . $1$2$3")
+  //   .replace(periodTag, "$1 $2")
+}
 
-const parseAndSave = function(userId, url,callback){
-  let article = articleObjStarter(url,userId);
-  // call to mercury
+const parseAndSave = function(userId, url, callback){
+  let article = articleObjStarter(url, userId);
+  // call to mercury, passing in object and callback
   request(optionsBuilder(url), function(error, response, body) {
     // error if request doesn't go through
     if(error) {
@@ -59,15 +77,35 @@ const parseAndSave = function(userId, url,callback){
         // error if mercury responds eith error
       } catch (parseError) {
         console.log('routes.js l28, in catch block, try block not able to parse Mercury response. parseError = ', parseError, '\n\n');
-        var parsedBody;
+        // var parsedBody;
         callback(utils.errors.mercuryCantParse);
         return;
       }
     if (parsedBody.error) {
       callback(utils.errors.badUrl);
     } else {
-      article = articleObjFinisher(article,parsedBody);
-      Articles.create(article,function(result){
+
+      // ADD CODE IN HERE TO PREPROCESS parsedBody before sending into articleObjectFinisher
+      console.log('=======PARSEDBODY A-PRE=======>>>: ', parsedBody);
+      console.log('=======PARSEDBODY.content A.1 =======typeof >>>: ', typeof parsedBody.content);
+
+      parsedBody.content = utils.preStripSpacing(parsedBody.content);
+      console.log('=======PARSEDBODY B-Spaced =======>>>: ', parsedBody);
+      console.log('=======PARSEDBODY.content B.1 =======typeof >>>: ', typeof parsedBody.content);
+
+      // parsedBody.content = utils.unescapeHex(parsedBody.content);
+      // console.log('=======PARSEDBODY C-Unescaped =======>>>: ', parsedBody);
+
+      article = articleObjFinisher(article, parsedBody); /* goes to */
+
+      // article = articleObjFinisher(article, parsedBody); // ORIGINAL!
+
+      // // first: process html (to add pauses, etc.) before sending it to stripTags module
+      // let articleX = addPausesToHtml(article);
+      // // next: send processed html into function that will invoke stripTags module
+      // let articleY = articleObjFinisher(articleX, parsedBody);
+
+      Articles.create(article, function(result){ // ORIGINAL!
         callback(result);
       });
     }

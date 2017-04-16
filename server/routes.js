@@ -25,9 +25,14 @@ module.exports = function(app, express, passport) {
   app.get('/getAll', function(req, res) {
     console.log('server.js received GET req at /getAll . Returning array of objects with contents of Readcastly db!');
     Articles.getAll(req.query.userId, function(library) {
-      // console.log('server/routes.js l 25, about to call utils.dbstats...');
-      // utils.dbStats(library);
-      // console.log('server/routes.js l 29, library sending to client = ', library);
+
+      console.log('server/routes.js l 25, about to call utils.dbstats...'); // ***
+      utils.dbStats(library); // ***
+      var peskyCharacters = utils.textInspector(library);
+      // console.log('========(routes.js L-32) PESKY CHARACTERS: ', peskyCharacters);
+      // console.log('========Array.isArray(library): ', Array.isArray(library));
+      // console.log('server/routes.js l 29, library sending to client = ', library); // ***
+
       res.send(library);
     });
   });
