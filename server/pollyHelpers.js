@@ -60,11 +60,16 @@ const arrHeadCleaner = (arr) => {
   return result;
 }
 
+const titleAbbreviator = function(title) {
+  return title.replace(/[^A-Za-z0-9\s]+/g, '').split(' ').slice(0, 5).join('-').toLowerCase();
+}
+
 // export methods in order to expose them in pollyController
 module.exports = {
   unescapeTextAgain,
   chopper,
   strHeadCleaner,
-  arrHeadCleaner
+  arrHeadCleaner,
+  titleAbbreviator
 };
 

@@ -66,18 +66,20 @@ const writeAudioStreamToS3 = ( audioStream, filename ) => {
   })
 }
 
+
 // 6. contains main logic of pollyController
 // Note: callback is passed in and invoked at the bottom of the promise chain
 const textToSpeech = (req, res, callback) => {
   log(line, 'BACK-B-pollyController-textToSpeech') //***
 
   // Extract needed info from request object
-  const articleTitle = req.body.payload.article.title
+  const articleTitle = req.body.payload.article.title;
+  const shortlyTitle = pollyHelpers.titleAbbreviator(articleTitle);
   const voiceId = req.body.payload.voice || 'Joanna' /*name of voice*/
   const textIn = req.body.payload.article.text /*text of the article from request object*/
   const convertedTextIn = pollyHelpers.unescapeTextAgain(textIn); /*text of the article after converting hex characters*/
 
-  const filename = (req.body.payload.article.article_id || 'temp').toString() + '-' + voiceId + '.mp3' /*unique article_id number*/
+  const filename = shortlyTitle + '-' + (req.body.payload.article.article_id || 'temp').toString() + '-' + voiceId.toLowerCase() + '.mp3' /*unique article_id number*/
   // || '999999999.mp3' // /*unique article_id number*/
   // also available: req.body.destination => /*e-mail address if e-mail, phone number if phone, 'stream' if stream, 'link' if link */
 
