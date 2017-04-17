@@ -17,6 +17,7 @@ import ArticleEntry from './ArticleEntry.jsx';
 import TopStories from './TopStories.jsx';
 import Player from './Player.jsx';
 import Confirm from './confirm.jsx';
+import TopStoryAdd from './topStoryAdd.jsx';
 import MembersOnly from './MembersOnly.jsx';
 import GuestMode from './GuestMode.jsx';
 import isValidUrl from '../helpers/urlValidation.js';
@@ -53,13 +54,13 @@ const exportOptions = {
     ]
   }
 
- let randomId = 10**9;
+let randomId = 10**9;
 
 class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isGuest: true,
+			isGuest: false,
 			library: [],
 			headlines: [],
 			gettingHeadlines: false,
@@ -82,6 +83,8 @@ class App extends React.Component {
 			lastMethod: '',
 			lastUrl: '',
 			lastLink: '',
+			topStoryAdd: false,
+			topStoryAddMsg: {},
 			topStoryMode: false,
 			topStoriesSources: [],
 			showMembersOnly: false,
@@ -115,7 +118,7 @@ class App extends React.Component {
 					if (article.publication_date) {article.publication_date = this.cleanDate(article.publication_date)};
 					article.est_time = this.cleanTime(article.est_time);
 				});
-				this.setState({ isLoading: false, library: (res.data.reverse()).slice(0,10) });
+				this.setState({ isLoading: false, library: (res.data.reverse()).slice(0,20) });
 			})
 			.catch((err) => this.setState({ failMessage: ('Unable to retrieve articles'), hasErrored: true }));
 	}
@@ -138,8 +141,18 @@ class App extends React.Component {
 		if (obj.publication_date) {
 			obj.publication_date = this.cleanDate(obj.publication_date);
 		}
+		if (this.state.topStoryMode && obj.error) {
+			this.setState({topStoryAddMsg: {'result': "Sorry ...", 'message': obj.error}}, function() {
+				this.setState({topStoryAdd: true})
+			});
+		} else if (this.state.topStoryMode) {
+			this.setState({topStoryAddMsg: {'result': "Success!", 'message': "The article has been added to your library"}}, function() {this.setState({topStoryAdd: true})
+			});
+		}
 		console.log(obj);
-		result.unshift(obj);
+		if (!obj.error) {
+			result.unshift(obj)
+		};
 		return result;
 	}
 
@@ -261,6 +274,10 @@ class App extends React.Component {
 		this.setState({gettingHeadlines: true});
 	}
 
+	toggleTopStoryAdd() {
+		this.setState({topStoryAdd: false});
+	}
+
 	getHeadlines(source) {
     axios.post('/topStories', {source: source, headlineMode: true})
       .then((res) => {
@@ -323,7 +340,12 @@ class App extends React.Component {
 				<div id="player_container">
 					<Player track={this.state.nowPlaying}/>
 				</div>
+				{this.state.isLoading &&
+          		<div id="loadingOverlay">
+            		<Loading type="spin" color="red" />
+          		</div>}
 				<Confirm deleteArticle={this.deleteArticle.bind(this)} user={this.state.user} method={this.state.lastMethod} link={this.state.lastLink} toggleConfirm={this.toggleConfirm.bind(this)} url={this.state.lastUrl} showConfirm={this.state.showConfirm} isGuest={this.state.isGuest}/>
+				<TopStoryAdd showModal={this.state.topStoryAdd} toggleTopStoryAdd={this.toggleTopStoryAdd.bind(this)} toggleView={this.toggleView.bind(this)} topStoryAddMsg={this.state.topStoryAddMsg} />
 				<MembersOnly showMembersOnly={this.state.showMembersOnly} toggleMembersOnly={this.toggleMembersOnly.bind(this)} />
 			</div>
 		);
