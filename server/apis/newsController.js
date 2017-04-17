@@ -3,6 +3,7 @@ const request = require('request');
 const newsApiSources = require('../database/collections/newsApi.json');
 const Sources = require('../database/collections/sources');
 const Source = require('../database/models/source');
+const mercury = require('./mercuryController');
 
 const newsApiImport = function(callback) {
   // newsApiSources.sources.forEach(function(source){
@@ -58,7 +59,52 @@ const newsApiBuilder = function(source,callback) {
     // .catch(function(error){console.log('ERROR BUILDING NEWSAPI REQUEST OBJ ', error);});
 };
 
+const guestStories = function(source,res) {
+    var options = {};
+    newsApiBuilder(source, function(optionsObj){
+      options = optionsObj;
+    });
+    request(options, function(error, response, body) {
+      let headlines = [];
+      // console.log('BEGINNING HEADLINES LENGTH === ', headlines.length);
+      if (error) {
+        console.log('ERROR GETTING GUEST STORIES FROM NEWSAPI ===', error);
+      } else {;
+        var parsedNewsObj = JSON.parse(body);
+        let collection = parsedNewsObj.articles.length;
+        // console.log('TOP STORIES FROM SERVER ===== ');
+        // parsedNewsObj.articles.forEach(function(article) {
+          // console.log(article.title);
+        // })
+        const bundler = function(article){
+          // console.log('PROCESSED ARTICLE === ', article.title);
+          if (article.error) {
+            collection--;
+          } else {
+            headlines.push(article);
+          }
+          if (headlines.length === collection) {
+            // console.log('HEADLINES TO BE SENT BACK ==== ');
+            // headlines.forEach(function(article) {
+              // console.log(article.title);
+            // });
+            res.send(headlines);
+          }
+        };
+        parsedNewsObj.articles.forEach(function(article) {
+          // console.log('ARTICLE BEING PROCESSED === ', article.title);
+          mercury.parseAndSave(99, article.url, true, function(result) {
+            // console.log('results for : ', article.url, result.title)
+            bundler(result);
+          });
+        });
+      }
+    });
+}
+
+
 module.exports = {
   newsApiImport : newsApiImport,
   newsApiBuilder: newsApiBuilder,
+  guestStories: guestStories
 };

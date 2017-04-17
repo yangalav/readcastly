@@ -34,11 +34,11 @@ const articleObjFinisher = function(obj,source) {
   obj.excerpt = source.excerpt;
   obj.word_count = source.word_count;
   obj.est_time = source.word_count / 145; // based on 145 wpm avg. spoken speech
-  obj.domain = source.domain || domainExtractor(obj.url);
+  obj.domain = source.domain || utils.domainExtractor(obj.url);
   return obj;
 };
 
-const parseAndSave = function(userId, url,callback){
+const parseAndSave = function(userId, url, guestMode, callback){
   let article = articleObjStarter(url,userId);
   request(optionsBuilder(url), function(error, response, body) {
     if(error) {
@@ -46,7 +46,7 @@ const parseAndSave = function(userId, url,callback){
         res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
       }
     try {
-        console.log('routes.js l24, in try block after Mercury response...');
+        // console.log('routes.js l24, in try block after Mercury response...');
         var parsedBody = JSON.parse(body);
         // console.log('...result: parsedBody = ', parsedBody);
         if(parsedBody === null) {
@@ -63,14 +63,12 @@ const parseAndSave = function(userId, url,callback){
       callback(utils.errors.badUrl);
     } else {
       article = articleObjFinisher(article,parsedBody);
-      Articles.create(article,function(result){
+      Articles.create(article, guestMode, function(result){
         callback(result);
       });
     }
   })
 };
-
-
 
 
 module.exports = { parseAndSave : parseAndSave };

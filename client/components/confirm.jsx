@@ -28,11 +28,11 @@ class Confirm extends React.Component {
             <Modal.Title id="contained-modal-title">Success!</Modal.Title>
           </Modal.Header>
           {this.props.method === 'link' ?
-            (<Modal.Body>Thank you for using Readcast.ly!  Your Readcast can be downloaded <a href={this.props.link}>here</a>.</Modal.Body>) :
+            (<Modal.Body>Thank you for using Readcast.ly!  Right-click <a href={this.props.link}>here</a> to download your Readcast!</Modal.Body>) :
             (<Modal.Body>Congratulations!  Your Readcast has been delivered to {destination}.</Modal.Body>)
           }
           <Modal.Footer>
-            <Button bsStyle="danger" onClick={deleteClose}>Remove article from library</Button>
+            {!this.props.isGuest && <Button bsStyle="danger" onClick={deleteClose}>Remove article from library</Button>}
             <Button bsStyle="success" onClick={close}>Close</Button>
           </Modal.Footer>
         </Modal>
