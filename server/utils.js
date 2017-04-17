@@ -24,6 +24,27 @@ const domainExtractor = function(url) {
   return url.slice(start,end);
 };
 
+const textInspector = function(dbContents) {
+  var cache = {};
+  var pattern = /&#?\w+;/g;
+  var results;
+  console.log('========textInspector: Array.isArray(dbContents): ', Array.isArray(dbContents) )
+  // console.log('------------dbContents[0]: ', dbContents[0] )
+  dbContents.forEach(function(entryObj) {
+    url = entryObj.url;
+    results = entryObj.text.match(pattern);
+    // (results === null) ? console.log('---- FOR this URL, results are NULL: ', url) : console.log('-----(utils.js: L-36) One Set of Results: ', results);
+    if (results !== null) {
+      results.forEach(function(item) {
+        (!cache[item]) ? (cache[item] = 1) : cache[item]++;
+      })
+    }
+  })
+  return cache;
+}
+
+//=====================
+
 const dbStats = function(dbContents) {
   console.log('server.utils.js l 28: running dbStats...');
   var count = 0;
@@ -74,36 +95,57 @@ const dbStats = function(dbContents) {
   variedAverages([10, 7, 5, 3, 1]) // these are the scenarios to run: # of highest word counts to remove
 };
 
-
 const readcastBuilder = function(articleObj) {
 // placeholder
   return articleObj.title;
-
 }
 
-const unescapeHtml = function(unsafe) {
+// invoked (in mercuryController) when first posting an article / url
+const preStripSpacing = function(textInput) {
+  let headerTag = /(\<)(h[1-6])(\>)(.*?)(\<\/)(h[1-6])(\>)/g;
+  let breakTag = /(\<br\>)/g;
+  let periodTag = /(\.)(\<)/g;
+  let parenTag = /(\.)(\<)/g;
+  let tagCaps = /\>([A-Z])/g;
+  return textInput
+    .replace(headerTag, " $1$2$3\'$4\.\'$5$6$7\n") // e.g., before("</h>") => after(". </h>") // WAITERS  
+    .replace(breakTag, ". $1") // e.g., before("<br>") => after(". <br>") // WAITERS
+    .replace(periodTag, "$1 $2") // e.g., before(".<") => after(". <")
+    .replace(parenTag, "$1 $2") // e.g., before(")<") => after(") <")
+    .replace(tagCaps, "\>\. $1") // e.g., before(">A") => after("> A")
+}
+
+// function to convert hexadecimal character codes into their character equivalents; 
+const unescapeHex = function(unsafe) {
   return unsafe
+    .replace(/&quot;/g, "\"")    
+    .replace(/&apos;/g, "\'") 
     .replace(/&#x22;/g, "\"")
-    .replace(/&#x2013;/g, "–")    
-    .replace(/&#x2014;/g, "—")
-    .replace(/&#x2018;/g, "\'")    
-    .replace(/&#x2019;/g, "\'")
+    .replace(/&#x201(C|D);/g, "\"")
+    .replace(/&#x201(8|9);/g, "\'")    
+    .replace(/&#xA0;/g, " ")    
     .replace(/&#x2026;/g, "...")
-    .replace(/&#x201C;/g, "\"")
-    .replace(/&#x201D;/g, "\"")
-    .replace(/&#xAD;/g, "-")
-    .replace(/&apos;/g, "\'")
-    .replace(/&#x200A;/g, "–")
+    // catch-all for other hexadecimal char patterns, replacing them with a "-"
+    .replace(/&#?\w+;/g, "-")
 }
 
+// function to inspect text after it has gone through stripper, and insert spaces in order to facilitate polly reading
+const postStripSpacing = function(textInput) {
+  let parenChar = /(\))(\w)/g
+  let dotCaps = /\.([A-Z])/g  
+  return textInput
+    .replace(parenChar, "$1 $2") // e.g., before(")a") => after(") a")
+    .replace(dotCaps, "\.\s$1") // e.g., before(".A") => after(". A") // DOT - MELO
+}
 
-
-
-
-module.exports = {
-  errors: errors,
-  domainExtractor: domainExtractor,
-  dbStats: dbStats,
-  readcastBuilder: readcastBuilder,
-  unescapeHtml: unescapeHtml
+module.exports = { 
+  errors, 
+  domainExtractor, 
+  dbStats, 
+  readcastBuilder, 
+  textInspector, 
+  preStripSpacing,
+  unescapeHex,
+  postStripSpacing
 };
+
