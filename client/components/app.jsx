@@ -5,6 +5,7 @@ import axios from 'axios';
 import ToggleDisplay from 'react-toggle-display';
 
 import Title from './Title.jsx';
+import LogoutButton from './LogoutButton.jsx';
 import Subtitle from './Subtitle.jsx';
 import WhichView from './WhichView.jsx';
 // import HeaderNavigation from './Navbar.jsx';

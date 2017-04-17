@@ -2,13 +2,14 @@ const db = require('../dbConfig');
 const Users = require('../collections/users');
 const User = require('../models/user');
 
-const getByID = function(id) {
-  console.log('get by ID ', id);
+const findById = function(id) {
+  console.log('find by ID ', id);
   return db.knex('Users')
     .where({ id: id })
-    .then(function(id){
-      console.log(id)
-      return id;
+    .then(function(user){
+      console.log('this thaaaa user:')
+      console.log(user[0])
+      return user[0];
     })
     .catch(function(err){
       console.error(err)
@@ -43,6 +44,10 @@ const addUser = function(email,password,firstName,lastName,phone,voicePref,avata
       avatar: avatar,
     }
   )
+  .then(function() {
+    const user = db.knex('Users').where({ email: email });
+    return user;
+  })
   .catch(function(err) {
     console.error(err)
   });
@@ -54,7 +59,7 @@ const addUser = function(email,password,firstName,lastName,phone,voicePref,avata
 };
 
 module.exports= {
-  getByID,
+  findById,
   findByEmail,
   addUser
 };
