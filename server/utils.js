@@ -31,18 +31,10 @@ const dbStats = function(dbContents) {
   var highest = 0;
   var highestArray = [];
   var numOfHighestCountsToTrack = 25;
-  var articlesWithUnicode = [];
-  var articlesWithApos = [];
 
   var avg1 = function(arr) {
     for(var item of arr) {
-      if(item.text.includes('&#x')) {
-        articlesWithUnicode.push(item["id"]);
-      };
-      if(item.text.includes('&apos')) {
-        articlesWithApos.push(item["id"]);
-      };
-    // console.log('\narticle text = ', item["text"]);
+    // console.log('\narticle id = ', item["id"]);
     // console.log('article word count = ', item["word_count"]);
       count++;
       total+= item["word_count"]
@@ -59,9 +51,7 @@ const dbStats = function(dbContents) {
     console.log('\n\nTotal # words in all articles in db = ', total);
     console.log('# of articles in db = ', count);
     console.log('Average word count = ', Math.floor(total / count));
-    console.log('\n', numOfHighestCountsToTrack, ' articles with highest word counts: ', highestArray);
-    console.log('\nArticles w/ unicode in text (by id#): ', articlesWithUnicode);
-    console.log('\nArticles w/ &apos in text (by id#): ', articlesWithApos);
+    // console.log('\n', numOfHighestCountsToTrack, ' articles with highest word counts: ', highestArray);
   };
   avg1(dbContents);
 
@@ -78,10 +68,10 @@ const dbStats = function(dbContents) {
 
     for(var z=0; z < arr.length; z++) {
       var newAvg = Math.floor((total - reduction(arr[z])) / (count - arr[z]));
-      console.log('i.e., the avg. word count if we remove the ', arr[z], ' longest articles = ', newAvg);
+      // console.log('i.e., the avg. word count if we remove the ', arr[z], ' longest articles = ', newAvg);
     }
   }
-  variedAverages([25, 10, 7, 5, 3, 1]) // these are the scenarios to run: # of highest word counts to remove
+  variedAverages([10, 7, 5, 3, 1]) // these are the scenarios to run: # of highest word counts to remove
 };
 
 
@@ -94,9 +84,9 @@ const readcastBuilder = function(articleObj) {
 const unescapeHtml = function(unsafe) {
   return unsafe
     .replace(/&#x22;/g, "\"")
-    .replace(/&#x2013;/g, "–")
+    .replace(/&#x2013;/g, "–")    
     .replace(/&#x2014;/g, "—")
-    .replace(/&#x2018;/g, "\'")
+    .replace(/&#x2018;/g, "\'")    
     .replace(/&#x2019;/g, "\'")
     .replace(/&#x2026;/g, "...")
     .replace(/&#x201C;/g, "\"")

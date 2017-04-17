@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {Button, Col, FormControl, FormGroup, Row} from 'react-bootstrap';
-import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 
 class ArticleEntry extends React.Component {
 	constructor(props) {
@@ -60,7 +59,7 @@ class ArticleEntry extends React.Component {
 		if (!this.state.method || !this.state.voice) {
 			alert('Please be sure to choose both a voice and a delivery method!');
 		} else {
-			this.props.toggleConvert(); // app.js l 245: toggleConvert() {this.setState({isConverting: true});}
+			this.props.toggleConvert();
 			let articleObj = {
 				method: this.state.method,
 				voice: this.state.voice,
@@ -72,7 +71,7 @@ class ArticleEntry extends React.Component {
 
 	render() {
 		return (
-			<Row> 
+			<Row>
 				<Col md={12} className="list-group-item article-entry">
 					<Col md={3} className="articleImage">
 						{!this.props.topStoryMode && this.props.article.image && <img className="article-sampleImage img-responsive img-rounded center-block" src={this.props.article.image} />}
