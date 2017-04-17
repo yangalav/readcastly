@@ -64,8 +64,8 @@ class App extends React.Component {
 				stream: 'stream',
 				link: 'link',
 				email: 'arfechner@gmail.com',
-				phone: '+19734602180'
-				// first_name:,
+				phone: '+19734602180',
+				first_name: 'Andrew',
 				// voice_pref: 'Mama'
 				// avatar:,
 			},
@@ -78,6 +78,15 @@ class App extends React.Component {
       sources: "pull-from-api" // in server/routes.js /topStories this invokes newsApiImport & sends request for articles from ars-technica (to be updated)
 		};
 	}
+
+  getCurrentUser(){
+    return axios.get('/api/login')
+    .then((res) => {
+      console.log('Here is the current user data! : ');
+      console.log(res.data);
+      return;
+    });
+  }
 
 	addDeliveryMethods(){
 		if (this.state.user.email) {
@@ -254,7 +263,8 @@ class App extends React.Component {
 		return(
 			<div className="modal-container">
 			  <br></br>
-				<Subtitle subtitle='your reading backlog solved'/>
+				<LogoutButton />
+				<Subtitle getCurrentUser={this.getCurrentUser.bind(this)} user={this.state.user} subtitle='your reading backlog solved.'/>
 				{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
 				<TransFormEr postIt={this.postUserLink.bind(this)} isLoading={this.state.isLoading} toggleLoading={this.toggleLoading.bind(this)}/>
 
