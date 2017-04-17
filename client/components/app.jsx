@@ -12,7 +12,7 @@ import WhichView from './WhichView.jsx';
 // {import SignupButton from './SignupButton'; }
 import SignUpForm from './SignupForm.jsx';
 import TransFormEr from './TransFormer.jsx';
-import ArticleList from './ArticleList.jsx';
+import SortableList from './ArticleList.jsx';
 import ArticleEntry from './ArticleEntry.jsx';
 import TopStories from './TopStories.jsx';
 import Player from './Player.jsx';
@@ -21,6 +21,8 @@ import MembersOnly from './MembersOnly.jsx';
 import GuestMode from './GuestMode.jsx';
 import isValidUrl from '../helpers/urlValidation.js';
 import {Loading, ErrorAlert} from './Alerts.jsx';
+
+import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 
 const exportOptions = {
     voices : [
@@ -43,7 +45,7 @@ const exportOptions = {
       {flag: 'in', name: 'Raveena'},
       {name: '--Welsh English--'},
       {flag: 'wa', name: 'Geraint'},
-      {name: '--Japanese English--'},   
+      {name: '--Japanese English--'},
       {flag: 'jp', name: 'Mizuki'}
     ],
     methods : [
@@ -112,7 +114,18 @@ class App extends React.Component {
 					if (article.publication_date) {article.publication_date = this.cleanDate(article.publication_date)};
 					article.est_time = this.cleanTime(article.est_time);
 				});
-				this.setState({ isLoading: false, library: (res.data.reverse()) });
+        var smallerDataSet = // temp logic to reduce the size of what's rendered from 800+ artcles to 200
+
+          function(data) {
+          var subset = [];
+          for(var x=0; x<201; x++) {
+            subset.push(data[x]);
+          }
+          console.log('subset array of 200 = ', subset);
+          return subset;
+        }
+      	// this.setState({ isLoading: false, library: (res.data.reverse()) });
+         this.setState({ isLoading: false, library: (smallerDataSet(res.data.reverse())) });
 			})
 			.catch((err) => this.setState({ failMessage: ('Unable to retrieve articles'), hasErrored: true }));
 	}
@@ -198,6 +211,7 @@ class App extends React.Component {
 
 // {for deleting a single article}
 	deleteArticle(url) {
+    console.log('in app.js l. 214. deleteArticle invoked...');
 		// {this.setState({ isLoading: true });}
 		axios.post('/deleteOne', { userId: this.state.user.id, url: url })
 		.then((res) => {
@@ -213,6 +227,7 @@ class App extends React.Component {
 //     article: { /* complete article object */ }
 // };
 	convertArticle(articleObject) {
+    console.log('in app.js l. 230. convertArticle invoked...');
 		let exportObj = {
 			userId: this.state.user.id,
 			destination: this.state.user[articleObject.method],
@@ -280,8 +295,14 @@ class App extends React.Component {
     // this.getTopStories();
 	}
 
-	render() {
+  onSortEnd ({oldIndex, newIndex}) {
+     this.setState({
+       library: arrayMove(this.state.library, oldIndex, newIndex),
+     });
+   };
 
+	render() {
+      console.log('this.state = ', this.state);
 		return(
 			<div className="modal-container">
 			  <br></br>
@@ -294,7 +315,7 @@ class App extends React.Component {
 					<WhichView toggleView={this.toggleView.bind(this)} topStoryMode={this.state.topStoryMode}/>
 					{/*this.state.isLoading && <Loading />*/}
 					<ToggleDisplay show={!this.state.topStoryMode}>
-						<ArticleList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} toggleMembersOnly={this.toggleMembersOnly.bind(this)} />
+						<SortableList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} toggleMembersOnly={this.toggleMembersOnly.bind(this)} onSortEnd={this.onSortEnd.bind(this)} />
 					</ToggleDisplay>
 
 					<ToggleDisplay show={this.state.topStoryMode}>

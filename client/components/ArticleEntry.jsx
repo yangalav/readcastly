@@ -56,6 +56,7 @@ class ArticleEntry extends React.Component {
 	showInfo() {console.log('article:', this.props.article);};
 
 	export() {
+		console.log('ArticleEntry l59: export invoked...');
 		if (!this.state.method || !this.state.voice || this.state.method === 'banana' || this.state.voice === 'banana') {
 			alert('Please be sure to choose both a voice and a delivery method!');
 		}
