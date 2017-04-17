@@ -102,13 +102,19 @@ module.exports = function(app, express, passport) {
   });
 
   app.get('/api/login', function(req, res) {
-    res.send('this is our login page :)');
+    console.log('this is our login page :)');
+    res.send(req.body);
+    ;
   });
 
   app.get('/api/', function(req, res) {
     console.log('RENDER INDEX')
     app.use(express.static(path.join(__dirname, '../client')));
-    res.sendFile(path.join(__dirname, '../client/index.html'))
+    console.log('This is the userrrr :) :) :) ')
+    console.log(req.user);
+    res.sendFile(path.join(__dirname, '../client/index.html'), {
+      user: req.user,
+    });
   });
 
   app.post('/api/signup',
