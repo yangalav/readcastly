@@ -1,6 +1,6 @@
-/* controller for Amazon Polly API */
+/* pollyController.js: for interacting with Amazon Polly API */
 
-// 1. Load SDK, set config variables, then create a Polly Instance;
+// 1. Load AWS-SDK; set config variables; create a Polly Instance;
 require('dotenv').config();
 const Promise = require('bluebird')
 const AWS = require('aws-sdk')
@@ -88,20 +88,25 @@ const textToSpeech = (req, res, callback) => {
   let text = pollyHelpers.strHeadCleaner(convertedTextIn);
   log(line, 'BACK-D-textToSpeech: typeof TEXT>>>: ', typeof text)  /* FOR DEBUGGING */
   
+  // turn string into array, in order to count words total
   var roughWords = text.split(" ");
   var words = pollyHelpers.arrHeadCleaner(roughWords);
-  // log(line, 'BACK-D2-textToSpeech: WORDS>>>: ', words); // LOTS  /* FOR DEBUGGING */
+  log(line, 'BACK-D2-textToSpeech: WORDS>>>: ', words); // LOTS  /* FOR DEBUGGING */
   log(line, 'BACK-D2-words.length: ', words.length);  /* FOR DEBUGGING */
 
   // ...Check length of desired text to send to Polly; If longer than 230 words, break up into subarrays.
   var textArray = pollyHelpers.chopper(words, text, 230);
 
-  // log(line, 'BACK-E-TEXT-ARRAY: >>>>>>>>> ', textArray); // LOTS /* FOR DEBUGGING */
+  // ... clean the title, then add it to the front of textArray.
+  var titleText = pollyHelpers.strHeadCleaner(articleTitle);
+  textArray[0] = titleText + '. ' + textArray[0];
+
+  log(line, 'BACK-E-TEXT-ARRAY: >>>>>>>>> ', textArray); // LOTS /* FOR DEBUGGING */
   log(line, 'BACK-E-textToSpeech: voiceId: ', voiceId, ' text: ', text, ' filename: ', filename) /* FOR DEBUGGING */
 
   // ...make (multiple) asynchronous calls, managed with Promise.all, 
   Promise.all(textArray.map(function(item) {
-    // log('\nONE ITEM being mapped to generatePollyAudio call: ==> ', item) // LOTS /* FOR DEBUGGING */
+    log('\nONE ITEM being mapped to generatePollyAudio call: ==> ', item) // LOTS /* FOR DEBUGGING */
     // ... SEE #2 (ABOVE): to feed segments of text into polly, generating audio data for each of them
     return generatePollyAudio(item, voiceId)
   }))

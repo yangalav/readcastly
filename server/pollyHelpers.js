@@ -1,4 +1,4 @@
-/* pollyHelpers.js: a file of helper methods used in pollyController */
+/* pollyHelpers.js: a file of helper methods used in pollyController.js */
 
 // function to convert hexadecimal character codes into their character equivalents; 
 const unescapeTextAgain = function(unsafe) {
@@ -43,11 +43,10 @@ const chopper = (arr, text, maxWords) => {
 // method to remove any leading white-spaces and carriage-returns from string input
 const strHeadCleaner = (str) => {
   let result = str.slice();
-  let index = 0;
-  console.log('result.length: ', result.length); //***
-  while(result[index] === '\n' || result[index] === ' ') index++;
-  console.log('index: ', index); //***
-  if (index > 0) result = result.slice(index);
+  // console.log('result.length: ', result.length); /* FOR DEBUGGING */
+  let startIndex = str.search(/\w/);
+  (startIndex > 0) && (result = result.slice(startIndex));
+  // console.log('startIndex: ', startIndex); /* FOR DEBUGGING */ 
   return result;
 }
 
