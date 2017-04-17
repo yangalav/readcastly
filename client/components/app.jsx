@@ -43,7 +43,7 @@ const exportOptions = {
       {flag: 'in', name: 'Raveena'},
       {name: '--Welsh English--'},
       {flag: 'wa', name: 'Geraint'},
-      {name: '--Japanese English--'},   
+      {name: '--Japanese English--'},
       {flag: 'jp', name: 'Mizuki'}
     ],
     methods : [
@@ -70,7 +70,7 @@ class App extends React.Component {
 				link: 'link',
 				email: 'arfechner@gmail.com',
 				phone: '+19734602180',
-				first_name: 'Andrew',
+				first_name: 'Guest',
 				// voice_pref: 'Mama'
 				// avatar:,
 			},
@@ -86,12 +86,27 @@ class App extends React.Component {
 	}
 
   getCurrentUser(){
-    return axios.get('/api/login')
+    console.log('jerry sucks');
+    return axios.get('/api/getUserInfo')
     .then((res) => {
       console.log('Here is the current user data! : ');
       console.log(res.data);
-      return;
-    });
+      if(res.data) {
+        this.setState({
+        user: {
+          id: res.data.id,
+          stream: 'stream',
+  				link: 'link',
+  				email: res.data.email,
+  				phone: res.data.phone,
+  				first_name: res.data.first_name,
+        }
+       })
+      }
+      this.addDeliveryMethods();
+      this.getReadingList();
+      this.getTopStories();
+    })
   }
 
 	addDeliveryMethods(){
@@ -105,7 +120,9 @@ class App extends React.Component {
 
 	// {for getting entire article list}
 	getReadingList() {
+    console.log('USER: ', this.state.user)
 		this.setState({ isLoading: true });
+    console.log('this is the user id for libraryyyyy: ' + this.state.user.id)
 		axios.get('/getAll', {params: {userId: this.state.user.id} })
 			.then((res) => {
 				res.data.forEach((article) => {
@@ -247,6 +264,10 @@ class App extends React.Component {
 			})
 			.catch ((err) => console.log('ERROR GETTING TOP STORIES SOURCES', err))
 	}
+
+  componentWillMount() {
+    this.getCurrentUser();
+  }
 
 	toggleView() {
 		let currentState = this.state.topStoryMode;
