@@ -20,7 +20,8 @@ import Confirm from './confirm.jsx';
 import MembersOnly from './MembersOnly.jsx';
 import GuestMode from './GuestMode.jsx';
 import isValidUrl from '../helpers/urlValidation.js';
-import {Loading, ErrorAlert} from './Alerts.jsx';
+// import {Loading, ErrorAlert} from './Alerts.jsx';
+import Loading from 'react-loading';
 
 const exportOptions = {
     voices : [
@@ -43,7 +44,7 @@ const exportOptions = {
       {flag: 'in', name: 'Raveena'},
       {name: '--Welsh English--'},
       {flag: 'wa', name: 'Geraint'},
-      {name: '--Japanese English--'},   
+      {name: '--Japanese English--'},
       {flag: 'jp', name: 'Mizuki'}
     ],
     methods : [
@@ -52,13 +53,16 @@ const exportOptions = {
     ]
   }
 
+ let randomId = 10**9;
+
 class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isGuest: false,
+			isGuest: true,
 			library: [],
 			headlines: [],
+			gettingHeadlines: false,
 			hasErrored: false,
 			isLoading: false,
 			isConverting: false,
@@ -79,7 +83,6 @@ class App extends React.Component {
 			lastUrl: '',
 			lastLink: '',
 			topStoryMode: false,
-			sources: "pull-from-api", // in server/routes.js /topStories this invokes newsApiImport & sends request for articles from ars-technica (to be updated)
 			topStoriesSources: [],
 			showMembersOnly: false,
 		};
@@ -112,26 +115,9 @@ class App extends React.Component {
 					if (article.publication_date) {article.publication_date = this.cleanDate(article.publication_date)};
 					article.est_time = this.cleanTime(article.est_time);
 				});
-				this.setState({ isLoading: false, library: (res.data.reverse()) });
+				this.setState({ isLoading: false, library: (res.data.reverse()).slice(0,10) });
 			})
 			.catch((err) => this.setState({ failMessage: ('Unable to retrieve articles'), hasErrored: true }));
-	}
-
-	getTopStories(){
-    console.log('app.js getTopStories, l 102. about to make GET req...');
-		this.setState({ isLoading: true });
-		axios.get('/topStories', {params: {sources: this.state.sources}})
-		.then((res) => {
-      console.log('app.js getTopStories, l 105. res from BE = ', res.data);
-				res.data.forEach((article) => {
-					if (article.publishedAt) {article.publishedAt = this.cleanDate(article.publishedAt)};
-					article.est_time = this.cleanTime(article.est_time);
-				});
-				this.setState({ isLoading: false, headlines: (res.data) });
-        console.log('app.js getTopStories, l 112. cleaned date data =', res.data);
-        console.log('app.js getTopStories, l 112. [0]description =', res.data[0].description);
-			})
-			.catch((err) => this.setState({ failMessage: ('Unable to retrieve headlines'), hasErrored: true }));
 	}
 
 	cleanDate(entry) {
@@ -159,7 +145,7 @@ class App extends React.Component {
 
 // {for posting new links}
 	postUserLink(url) {
-		this.setState({hasErrored: false, failMessage: ''});
+		// this.setState({hasErrored: false, failMessage: ''});
 		if (!isValidUrl(url)) {
 			this.setState({ failMessage: ('Not a valid url: ' + url), hasErrored: true });
 			return;
@@ -271,13 +257,33 @@ class App extends React.Component {
 		this.setState({showMembersOnly: !currentState});
 	}
 
-	// {invokes ajax call to fetch data for the ArticleList component}
+	toggleHeadlines() {
+		this.setState({gettingHeadlines: true});
+	}
+
+	getHeadlines(source) {
+    axios.post('/topStories', {source: source, headlineMode: true})
+      .then((res) => {
+        res.data.forEach((article) => {
+          if (article.publication_date) {
+            article.publication_date = this.cleanDate(article.publication_date);
+          }
+          article.est_time = this.cleanTime(article.est_time);
+           randomId++
+           article.id = randomId;
+         });
+        this.setState({ headlines: res.data}, function() {
+          this.setState({gettingHeadlines: false});
+        });
+      })
+      .catch((err) => console.log('Unable to retrieve headlines', err));
+  }
+
 	componentDidMount() {
 		this.addDeliveryMethods();
 		this.getReadingList();
 		this.getTopStoriesSources();
-						// console.log('app.js getReadingList l 42. full db returned: ', res.data;
-    // this.getTopStories();
+		this.getHeadlines('google-news');
 	}
 
 	render() {
@@ -294,16 +300,24 @@ class App extends React.Component {
 					<WhichView toggleView={this.toggleView.bind(this)} topStoryMode={this.state.topStoryMode}/>
 					{/*this.state.isLoading && <Loading />*/}
 					<ToggleDisplay show={!this.state.topStoryMode}>
-						<ArticleList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} toggleMembersOnly={this.toggleMembersOnly.bind(this)} />
+						<ArticleList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} toggleMembersOnly={this.toggleMembersOnly.bind(this)} addIt={this.postUserLink.bind(this)}/>
 					</ToggleDisplay>
 
 					<ToggleDisplay show={this.state.topStoryMode}>
-						<TopStories getTopStories={this.getTopStories.bind(this)} headlines={this.state.headlines} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} />
+						<TopStories user={this.state.user} isGuest={this.state.isGuest} cleanDate={this.cleanDate.bind(this)} cleanTime={this.cleanTime.bind(this)} topStoriesSources={this.state.topStoriesSources} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} toggleMembersOnly={this.toggleMembersOnly.bind(this)} addIt={this.postUserLink.bind(this)} headlines={this.state.headlines} toggleHeadlines={this.toggleHeadlines.bind(this)} getHeadlines={this.getHeadlines.bind(this)} />
+						{this.state.gettingHeadlines &&
+          			<div id="loadingOverlay">
+            			<Loading type="spin" color="red" />
+          			</div>}
 					</ToggleDisplay>
 				</ToggleDisplay>
 
 				<ToggleDisplay show={this.state.isGuest}>
-						<GuestMode isGuest={this.state.isGuest} cleanDate={this.cleanDate.bind(this)} cleanTime={this.cleanTime.bind(this)} topStoriesSources={this.state.topStoriesSources} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} toggleMembersOnly={this.toggleMembersOnly.bind(this)}/>
+						<GuestMode isGuest={this.state.isGuest} cleanDate={this.cleanDate.bind(this)} cleanTime={this.cleanTime.bind(this)} topStoriesSources={this.state.topStoriesSources} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} toggleMembersOnly={this.toggleMembersOnly.bind(this)} addIt={this.postUserLink.bind(this)} headlines={this.state.headlines} toggleHeadlines={this.toggleHeadlines.bind(this)} getHeadlines={this.getHeadlines.bind(this)} />
+						{this.state.gettingHeadlines &&
+          		<div id="loadingOverlay">
+            		<Loading type="spin" color="red" />
+          		</div>}
 				</ToggleDisplay>}
 
 				<div id="player_container">
@@ -325,3 +339,23 @@ export default App;
 		// <Title title='Read.Cast.ly'/>
 
 					// <div id="navbar"></div>
+
+
+
+	// getTopStories(){
+ //    console.log('app.js getTopStories, l 102. about to make GET req...');
+	// 	this.setState({ isLoading: true });
+	// 	axios.get('/topStories', {params: {sources: this.state.sources}})
+	// 	.then((res) => {
+ //      console.log('app.js getTopStories, l 105. res from BE = ', res.data);
+	// 			res.data.forEach((article) => {
+	// 				if (article.publishedAt) {article.publishedAt = this.cleanDate(article.publishedAt)};
+	// 				article.est_time = this.cleanTime(article.est_time);
+	// 			});
+	// 			this.setState({ isLoading: false, headlines: (res.data) });
+ //        console.log('app.js getTopStories, l 112. cleaned date data =', res.data);
+ //        console.log('app.js getTopStories, l 112. [0]description =', res.data[0].description);
+	// 		})
+	// 		.catch((err) => this.setState({ failMessage: ('Unable to retrieve headlines'), hasErrored: true }));
+	// }
+

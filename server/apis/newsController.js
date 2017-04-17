@@ -59,7 +59,7 @@ const newsApiBuilder = function(source,callback) {
     // .catch(function(error){console.log('ERROR BUILDING NEWSAPI REQUEST OBJ ', error);});
 };
 
-const guestStories = function(source,res) {
+const topStories = function(source, headlineMode, res) {
     var options = {};
     newsApiBuilder(source, function(optionsObj){
       options = optionsObj;
@@ -93,7 +93,7 @@ const guestStories = function(source,res) {
         };
         parsedNewsObj.articles.forEach(function(article) {
           // console.log('ARTICLE BEING PROCESSED === ', article.title);
-          mercury.parseAndSave(99, article.url, true, function(result) {
+          mercury.parseAndSave(99, article.url, headlineMode, function(result) {
             // console.log('results for : ', article.url, result.title)
             bundler(result);
           });
@@ -103,8 +103,4 @@ const guestStories = function(source,res) {
 }
 
 
-module.exports = {
-  newsApiImport : newsApiImport,
-  newsApiBuilder: newsApiBuilder,
-  guestStories: guestStories
-};
+module.exports = { newsApiImport, newsApiBuilder, topStories };
