@@ -24,10 +24,19 @@ const optionsBuilder = function(url) {
     };
 };
 
-
 const articleObjFinisher = function(obj,source) {
   obj.title = source.title;
-  obj.text = stripper(source.content);
+  // NOTE: a series of console.log statements that follow (below) track the changes before and after each step in processing the article text
+  console.log('======articleObjFinisher-A -- PRE-STRIP-source.content: ', source.content); /* MH: DEBUGGING */
+  // ...put text through the stripper module, to strip away html tags from the article text
+  const strippedText = stripper(source.content);
+  console.log('======articleObjFinisher-B -- POST-STRIP-strippedText: ', strippedText); /* MH: DEBUGGING */
+  // ...put stripped test through unescapeHex function to remove/replace hex character codes
+  const strippedUnescapedText = utils.unescapeHex(strippedText);
+  console.log('======articleObjFinisher-C -- POST-Unescaped-strippedUnescapedText: ', strippedUnescapedText); /* MH: DEBUGGING */
+  // ...put strippedUnescapedText through another function to fix spacing issues
+  obj.text = utils.postStripSpacing( strippedUnescapedText );   
+  console.log('======articleObjFinisher-D -- postStripSpacing: ', obj.text); /* MH: DEBUGGING */
   obj.author = source.author || "Dave Winfield" // "Author not available";
   obj.publication_date = source.date_published;
   obj.image = source.lead_image_url ||   "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcT8-E0VKkso9wu60MnVZor7_HqEJIAm8DMB6iJGgFvG1m57WHz0";
@@ -41,6 +50,7 @@ const articleObjFinisher = function(obj,source) {
 const parseAndSave = function(userId, url, guestMode, callback){
   let article = articleObjStarter(url,userId);
   request(optionsBuilder(url), function(error, response, body) {
+    // error if request doesn't go through
     if(error) {
         console.log('routes.js l 20, GET req to Mercury. error! = ', error);
         res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
@@ -48,27 +58,40 @@ const parseAndSave = function(userId, url, guestMode, callback){
     try {
         // console.log('routes.js l24, in try block after Mercury response...');
         var parsedBody = JSON.parse(body);
-        // console.log('...result: parsedBody = ', parsedBody);
+        console.log('======MERC-CONTROLLER-...result: parsedBody = ', parsedBody); //***
         if(parsedBody === null) {
           callback(utils.errors.mercuryCantParse);
           return;
         }
+        // error if mercury responds eith error
       } catch (parseError) {
         console.log('routes.js l28, in catch block, try block not able to parse Mercury response. parseError = ', parseError, '\n\n');
-        var parsedBody;
+        // var parsedBody;
         callback(utils.errors.mercuryCantParse);
         return;
       }
     if (parsedBody.error) {
       callback(utils.errors.badUrl);
     } else {
-      article = articleObjFinisher(article,parsedBody);
-      Articles.create(article, guestMode, function(result){
+
+      console.log('=======PARSEDBODY A-PRE=======>>>: ', parsedBody); /* MH: DEBUGGING */
+      console.log('=======PARSEDBODY.content A.1 =======typeof >>>: ', typeof parsedBody.content); /* MH: DEBUGGING */
+
+      // ...call utils method to address spacing issues in html, before sending it to stripper module
+      parsedBody.content = utils.preStripSpacing(parsedBody.content);
+      console.log('=======PARSEDBODY B-Spaced =======>>>: ', parsedBody); /* MH: DEBUGGING */
+      console.log('=======PARSEDBODY.content B.1 =======typeof >>>: ', typeof parsedBody.content); /* MH: DEBUGGING */
+  
+      // ...send article through articleObjFinisher method, above
+      article = articleObjFinisher(article, parsedBody); 
+
+      // ...send article object on to database/controllers/articlesController.js
+      Articles.create(article, guestMode, function(result){ // ORIGINAL!
         callback(result);
       });
     }
   })
 };
 
-
 module.exports = { parseAndSave : parseAndSave };
+
