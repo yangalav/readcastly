@@ -11,15 +11,13 @@ import WhichView from './WhichView.jsx';
 // {import SignupButton from './SignupButton'; }
 import SignUpForm from './SignupForm.jsx';
 import TransFormEr from './TransFormer.jsx';
-import SortableList from './ArticleList.jsx';
+import ArticleList from './ArticleList.jsx';
 import ArticleEntry from './ArticleEntry.jsx';
 import TopStories from './TopStories.jsx';
 import Player from './Player.jsx';
 import Confirm from './confirm.jsx';
 import isValidUrl from '../helpers/urlValidation.js';
 import {Loading, ErrorAlert} from './Alerts.jsx';
-
-import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 
 const exportOptions = {
     voices : [
@@ -95,39 +93,28 @@ class App extends React.Component {
 		this.setState({ isLoading: true });
 		axios.get('/getAll', {params: {userId: this.state.user.id} })
 			.then((res) => {
-        // console.log('res.data before clean: ', res.data);
 				res.data.forEach((article) => {
 					if (article.publication_date) {article.publication_date = this.cleanDate(article.publication_date)};
 					article.est_time = this.cleanTime(article.est_time);
 				});
-        var smallerDataSet = function(data) {
-          // console.log('app.js, smallerDataSet. data = ', data);
-          var subset = [];
-          for(var x=0; x<21; x++) {
-            subset.push(data[x]);
-          }
-          console.log('subset array of 20 = ', subset);
-          return subset;
-        }
-				// this.setState({ isLoading: false, library: (res.data.reverse()) });
-        this.setState({ isLoading: false, library: (smallerDataSet(res.data.reverse())) });
+				this.setState({ isLoading: false, library: (res.data.reverse()) });
 			})
 			.catch((err) => this.setState({ failMessage: ('Unable to retrieve articles'), hasErrored: true }));
 	}
 
 	getTopStories(){
-    console.log('app.js getTopStories, l 110. about to make GET req...');
+    console.log('app.js getTopStories, l 102. about to make GET req...');
 		this.setState({ isLoading: true });
 		axios.get('/topStories', {params: {sources: this.state.sources}})
 		.then((res) => {
-      console.log('app.js getTopStories, l 114. res from BE = ', res.data);
+      console.log('app.js getTopStories, l 105. res from BE = ', res.data);
 				res.data.forEach((article) => {
 					if (article.publishedAt) {article.publishedAt = this.cleanDate(article.publishedAt)};
 					article.est_time = this.cleanTime(article.est_time);
 				});
 				this.setState({ isLoading: false, headlines: (res.data) });
-        console.log('app.js getTopStories, l 120. cleaned date data =', res.data);
-        // console.log('app.js getTopStories, l 112. [0]description =', res.data[0].description);
+        console.log('app.js getTopStories, l 112. cleaned date data =', res.data);
+        console.log('app.js getTopStories, l 112. [0]description =', res.data[0].description);
 			})
 			.catch((err) => this.setState({ failMessage: ('Unable to retrieve headlines'), hasErrored: true }));
 	}
@@ -164,7 +151,7 @@ class App extends React.Component {
 		this.setState({ isLoading: true });
 		axios.post('/requrl', {userId: this.state.user.id, requrl: url})
 		.then((res) => {
-			this.setState({ isLoading: false, library: (this.addOne(res.data)) }); // QQ: THIS UPDATES ENTIRE LIBRARY, NOT JUST NEW ARTICLE, CORRECT?
+			this.setState({ isLoading: false, library: (this.addOne(res.data)) });
 			return;
 		})
 		.catch((err) => this.setState({ failMessage: (res.data.error || 'Unable to fetch that link'), hasErrored: true }));
@@ -262,14 +249,8 @@ class App extends React.Component {
 		this.setState({isConverting: true});
 	}
 
-  onSortEnd ({oldIndex, newIndex}) {
-     this.setState({
-       library: arrayMove(this.state.library, oldIndex, newIndex),
-     });
-   };
-
 	render() {
-console.log('this.state.library = ', this.state.library)
+
 		return(
 			<div className="modal-container">
 			  <br></br>
@@ -281,7 +262,7 @@ console.log('this.state.library = ', this.state.library)
 				{/*this.state.isLoading && <Loading />*/}
 
 				<ToggleDisplay show={!this.state.topStoryMode}>
-					<SortableList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} onSortEnd={this.onSortEnd.bind(this)}/>
+					<ArticleList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} />
 				</ToggleDisplay>
 
 				<ToggleDisplay show={this.state.topStoryMode}>
