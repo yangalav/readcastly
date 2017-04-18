@@ -9,7 +9,6 @@ class Confirm extends React.Component {
   render () {
     let close = () => this.props.toggleConfirm();
     let deleteClose = () => {
-      console.log('URL FOR MODAL === ', this.props.url);
       this.props.deleteArticle(this.props.url);
       this.props.toggleConfirm();
     }
