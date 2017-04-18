@@ -12,7 +12,7 @@ const session = require('express-session');
 const urlParser = bodyParser.urlencoded({extended: false});
 const jsonParser = bodyParser.json();
 // const request = require('request'); we shouldn't need this, as request now in routes (tested and works)
-// const news = require('./apis/newsController'); 
+// const news = require('./apis/newsController');
 
 //DO NOT REMOVE THE BELOW FUNCTION ... WE MAY NEED TO RUN IT AT SOME POINT IN THE FUTURE!!
 //news.newsApiImport();
