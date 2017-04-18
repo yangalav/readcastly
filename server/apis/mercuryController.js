@@ -35,7 +35,7 @@ const articleObjFinisher = function(obj,source) {
   const strippedUnescapedText = utils.unescapeHex(strippedText);
   console.log('======articleObjFinisher-C -- POST-Unescaped-strippedUnescapedText: ', strippedUnescapedText); /* MH: DEBUGGING */
   // ...put strippedUnescapedText through another function to fix spacing issues
-  obj.text = utils.postStripSpacing( strippedUnescapedText );   
+  obj.text = utils.postStripSpacing( strippedUnescapedText );
   console.log('======articleObjFinisher-D -- postStripSpacing: ', obj.text); /* MH: DEBUGGING */
   obj.author = source.author || "Dave Winfield" // "Author not available";
   obj.publication_date = source.date_published;
@@ -47,7 +47,7 @@ const articleObjFinisher = function(obj,source) {
   return obj;
 };
 
-const parseAndSave = function(userId, url, guestMode, callback){
+const parseAndSave = function(userId, url, headlineMode, callback){
   let article = articleObjStarter(url,userId);
   request(optionsBuilder(url), function(error, response, body) {
     // error if request doesn't go through
@@ -81,12 +81,12 @@ const parseAndSave = function(userId, url, guestMode, callback){
       parsedBody.content = utils.preStripSpacing(parsedBody.content);
       console.log('=======PARSEDBODY B-Spaced =======>>>: ', parsedBody); /* MH: DEBUGGING */
       console.log('=======PARSEDBODY.content B.1 =======typeof >>>: ', typeof parsedBody.content); /* MH: DEBUGGING */
-  
+
       // ...send article through articleObjFinisher method, above
-      article = articleObjFinisher(article, parsedBody); 
+      article = articleObjFinisher(article, parsedBody);
 
       // ...send article object on to database/controllers/articlesController.js
-      Articles.create(article, guestMode, function(result){ // ORIGINAL!
+      Articles.create(article, headlineMode, function(result){ // ORIGINAL!
         callback(result);
       });
     }

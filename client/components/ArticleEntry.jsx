@@ -30,7 +30,7 @@ class ArticleEntry extends React.Component {
 		this.setState({voice: voice.target.value}, () => console.log(this.state));
 	}
 
-	voiceMenu() {return (this.makeVoiceMenu(this.props.exportOptions.voices));}
+	// voiceMenu() {return (this.makeVoiceMenu(this.props.exportOptions.voices));}
 
 	makeExportMenu(methods) {
 		return(
@@ -51,9 +51,13 @@ class ArticleEntry extends React.Component {
 		this.setState({method: method.target.value}, () => console.log(this.state));
 	}
 
-	exportMenu() {return (this.makeExportMenu(this.props.exportOptions.methods));};
+	// exportMenu() {return (this.makeExportMenu(this.props.exportOptions.methods));};
 
-	showInfo() {console.log('article:', this.props.article);};
+	// showInfo() {console.log('article:', this.props.article);};
+
+	localAdd() {
+		this.props.addIt(this.props.article.url);
+	}
 
 	export() {
 		if (!this.state.method || !this.state.voice || this.state.method === 'banana' || this.state.voice === 'banana') {
@@ -77,8 +81,7 @@ class ArticleEntry extends React.Component {
 			<Row>
 				<Col md={12} className="list-group-item article-entry">
 					<Col md={3} className="articleImage">
-						{!this.props.topStoryMode && this.props.article.image && <img className="article-sampleImage img-responsive img-rounded center-block" src={this.props.article.image} />}
-						{this.props.topStoryMode && this.props.article.urlToImage && <img className="article-sampleImage-TS img-responsive img-rounded center-block" src={this.props.article.urlToImage} />}
+						<img className="article-sampleImage img-responsive img-rounded center-block" src={this.props.article.image} />
 					</Col>
 					<Col md={7} className="article-info">
 		  			{!this.props.topStoryMode && this.props.article.title && <div className="article-title"><span><a href={this.props.article.url}>{this.props.article.title}</a></span></div>}
@@ -86,22 +89,22 @@ class ArticleEntry extends React.Component {
 
 		  			{this.props.article.author && <div className="article-author"><span>{this.props.article.author}</span></div>}
 
-		  			{!this.props.topStoryMode && this.props.article.publication_date && <div className="article-publishDate"><span>{this.props.article.publication_date}</span></div>}
+		  			{this.props.article.publication_date && <div className="article-publishDate"><span>{this.props.article.publication_date}</span></div>}
 						{this.props.topStoryMode && this.props.article.publishedAt && <div className="article-publishDate"><span>{this.props.article.publishedAt}</span></div>}
 
 		  			{this.props.article.source_name && <div className="article-source"><span><i>{this.props.article.source_name}</i></span></div>}
 
-		  			{!this.props.topStoryMode && this.props.article.excerpt && <div className="article-excerpt"><span>Excerpt: </span><span>{this.props.article.excerpt }</span></div>}
-						{this.props.topStoryMode && this.props.article.description && <div className="article-excerpt"><span>Description: </span><span>{this.props.article.description }</span></div>}
+		  			{this.props.article.excerpt && <div className="article-excerpt"><span>Excerpt: </span><span>{this.props.article.excerpt }</span></div>}
+						{this.props.article.description && <div className="article-excerpt"><span>Description: </span><span>{this.props.article.description }</span></div>}
 
 		  			{!this.props.topStoryMode && !this.props.isGuest && <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.props.deleteIt(this.props.article.url)}>Remove From Library</Button>}
-		  			{(this.props.topStoryMode || this.props.isGuest) && <Button bsStyle="warning" bsSize="xsmall" onClick={this.props.isGuest ? this.props.toggleMembersOnly.bind(this) : this.props.convertIt(this.props.article.url)}>Add to Library</Button>}
+		  			{(this.props.topStoryMode || this.props.isGuest) && <Button bsStyle="warning" bsSize="xsmall" onClick={this.props.isGuest ? this.props.toggleMembersOnly.bind(this) : this.localAdd.bind(this)}>Add to Library</Button>}
 		  		</Col>
 		  	<Col md={2}>
 		  		<div className="article-buttons">
-						{!this.props.topStoryMode && this.props.article && this.voiceMenu()}
-						{!this.props.topStoryMode && this.props.article && this.exportMenu()}
-						{!this.props.topStoryMode && this.props.article && <Button bsStyle="success" onClick={!this.props.isConverting ? this.export.bind(this) : null} disabled={this.props.isConverting} block>{this.props.isConverting ? (<div>Stand by for your Readcast</div>) : (<div>Read To Me!<br /><i>Est. Time: {this.props.article.est_time}</i></div>)}</Button>}
+						{this.props.article && this.makeVoiceMenu(this.props.exportOptions.voices)}
+						{this.props.article && this.makeExportMenu(this.props.exportOptions.methods)}
+						{this.props.article && <Button bsStyle="success" onClick={!this.props.isConverting ? this.export.bind(this) : null} disabled={this.props.isConverting} block>{this.props.isConverting ? (<div>Stand by for your Readcast</div>) : (<div>Read To Me!<br /><i>Est. Time: {this.props.article.est_time}</i></div>)}</Button>}
 					</div>
 					</Col>
 		  	</Col>
