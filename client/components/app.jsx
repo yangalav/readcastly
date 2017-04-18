@@ -118,7 +118,7 @@ class App extends React.Component {
 
           function(data) {
           var subset = [];
-          for(var x=0; x<201; x++) {
+          for(var x=0; x<21; x++) {
             subset.push(data[x]);
           }
           console.log('subset array of 200 = ', subset);

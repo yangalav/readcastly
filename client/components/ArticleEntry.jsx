@@ -100,10 +100,13 @@ class ArticleEntry extends React.Component {
 		  		</Col>
 		  	<Col md={2}>
 		  		<div className="article-buttons">
+
 						{!this.props.topStoryMode && this.props.article && this.voiceMenu()}
 						{!this.props.topStoryMode && this.props.article && this.exportMenu()}
+
 						{this.props.article && <Button bsStyle="success" onClick={!this.props.isConverting ? this.export.bind(this) : null} disabled={this.props.isConverting} block>
-						</Button>}
+            {this.props.isConverting ? (<span>Stand by for your Readcast</span>) : (<span>Read To Me!<br /><i>Est. Time: {this.props.article.est_time}</i></span>)}</Button>}
+
 					</div>
 					</Col>
 		  	</Col>
@@ -114,16 +117,13 @@ class ArticleEntry extends React.Component {
 
 export default ArticleEntry;
 
-
 // {this.props.isConverting ? (<div>Stand by for your Readcast</div>) : (<div>Read To Me!<br /><i>Est. Time: {this.props.article.est_time}</i></div>)}
 
 // update from Andrew:
   // {this.props.article && <Button bsStyle="success" onClick={!this.props.isConverting ? this.export.bind(this) : null} disabled={this.props.isConverting} block>{this.props.isConverting ? (<div>Stand by for your Readcast</div>) : (<div>Read To Me!<br /><i>Est. Time: {this.props.article.est_time}</i></div>)}</Button>}
 
- // working minus the pending:
-  //{!this.props.topStoryMode && this.props.article && <Button bsStyle="success" onClick={!this.props.isConverting ? this.export.bind(this) : null} disabled={this.props.isConverting} > < /Button>}
-
- // {!this.props.topStoryMode && this.props.article && <Button bsStyle="success" onClick={!this.props.isConverting ? this.export.bind(this) : null} disabled={this.props.isConverting} block>{this.props.isConverting ? (<div>Stand by for your Readcast</div>) : (<div>Read To Me!<br /><i>Est. Time: {this.props.article.est_time}</i></div>)}</Button>}
+ // working minus the pending (Stand by for your Readcast : Read To Me!):
+  //{this.props.article && <Button bsStyle="success" onClick={!this.props.isConverting ? this.export.bind(this) : null} disabled={this.props.isConverting} block></Button>}
 
 
 // function ArticleEntry({article, deleteIt, convertIt}) {
