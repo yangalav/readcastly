@@ -12,7 +12,7 @@ import WhichView from './WhichView.jsx';
 // {import SignupButton from './SignupButton'; }
 import SignUpForm from './SignupForm.jsx';
 import TransFormEr from './TransFormer.jsx';
-import ArticleList from './ArticleList.jsx';
+import SortableList from './ArticleList.jsx';
 import ArticleEntry from './ArticleEntry.jsx';
 import TopStories from './TopStories.jsx';
 import Player from './Player.jsx';
@@ -23,6 +23,8 @@ import GuestMode from './GuestMode.jsx';
 import isValidUrl from '../helpers/urlValidation.js';
 import { ErrorAlert } from './Alerts.jsx';
 import Loading from 'react-loading';
+
+import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 
 const exportOptions = {
     voices : [
@@ -197,6 +199,7 @@ class App extends React.Component {
 
 // {for deleting a single article}
 	deleteArticle(url) {
+    console.log('in app.js l. 214. deleteArticle invoked...');
 		// {this.setState({ isLoading: true });}
 		axios.post('/deleteOne', { userId: this.state.user.id, url: url })
 		.then((res) => {
@@ -212,6 +215,7 @@ class App extends React.Component {
 //     article: { /* complete article object */ }
 // };
 	convertArticle(articleObject) {
+    console.log('in app.js l. 230. convertArticle invoked...');
 		let exportObj = {
 			userId: this.state.user.id,
 			destination: this.state.user[articleObject.method],
@@ -312,8 +316,14 @@ class App extends React.Component {
 		this.getHeadlines('google-news');
 	}
 
-	render() {
+  onSortEnd ({oldIndex, newIndex}) {
+     this.setState({
+       library: arrayMove(this.state.library, oldIndex, newIndex),
+     });
+   };
 
+	render() {
+      console.log('this.state = ', this.state);
 		return(
 			<div className="modal-container">
 			  <br></br>
@@ -326,7 +336,7 @@ class App extends React.Component {
 					<WhichView toggleView={this.toggleView.bind(this)} topStoryMode={this.state.topStoryMode}/>
 					{/*this.state.isLoading && <Loading />*/}
 					<ToggleDisplay show={!this.state.topStoryMode}>
-						<ArticleList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} toggleMembersOnly={this.toggleMembersOnly.bind(this)} addIt={this.postUserLink.bind(this)}/>
+						<SortableList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} toggleMembersOnly={this.toggleMembersOnly.bind(this)} onSortEnd={this.onSortEnd.bind(this)} addIt={this.postUserLink.bind(this)} />
 					</ToggleDisplay>
 
 					<ToggleDisplay show={this.state.topStoryMode}>
@@ -389,4 +399,3 @@ export default App;
 	// 		})
 	// 		.catch((err) => this.setState({ failMessage: ('Unable to retrieve headlines'), hasErrored: true }));
 	// }
-
