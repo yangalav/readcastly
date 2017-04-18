@@ -81,7 +81,7 @@ class ArticleEntry extends React.Component {
 			<Row>
 				<Col md={12} className="list-group-item article-entry">
 					<Col md={3} className="articleImage">
-						<img className="article-sampleImage img-responsive img-rounded center-block" src={this.props.article.image} />
+						<img className="article-sampleImage img-responsive img-rounded center-block" src={this.props.article.image} alt="../images/Readcastly-R.jpeg" />
 					</Col>
 					<Col md={7} className="article-info">
 		  			{!this.props.topStoryMode && this.props.article.title && <div className="article-title"><span><a href={this.props.article.url}>{this.props.article.title}</a></span></div>}
