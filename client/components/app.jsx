@@ -258,6 +258,7 @@ class App extends React.Component {
     // this.getTopStories();
 	}
 
+  //blaaaaahhhhhh
   componentWillMount() {
     this.getCurrentUser();
   }
