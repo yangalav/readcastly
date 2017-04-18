@@ -78,9 +78,7 @@ class ArticleEntry extends React.Component {
 			this.props.convertIt(articleObj);
 		}
 	}
-	testFn () {
-		return (this.props.isConverting ? (<span>Stand by for your Readcast</span>) : (<span>Read To Me!<br /><i>Est. Time: {this.props.article.est_time}</i></span>))
-	}
+	
 	render() {
 		return (
 			<Row>
