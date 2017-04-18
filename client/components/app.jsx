@@ -82,6 +82,7 @@ class App extends React.Component {
 			sources: "pull-from-api", // in server/routes.js /topStories this invokes newsApiImport & sends request for articles from ars-technica (to be updated)
 			topStoriesSources: [],
 			showMembersOnly: false,
+			isFiltered: false
 		};
 	}
 
@@ -173,6 +174,20 @@ class App extends React.Component {
 		})
 		.catch((err) => this.setState({ failMessage: (res.data.error || 'Unable to fetch that link'), hasErrored: true }));
 	}
+
+	filterArticles(userInput) {
+		let target = new RegExp(userInput, 'i'); /* note: 'i' is a RegEx flag, not 'i' for 'index' */
+		let lib = this.state.library;
+
+		this.setState({ isLoading: true, hasErrored: false, failMessage: '' });
+		// ...filter through library for articles containing user-provided search terms
+		let filtered = lib.filter(function(article) {
+			// ...for efficiency, check for match in title and excerpt before checking full article text
+			if (target.test(article.title) || target.test(article.excerpt) || target.test(article.text)) { return article; }
+		});
+		(filtered.length) ? this.setState({ isLoading: false, library: filtered }) : this.setState({ isLoading: false, hasErrored: true, failMessage: 'no articles found matching your search terms' })
+	}
+
 
 // {helper function for helper, deleteOne}
 	findIndex(array, url) {
@@ -272,6 +287,11 @@ class App extends React.Component {
 		this.setState({showMembersOnly: !currentState});
 	}
 
+	toggleFiltered() {
+		let currentState = this.state.isFiltered;
+		this.setState({isFiltered: !currentState })
+	}
+
 	// {invokes ajax call to fetch data for the ArticleList component}
 	componentDidMount() {
 		this.addDeliveryMethods();
@@ -292,7 +312,7 @@ class App extends React.Component {
 				<TransFormEr postIt={this.postUserLink.bind(this)} isLoading={this.state.isLoading} toggleLoading={this.toggleLoading.bind(this)} isGuest={this.state.isGuest} />
 
 				<ToggleDisplay show={!this.state.isGuest}>
-					<WhichView toggleView={this.toggleView.bind(this)} topStoryMode={this.state.topStoryMode}/>
+					<WhichView toggleView={this.toggleView.bind(this)} topStoryMode={this.state.topStoryMode}/ searchForIt={this.filterArticles.bind(this)} toggleFiltered={this.toggleFiltered.bind(this)} />
 					{/*this.state.isLoading && <Loading />*/}
 					<ToggleDisplay show={!this.state.topStoryMode}>
 						<ArticleList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} toggleMembersOnly={this.toggleMembersOnly.bind(this)} />
@@ -314,7 +334,6 @@ class App extends React.Component {
 				<MembersOnly showMembersOnly={this.state.showMembersOnly} toggleMembersOnly={this.toggleMembersOnly.bind(this)} />
 			</div>
 		);
-
 	}
 }
 
@@ -322,7 +341,7 @@ export default App;
 
 	// <ReadcastTopstories readcast='Your Read.casts'/>
 	// => TODO: // get player scroll to work. Test text: Last word is "initially". This is a song by the legendary Badfinger, who were on Apple Records. Apple Computer told the Beatles they would never be in music so that settled the court case initially
-
+  
 		// <Title title='Read.Cast.ly'/>
 
 					// <div id="navbar"></div>
