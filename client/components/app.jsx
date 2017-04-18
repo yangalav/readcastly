@@ -21,7 +21,7 @@ import TopStoryAdd from './topStoryAdd.jsx';
 import MembersOnly from './MembersOnly.jsx';
 import GuestMode from './GuestMode.jsx';
 import isValidUrl from '../helpers/urlValidation.js';
-// import {Loading, ErrorAlert} from './Alerts.jsx';
+import { ErrorAlert } from './Alerts.jsx';
 import Loading from 'react-loading';
 
 const exportOptions = {
@@ -238,6 +238,14 @@ class App extends React.Component {
 		.catch((err) => this.setState({ hasErrored: true, failMessage: ('Error in conversion to speech: ' + err)}));
 	}
 
+	quickStream(url) {
+		this.toggleLoading();
+		axios.post('/quickStream', {url: url})
+		.then((res) => {
+			this.setState({nowPlaying: {url: res.data.url, title: res.data.title}, isLoading: false});
+		})
+	}
+
 	getTopStoriesSources() {
 		axios.get('https://newsapi.org/v1/sources?language=en')
 			.then((res) => {
@@ -258,7 +266,8 @@ class App extends React.Component {
 	}
 
 	toggleLoading() {
-		this.setState({isLoading: true});
+		let currentState = this.state.isLoading;
+		this.setState({isLoading: !currentState});
 	}
 
 	toggleConvert() {
@@ -311,7 +320,7 @@ class App extends React.Component {
 				<LogoutButton />
 				<Subtitle getCurrentUser={this.getCurrentUser.bind(this)} user={this.state.user} subtitle='your reading backlog solved.'/>
 				{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
-				<TransFormEr postIt={this.postUserLink.bind(this)} isLoading={this.state.isLoading} toggleLoading={this.toggleLoading.bind(this)} isGuest={this.state.isGuest} />
+				<TransFormEr postIt={this.postUserLink.bind(this)} isLoading={this.state.isLoading} toggleLoading={this.toggleLoading.bind(this)} isGuest={this.state.isGuest} quickStream={this.quickStream.bind(this)} />
 
 				<ToggleDisplay show={!this.state.isGuest}>
 					<WhichView toggleView={this.toggleView.bind(this)} topStoryMode={this.state.topStoryMode}/>

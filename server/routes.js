@@ -22,6 +22,21 @@ module.exports = function(app, express, passport) {
     });
   });
 
+  app.post('/quickStream', function(req, res) {
+    // console.log('server.js received POST req at /requrl. req.body = ', req.body);
+    mercury.parseAndSave(99, req.body.url, true, function(result) {
+      let temp = {body: {payload: {}}};
+      temp.body.payload.userId = 99;
+      temp.body.payload.destination = 'stream';
+      temp.body.payload.voice = 'Joanna';
+      temp.body.payload.article = result;
+      polly.textToSpeech(temp,res,function(url, title) {
+        console.log('SUCCESSFUL STREAM RETURN--url: ', url, 'title: ', title)
+        res.send({url, title});
+      });
+    });
+  });
+
   app.get('/getAll', function(req, res) {
     console.log('server.js received GET req at /getAll . Returning array of objects with contents of Readcastly db!');
     Articles.getAll(req.query.userId, function(library) {

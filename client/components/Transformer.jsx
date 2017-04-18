@@ -11,18 +11,23 @@ class TransFormEr extends React.Component {
 		this.state = {value: ''};
 
 		this.handleChange = this.handleChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
+		this.addOne = this.addOne.bind(this);
 	}
 
 	handleChange(event) {
 		this.setState({value: event.target.value});
 	}
 
-	handleSubmit(event) {
+	addOne(event) {
 		this.props.toggleLoading();
 		console.log('VALUE === ', this.state.value)
 		event.preventDefault();
 		this.props.postIt(this.state.value);
+		this.setState({value: ''});
+	}
+
+	quickStream() {
+		this.props.quickStream(this.state.value);
 		this.setState({value: ''});
 	}
 
@@ -31,17 +36,17 @@ class TransFormEr extends React.Component {
 			<Grid>
 						<hr/>
 				<Row className="transformer">
-					<Form inline onSubmit={!this.props.isLoading ? this.handleSubmit : null}>
+					<Form inline onSubmit={!this.props.isLoading ? this.quickStream.bind(this) : null}>
 						<Col md={this.props.isGuest ? 10 : 8}>
 							<FormControl type="text" id="add-library-input" placeholder="Enter an article URL" value={this.state.value} onChange={this.handleChange} />
 						</Col>
 						<Col md={2}>
-					    <Button type="submit" bsStyle="success" id="listen-now-btn">Listen now</Button>
+					    <Button type="submit" bsStyle="success" id="listen-now-btn" >Listen now</Button>
 						</Col>
+							</Form>
             <Col md={2}>
-							{!this.props.isGuest && <Button type="submit" bsStyle="default" id="add-library-btn" disabled={this.props.isLoading}>{this.props.isLoading ? 'Loading...' : 'Add to Library'}</Button>}
+							{!this.props.isGuest && <Button type="submit" bsStyle="default" id="add-library-btn" disabled={this.props.isLoading} onClick={this.addOne}>{this.props.isLoading ? 'Loading...' : 'Add to Library'}</Button>}
 						</Col>
-						</Form>
 				</Row>
 			</Grid>
 		);
