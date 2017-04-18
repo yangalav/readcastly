@@ -265,6 +265,7 @@ class App extends React.Component {
 			.catch ((err) => console.log('ERROR GETTING TOP STORIES SOURCES', err))
 	}
 
+  //blaaaaahhhhhh
   componentWillMount() {
     this.getCurrentUser();
   }
