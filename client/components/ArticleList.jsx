@@ -8,19 +8,32 @@
 	import {render} from 'react-dom';
 	import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 
-	const SortableItem = SortableElement(({ index, user, value, exportOptions, deleteIt, convertIt, topStoryMode, toggleConvert, isConverting }) =>
-	  <ArticleEntry key={index} user={user} article={value} exportOptions={exportOptions} deleteIt={deleteIt} convertIt={convertIt} topStoryMode={topStoryMode} toggleConvert={toggleConvert} isConverting={isConverting} />
+	const SortableItem = SortableElement(({ index, user, value, exportOptions, deleteIt, convertIt, topStoryMode, toggleConvert }) =>
+	  <ArticleEntry key={index} user={user} article={value} exportOptions={exportOptions} deleteIt={deleteIt} convertIt={convertIt} topStoryMode={topStoryMode} toggleConvert={toggleConvert} />
 	);
 
-	const SortableList = SortableContainer(({ articles, user, exportOptions, deleteIt, convertIt, topStoryMode, toggleConvert, isConverting }) => (
+	const SortableList = SortableContainer(({ articles, user, exportOptions, deleteIt, convertIt, topStoryMode, toggleConvert}) => (
 	    <ul>
 	      {articles.map((value, index) => (
-	        <SortableItem key={`item-${index}`} index={index} value={value} user={user} exportOptions={exportOptions} deleteIt={deleteIt} convertIt={convertIt} topStoryMode={topStoryMode} toggleConvert={toggleConvert} isConverting={isConverting}/>
+	        <SortableItem key={`item-${index}`} index={index} value={value} user={user} exportOptions={exportOptions} deleteIt={deleteIt} convertIt={convertIt} topStoryMode={topStoryMode} toggleConvert={toggleConvert}/>
 	      ))}
 	    </ul>
 	  ));
 
 export default SortableList;
+
+// with isConverting
+// const SortableItem = SortableElement(({ index, user, value, exportOptions, deleteIt, convertIt, topStoryMode, isConverting }) =>
+// 	<ArticleEntry key={index} user={user} article={value} exportOptions={exportOptions} deleteIt={deleteIt} convertIt={convertIt} topStoryMode={topStoryMode} isConverting={isConverting} />
+// );
+//
+// const SortableList = SortableContainer(({ articles, user, exportOptions, deleteIt, convertIt, topStoryMode, isConverting }) => (
+// 		<ul>
+// 			{articles.map((value, index) => (
+// 				<SortableItem key={`item-${index}`} index={index} value={value} user={user} exportOptions={exportOptions} deleteIt={deleteIt} convertIt={convertIt} topStoryMode={topStoryMode} isConverting={isConverting}/>
+// 			))}
+// 		</ul>
+// 	));
 
 // before drag/drop:
 	// import React from 'react';

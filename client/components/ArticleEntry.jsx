@@ -102,7 +102,7 @@ class ArticleEntry extends React.Component {
 		  		<div className="article-buttons">
 						{!this.props.topStoryMode && this.props.article && this.voiceMenu()}
 						{!this.props.topStoryMode && this.props.article && this.exportMenu()}
-						{!this.props.topStoryMode && this.props.article && <Button bsStyle="success" onClick={!this.props.isConverting ? this.export.bind(this) : null} disabled={this.props.isConverting} block>{this.props.isConverting ? (<div>Stand by for your Readcast</div>) : (<div>Read To Me!<br /><i>Est. Time: {this.props.article.est_time}</i></div>)}</Button>}
+						{!this.props.topStoryMode && this.props.article && <Button bsStyle="success" onClick={!this.props.isConverting ? this.export.bind(this) : null} disabled={this.props.isConverting} > < /Button>}
 					</div>
 					</Col>
 		  	</Col>
@@ -112,6 +112,8 @@ class ArticleEntry extends React.Component {
 };
 
 export default ArticleEntry;
+
+ // {!this.props.topStoryMode && this.props.article && <Button bsStyle="success" onClick={!this.props.isConverting ? this.export.bind(this) : null} disabled={this.props.isConverting} block>{this.props.isConverting ? (<div>Stand by for your Readcast</div>) : (<div>Read To Me!<br /><i>Est. Time: {this.props.article.est_time}</i></div>)}</Button>}
 
 
 // function ArticleEntry({article, deleteIt, convertIt}) {
