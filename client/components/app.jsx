@@ -6,10 +6,11 @@ import ToggleDisplay from 'react-toggle-display';
 
 import Title from './Title.jsx';
 import LogoutButton from './LogoutButton.jsx';
+import LoginButton from './LoginButton.jsx';
+import SignupButton from './SignupButton.jsx';
 import Subtitle from './Subtitle.jsx';
 import WhichView from './WhichView.jsx';
 // import HeaderNavigation from './Navbar.jsx';
-// {import SignupButton from './SignupButton'; }
 import SignUpForm from './SignupForm.jsx';
 import TransFormEr from './TransFormer.jsx';
 import ArticleList from './ArticleList.jsx';
@@ -56,7 +57,7 @@ class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isGuest: false,
+			isGuest: true,
 			library: [],
 			headlines: [],
 			hasErrored: false,
@@ -102,12 +103,27 @@ class App extends React.Component {
   				first_name: res.data.first_name,
         }
        })
+
+       this.setState({
+         isGuest: false,
+       });
       }
+
       this.addDeliveryMethods();
       this.getReadingList();
       this.getTopStories();
     })
   }
+
+  // showLogoutButton(){
+  //   render() {
+  //     return (
+  //           <div>
+  //               <input type="submit" value="Search" onClick={this.onClick} />
+  //               { this.state.showResults ? <Results /> : null }
+  //           </div>
+  //       );
+  // }
 
 	addDeliveryMethods(){
 		if (this.state.user.email || this.state.isGuest) {
@@ -295,9 +311,9 @@ class App extends React.Component {
 
 	// {invokes ajax call to fetch data for the ArticleList component}
 	componentDidMount() {
-		this.addDeliveryMethods();
-		this.getReadingList();
-		this.getTopStoriesSources();
+		// this.addDeliveryMethods();
+		// this.getReadingList();
+		// this.getTopStoriesSources();
 						// console.log('app.js getReadingList l 42. full db returned: ', res.data;
     // this.getTopStories();
 	}
@@ -307,7 +323,10 @@ class App extends React.Component {
 		return(
 			<div className="modal-container">
 			  <br></br>
-				<LogoutButton />
+        { this.state.isGuest ? null : <LogoutButton /> }
+        { this.state.isGuest ? <LoginButton /> : null }
+        { this.state.isGuest ? <SignupButton /> : null }
+
 				<Subtitle getCurrentUser={this.getCurrentUser.bind(this)} user={this.state.user} subtitle='your reading backlog solved.'/>
 				{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
 				<TransFormEr postIt={this.postUserLink.bind(this)} isLoading={this.state.isLoading} toggleLoading={this.toggleLoading.bind(this)} isGuest={this.state.isGuest} />

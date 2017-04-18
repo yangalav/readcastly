@@ -101,6 +101,7 @@ class SignupForm extends React.Component {
         <input type="url" name="avatar" value={this.state.avatar} onChange={this.handleAvatarChange}/><br/>
         <Button type="submit" bsStyle="success">Sign Up</Button>
         </form>
+        <div>Already have an account? <a href="/#/login">Login here</a></div>
       </div>
   	);
   }
