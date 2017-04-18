@@ -113,6 +113,7 @@ class App extends React.Component {
 					article.est_time = this.cleanTime(article.est_time);
 				});
 				this.setState({ isLoading: false, library: (res.data.reverse()) });
+				console.log('======GET ALL >>> this.state.library: ', this.state.library);
 			})
 			.catch((err) => this.setState({ failMessage: ('Unable to retrieve articles'), hasErrored: true }));
 	}
