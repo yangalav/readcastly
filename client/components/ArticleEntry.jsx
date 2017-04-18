@@ -4,6 +4,8 @@
 import React from 'react';
 import {Button, Col, FormControl, FormGroup, Row} from 'react-bootstrap';
 
+import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
+
 class ArticleEntry extends React.Component {
 	constructor(props) {
 		super(props);
@@ -60,6 +62,7 @@ class ArticleEntry extends React.Component {
 	}
 
 	export() {
+		console.log('ArticleEntry l59: export invoked...');
 		if (!this.state.method || !this.state.voice || this.state.method === 'banana' || this.state.voice === 'banana') {
 			alert('Please be sure to choose both a voice and a delivery method!');
 		}
@@ -75,7 +78,7 @@ class ArticleEntry extends React.Component {
 			this.props.convertIt(articleObj);
 		}
 	}
-
+	
 	render() {
 		return (
 			<Row>
@@ -104,7 +107,13 @@ class ArticleEntry extends React.Component {
 		  		<div className="article-buttons">
 						{this.props.article && this.makeVoiceMenu(this.props.exportOptions.voices)}
 						{this.props.article && this.makeExportMenu(this.props.exportOptions.methods)}
-						{this.props.article && <Button bsStyle="success" onClick={!this.props.isConverting ? this.export.bind(this) : null} disabled={this.props.isConverting} block>{this.props.isConverting ? (<div>Stand by for your Readcast</div>) : (<div>Read To Me!<br /><i>Est. Time: {this.props.article.est_time}</i></div>)}</Button>}
+
+						{this.props.article && <Button bsStyle="success" onClick={!this.props.isConverting ? this.export.bind(this) : null} disabled={this.props.isConverting} block>
+						{this.props.isConverting ? ('Stand by for your Readcast') : `Read To Me! Estimated: ${this.props.article.est_time}`}
+
+						</Button>}
+
+
 					</div>
 					</Col>
 		  	</Col>
@@ -114,6 +123,16 @@ class ArticleEntry extends React.Component {
 };
 
 export default ArticleEntry;
+
+//     {this.props.isConverting ? (<span>Stand by for your Readcast</span>) : (<span>Read To Me!<br /><i>Est. Time: {this.props.article.est_time}</i></span>)}</Button>}
+
+// {this.props.isConverting ? (<div>Stand by for your Readcast</div>) : (<div>Read To Me!<br /><i>Est. Time: {this.props.article.est_time}</i></div>)}
+
+// update from Andrew:
+  // {this.props.article && <Button bsStyle="success" onClick={!this.props.isConverting ? this.export.bind(this) : null} disabled={this.props.isConverting} block>{this.props.isConverting ? (<div>Stand by for your Readcast</div>) : (<div>Read To Me!<br /><i>Est. Time: {this.props.article.est_time}</i></div>)}</Button>}
+
+ // working minus the pending (Stand by for your Readcast : Read To Me!):
+  //{this.props.article && <Button bsStyle="success" onClick={!this.props.isConverting ? this.export.bind(this) : null} disabled={this.props.isConverting} block></Button>}
 
 
 // function ArticleEntry({article, deleteIt, convertIt}) {
