@@ -8,14 +8,14 @@
 	import {render} from 'react-dom';
 	import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 
-	const SortableItem = SortableElement(({ index, user, value, exportOptions, deleteIt, convertIt, topStoryMode, toggleConvert }) =>
-	  <ArticleEntry key={index} user={user} article={value} exportOptions={exportOptions} deleteIt={deleteIt} convertIt={convertIt} topStoryMode={topStoryMode} toggleConvert={toggleConvert} />
+	const SortableItem = SortableElement(({ index, user, value, exportOptions, deleteIt, convertIt, topStoryMode, isConverting, toggleConvert}) =>
+	  <ArticleEntry key={index} user={user} article={value} exportOptions={exportOptions} deleteIt={deleteIt} convertIt={convertIt} topStoryMode={topStoryMode} isConverting={isConverting} toggleConvert={toggleConvert} />
 	);
 
-	const SortableList = SortableContainer(({ articles, user, exportOptions, deleteIt, convertIt, topStoryMode, toggleConvert}) => (
+	const SortableList = SortableContainer(({ articles, user, exportOptions, deleteIt, convertIt, topStoryMode, isConverting, toggleConvert}) => (
 	    <ul>
 	      {articles.map((value, index) => (
-	        <SortableItem key={`item-${index}`} index={index} value={value} user={user} exportOptions={exportOptions} deleteIt={deleteIt} convertIt={convertIt} topStoryMode={topStoryMode} toggleConvert={toggleConvert}/>
+	        <SortableItem key={`item-${index}`} index={index} value={value} user={user} exportOptions={exportOptions} deleteIt={deleteIt} convertIt={convertIt} topStoryMode={topStoryMode} isConverting={isConverting} toggleConvert={toggleConvert} />
 	      ))}
 	    </ul>
 	  ));
