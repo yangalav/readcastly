@@ -285,6 +285,7 @@ class App extends React.Component {
 >>>>>>> Users can now login and save to their own library
 	}
 
+  //blaaaaahhhhhh
   componentWillMount() {
     this.getCurrentUser();
   }
