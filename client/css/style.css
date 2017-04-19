@@ -50,6 +50,12 @@ hr {
   align-content: center;
 }
 
+#empty-library {
+  text-align: center;
+  font-family: 'Work Sans', sans-serif;
+  font-weight: bolder;
+}
+
 .article-list {
   margin-bottom: 75px;
 }

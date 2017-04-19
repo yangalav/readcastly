@@ -27,7 +27,7 @@ class LoginForm extends React.Component {
     })
 		.then((res) => {
 			console.log("post request hahahahahaha" + res);
-      hashHistory.push('/');
+      hashHistory.push('/app');
       return;
 		});
   }
