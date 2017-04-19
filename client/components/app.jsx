@@ -178,21 +178,36 @@ class App extends React.Component {
 // {helper function for postUserLink}
 	addOne(obj) {
 		let result = this.state.library;
-		obj.est_time = this.cleanTime(obj.est_time);
-		if (obj.publication_date) {
-			obj.publication_date = this.cleanDate(obj.publication_date);
+		let there = false;
+		result.forEach(function(article) {
+			if (article.url === obj.url) {
+				there = true;
+			}
+		});
+		console.log('THERE? ', there);
+		if (!there) {
+			obj.est_time = this.cleanTime(obj.est_time);
+			if (obj.publication_date) {
+				obj.publication_date = this.cleanDate(obj.publication_date);
+			}
+			if (!obj.error) {
+				result.unshift(obj)
+			};
+			if (this.state.topStoryMode && obj.error) {
+				this.setState({topStoryAddMsg: {'result': "Sorry ...", 'message': obj.error}}, function() {
+					this.setState({topStoryAdd: true})
+				});
+			} else if (this.state.topStoryMode) {
+				this.setState({topStoryAddMsg: {'result': "Success!", 'message': "The article has been added to your library."}}, function() {this.setState({topStoryAdd: true})
+				});
+			}
+		} else {
+			if (this.state.topStoryMode) {
+				this.setState({topStoryAddMsg: {'result': "No need ...", 'message': 'That article is already in your library.'}}, function() {
+					this.setState({topStoryAdd: true})
+				});
+			}
 		}
-		if (this.state.topStoryMode && obj.error) {
-			this.setState({topStoryAddMsg: {'result': "Sorry ...", 'message': obj.error}}, function() {
-				this.setState({topStoryAdd: true})
-			});
-		} else if (this.state.topStoryMode) {
-			this.setState({topStoryAddMsg: {'result': "Success!", 'message': "The article has been added to your library"}}, function() {this.setState({topStoryAdd: true})
-			});
-		}
-		if (!obj.error) {
-			result.unshift(obj)
-		};
 		return result;
 	}
 
@@ -412,17 +427,16 @@ class App extends React.Component {
    };
 
 	render() {
-      console.log('this.state = ', this.state);
 		return(
 			<div className="entirePage">
 				<HeaderNav isGuest={this.state.isGuest} username={this.state.user.first_name}/>
 				<div className="modal-container">
-			  	<br></br>
-          	{/*{ this.state.isGuest ? null : <LogoutButton /> }
+			  	{/*<br></br>
+          	{ this.state.isGuest ? null : <LogoutButton /> }
           	{ this.state.isGuest ? <LoginButton /> : null }
           	{ this.state.isGuest ? <SignupButton /> : null }*/}
-					<Subtitle getCurrentUser={this.getCurrentUser.bind(this)} user={this.state.user} subtitle='your reading backlog solved.'/>
-					{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
+					{/*<Subtitle getCurrentUser={this.getCurrentUser.bind(this)} user={this.state.user} subtitle='your reading backlog solved.'/>
+					{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}*/}
 					<TransFormEr postIt={this.postUserLink.bind(this)} isLoading={this.state.isLoading} toggleLoading={this.toggleLoading.bind(this)} isGuest={this.state.isGuest} quickStream={this.quickStream.bind(this)} />
 
 					<ToggleDisplay show={!this.state.isGuest}>
