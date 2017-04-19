@@ -4,7 +4,6 @@
 import React from 'react';
 import { Grid, Row, Col, Form, FormControl, FormGroup, InputGroup, Button } from 'react-bootstrap';
 
-
 class TransFormEr extends React.Component {
 	constructor(props) {
 		super(props);
