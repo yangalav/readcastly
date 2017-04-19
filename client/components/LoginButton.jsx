@@ -2,26 +2,26 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { hashHistory } from 'react-router';
 
-class SignupButton extends React.Component {
+class LoginButton extends React.Component {
   constructor() {
     super();
 
-    this.handleSignup = this.handleSignup.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
   }
 
-  handleSignup(e){
+  handleLogin(e){
     e.preventDefault();
     console.log('handleddd login');
-    hashHistory.push('/signup');
+    hashHistory.push('/login');
   }
 
 render() {
   return (
       <div>
-        <Button onClick={this.handleSignup}>Sign Up</Button>
+        <Button onClick={this.handleLogin}>Login</Button>
       </div>
     );
   }
 }
 
-export default SignupButton;
+export default LoginButton;
