@@ -2,6 +2,9 @@ import React from 'react';
 // what to import from react-bootstrap?
 import { Grid, Row, Col, Form, FormControl, FormGroup, InputGroup, Button } from 'react-bootstrap';
 
+const log = console.log; /* MH-DEBUGGING */
+const line = '================'; /* MH-DEBUGGING */
+
 class FilterBox extends React.Component {
 	constructor(props) {
 		super(props);
@@ -12,27 +15,27 @@ class FilterBox extends React.Component {
 	}
 
 	handleChange(event) {
+		log(line, 'inside FilterBox -- handleChange: event.target.value: ', event.target.value)
 		this.setState({value: event.target.value});
 	}
 	handleSubmit(event) {
 		this.props.toggleLoading();
-		console.log('FilterBox VALUE === ', this.state.value)
+		console.log(line, 'inside FilterBox -- handleSubmit: this.state.value === ', this.state.value)
 		event.preventDefault();
 		// invokes searchForIt method (passed down from App Component) on user's search input
 		this.props.searchForIt(this.state.value);
 		this.setState({value: ''});
 	}
 
-	// upon user submit, a filter function takes search term(s) and filters through App library to render only those articles
 	render() {
 		return(
 			<Form inline onSubmit={!this.props.isLoading ? this.handleSubmit : null}>
-				<Col md={8}>
+				<Col md={3}>
 					<FormControl type="text" id="search-library" placeholder="Search your articles..." value={this.state.value} onChange={this.handleChange} />
 				</Col>
-        <Col md={4}>
-					<Button type="submit" bsStyle="primary" id="search-library-btn" onClick={this.props.toggleFiltered.bind(this)} disabled={this.props.isLoading}>{this.props.isLoading ? 'Loading...' : 'Filter'}</Button>
-					<Button bsStyle="default" onClick={this.props.toggleFiltered.bind(this)} disabled={this.props.isLoading}>All</Button>
+        <Col md={3}>
+					<Button type="submit" bsStyle="primary" id="search-library-btn" onClick={this.handleSubmit} disabled={this.props.isLoading}>{this.props.isLoading ? 'Loading...' : 'Filter'}</Button>
+					{this.props.isFiltered && <Button bsStyle="default" onClick={this.props.showAll.bind(this)} disabled={this.props.isLoading}>Show All</Button>}
 				</Col>
 			</Form>
 		);
@@ -40,6 +43,7 @@ class FilterBox extends React.Component {
 }
 
 export default FilterBox;
+
 
 
 // <<<<<<<<<<<<<<<<<<<<

@@ -58,6 +58,7 @@ class App extends React.Component {
 		this.state = {
 			isGuest: false,
 			library: [],
+			libraryBackup: [],
 			headlines: [],
 			hasErrored: false,
 			isLoading: false,
@@ -84,6 +85,7 @@ class App extends React.Component {
 			showMembersOnly: false,
 			isFiltered: false
 		};
+		
 	}
 
   getCurrentUser(){
@@ -113,7 +115,7 @@ class App extends React.Component {
 					if (article.publication_date) {article.publication_date = this.cleanDate(article.publication_date)};
 					article.est_time = this.cleanTime(article.est_time);
 				});
-				this.setState({ isLoading: false, library: (res.data.reverse()) });
+				this.setState({ isLoading: false, library: (res.data.reverse()), libraryBackup: res.data });
 				console.log('======GET ALL >>> this.state.library: ', this.state.library);
 			})
 			.catch((err) => this.setState({ failMessage: ('Unable to retrieve articles'), hasErrored: true }));
@@ -177,17 +179,22 @@ class App extends React.Component {
 
 	filterArticles(userInput) {
 		let target = new RegExp(userInput, 'i'); /* note: 'i' is a RegEx flag, not 'i' for 'index' */
-		let lib = this.state.library;
-
-		this.setState({ isLoading: true, hasErrored: false, failMessage: '' });
+		console.log('==========filterArticles: userInput: ', userInput, ' target: ', target);
+		// let lib = this.state.library.slice();
+		this.setState({isLoading: true, isFiltered: false, hasErrored: false, failMessage: ''})
 		// ...filter through library for articles containing user-provided search terms
-		let filtered = lib.filter(function(article) {
+		let filtered = this.state.libraryBackup.filter(function(article) {
 			// ...for efficiency, check for match in title and excerpt before checking full article text
 			if (target.test(article.title) || target.test(article.excerpt) || target.test(article.text)) { return article; }
 		});
-		(filtered.length) ? this.setState({ isLoading: false, library: filtered }) : this.setState({ isLoading: false, hasErrored: true, failMessage: 'no articles found matching your search terms' })
+		console.log('==========filteredArticles -- filtered: ', filtered);
+		console.log('========App.jsx - filteredArticles: this.state.isFiltered: ', this.state.isFiltered)
+		this.setState({ isLoading: false, library: filtered, isFiltered: true })
 	}
 
+	libraryShowAll() {
+		this.setState({ library: this.state.libraryBackup.slice(), isFiltered: false });
+	}
 
 // {helper function for helper, deleteOne}
 	findIndex(array, url) {
@@ -289,7 +296,8 @@ class App extends React.Component {
 
 	toggleFiltered() {
 		let currentState = this.state.isFiltered;
-		this.setState({isFiltered: !currentState })
+		console.log('========App.jsx - inside toggleFiltered-PRE: this.state.isFiltered: ', this.state.isFiltered)
+		this.setState({isFiltered: !currentState });
 	}
 
 	// {invokes ajax call to fetch data for the ArticleList component}
@@ -312,7 +320,7 @@ class App extends React.Component {
 				<TransFormEr postIt={this.postUserLink.bind(this)} isLoading={this.state.isLoading} toggleLoading={this.toggleLoading.bind(this)} isGuest={this.state.isGuest} />
 
 				<ToggleDisplay show={!this.state.isGuest}>
-					<WhichView toggleView={this.toggleView.bind(this)} topStoryMode={this.state.topStoryMode}/ searchForIt={this.filterArticles.bind(this)} toggleFiltered={this.toggleFiltered.bind(this)} />
+					<WhichView isLoading={this.state.isLoading} isFiltered={this.state.isFiltered} toggleLoading={this.toggleLoading.bind(this)} toggleView={this.toggleView.bind(this)} topStoryMode={this.state.topStoryMode} searchForIt={this.filterArticles.bind(this)} showAll={this.libraryShowAll.bind(this)} />
 					{/*this.state.isLoading && <Loading />*/}
 					<ToggleDisplay show={!this.state.topStoryMode}>
 						<ArticleList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} toggleMembersOnly={this.toggleMembersOnly.bind(this)} />
