@@ -183,6 +183,22 @@ hr {
 .btn {
     white-space: normal;
 }
+
+.logo-carousel img {
+  width: auto;
+  height: 120px;
+  max-height: 120px;
+}
+
+.right.carousel-control, .left.carousel-control {
+    display: none;
+    background-image: none;
+}
+
+.carousel-indicators li {
+    visibility: hidden;
+}
+
 /*.voice-chooser {
   width: 130px;
 }

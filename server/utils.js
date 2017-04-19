@@ -108,22 +108,22 @@ const preStripSpacing = function(textInput) {
   let parenTag = /(\.)(\<)/g;
   let tagCaps = /\>([A-Z])/g;
   return textInput
-    .replace(headerTag, " $1$2$3\'$4\.\'$5$6$7\n") // e.g., before("</h>") => after(". </h>") // WAITERS  
+    .replace(headerTag, " $1$2$3\'$4\.\'$5$6$7\n") // e.g., before("</h>") => after(". </h>") // WAITERS
     .replace(breakTag, ". $1") // e.g., before("<br>") => after(". <br>") // WAITERS
     .replace(periodTag, "$1 $2") // e.g., before(".<") => after(". <")
     .replace(parenTag, "$1 $2") // e.g., before(")<") => after(") <")
     .replace(tagCaps, "\>\. $1") // e.g., before(">A") => after("> A")
 }
 
-// function to convert hexadecimal character codes into their character equivalents; 
+// function to convert hexadecimal character codes into their character equivalents;
 const unescapeHex = function(unsafe) {
   return unsafe
-    .replace(/&quot;/g, "\"")    
-    .replace(/&apos;/g, "\'") 
+    .replace(/&quot;/g, "\"")
+    .replace(/&apos;/g, "\'")
     .replace(/&#x22;/g, "\"")
     .replace(/&#x201(C|D);/g, "\"")
-    .replace(/&#x201(8|9);/g, "\'")    
-    .replace(/&#xA0;/g, " ")    
+    .replace(/&#x201(8|9);/g, "\'")
+    .replace(/&#xA0;/g, " ")
     .replace(/&#x2026;/g, "...")
     // catch-all for other hexadecimal char patterns, replacing them with a "-"
     .replace(/&#?\w+;/g, "-")
@@ -132,20 +132,33 @@ const unescapeHex = function(unsafe) {
 // function to inspect text after it has gone through stripper, and insert spaces in order to facilitate polly reading
 const postStripSpacing = function(textInput) {
   let parenChar = /(\))(\w)/g
-  let dotCaps = /\.([A-Z])/g  
+  let dotCaps = /\.([A-Z])/g
   return textInput
     .replace(parenChar, "$1 $2") // e.g., before(")a") => after(") a")
     .replace(dotCaps, "\.\s$1") // e.g., before(".A") => after(". A") // DOT - MELO
 }
 
-module.exports = { 
-  errors, 
-  domainExtractor, 
-  dbStats, 
-  readcastBuilder, 
-  textInspector, 
+const payloadBuilder = function(article){
+  return {body: {
+                  payload: {
+                              userId: 99,
+                              destination: 'stream',
+                              voice: 'Joanna',
+                              article: article
+                            }
+                }
+          };
+};
+
+module.exports = {
+  errors,
+  domainExtractor,
+  dbStats,
+  readcastBuilder,
+  textInspector,
   preStripSpacing,
   unescapeHex,
-  postStripSpacing
+  postStripSpacing,
+  payloadBuilder
 };
 

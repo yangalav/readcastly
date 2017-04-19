@@ -1,4 +1,5 @@
 import React from 'react';
+import { hashHistory } from 'react-router';
 import { Modal, Button } from 'react-bootstrap';
 
 class MembersOnly extends React.Component {
@@ -6,15 +7,21 @@ class MembersOnly extends React.Component {
     super(props);
   };
 
+  close() {
+    this.props.toggleMembersOnly();
+  }
+
+  signUp() {
+    this.close();
+    hashHistory.push('/signup');
+  }
+
+  signIn() {
+    this.close();
+    hashHistory.push('/login');
+  }
+
   render () {
-    let close = () => this.props.toggleMembersOnly();
-    let signUp = () => {
-      // console.log('URL FOR MODAL === ', this.props.url);
-      // this.props.deleteArticle(this.props.url);
-      // this.props.toggleConfirm();
-    }
-
-
     return (
       <div style={{height: 200}}>
         <Modal
@@ -28,9 +35,9 @@ class MembersOnly extends React.Component {
           </Modal.Header>
           <Modal.Body>That feature is only available to registered users.  Sign in or join our ranks by clicking the buttons below!</Modal.Body>
           <Modal.Footer>
-            <Button bsStyle="danger" onClick={close}>Sign Up</Button>
-            <Button bsStyle="warning" onClick={close}>Sign In</Button>
-            <Button bsStyle="success" onClick={close}>Close</Button>
+            <Button bsStyle="danger" onClick={this.signUp.bind(this)}>Sign Up</Button>
+            <Button bsStyle="warning" onClick={this.signIn.bind(this)}>Sign In</Button>
+            <Button bsStyle="success" onClick={this.close.bind(this)}>Close</Button>
           </Modal.Footer>
         </Modal>
       </div>

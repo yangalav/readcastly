@@ -23,14 +23,8 @@ module.exports = function(app, express, passport) {
   });
 
   app.post('/quickStream', function(req, res) {
-    // console.log('server.js received POST req at /requrl. req.body = ', req.body);
     mercury.parseAndSave(99, req.body.url, true, function(result) {
-      let temp = {body: {payload: {}}};
-      temp.body.payload.userId = 99;
-      temp.body.payload.destination = 'stream';
-      temp.body.payload.voice = 'Joanna';
-      temp.body.payload.article = result;
-      polly.textToSpeech(temp,res,function(url, title) {
+      polly.textToSpeech(utils.payloadBuilder(result),res, function(url, title) {
         console.log('SUCCESSFUL STREAM RETURN--url: ', url, 'title: ', title)
         res.send({url, title});
       });
@@ -106,26 +100,25 @@ module.exports = function(app, express, passport) {
     res.send(req.body);
   });
 
-  app.get('/api/', isLoggedIn, function(req, res) {
-    console.log('RENDER INDEX')
-    app.use(express.static(path.join(__dirname, '../client')));
-    // console.log(req.user);
-    res.sendFile(path.join(__dirname, '../client/index.html'), {
-      user: req.user,
-    });
-  });
+  // app.get('/api/', isLoggedIn, function(req, res) {
+  //   console.log('RENDER INDEX')
+  //   app.use(express.static(path.join(__dirname, '../client')));
+  //   res.sendFile(path.join(__dirname, '../client/index.html'), {
+  //     user: req.user,
+  //   });
+  // });
 
   app.post('/api/signup',
     passport.authenticate('local-signup', {
-    successRedirect: '/',
-    failureRedirect: '/signup',
+    successRedirect: '/#/app',
+    failureRedirect: '/#/signup',
     failureFlash: true
   }))
 
   app.post('/api/login',
     passport.authenticate('local-login', {
-    successRedirect: '/',
-    failureRedirect: '/signup',
+    successRedirect: '/#/app',
+    failureRedirect: '/#/',
     failureFlash: true
   }))
 
@@ -145,7 +138,7 @@ module.exports = function(app, express, passport) {
     if(req.isAuthenticated())
       return next();
 
-    res.redirect('/login');
+    res.redirect('/#/splash');
   }
 
 };

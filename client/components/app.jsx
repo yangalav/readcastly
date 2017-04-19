@@ -73,11 +73,11 @@ class App extends React.Component {
 			failMessage: '',
 			nowPlaying: {url: 'http://www.netprophet.net/charts/charts/Badfinger%20-%20No%20Matter%20What.mp3', title: 'No Matter What'},
 			user:{
-				id: 99,
+				id: null,
 				stream: 'stream',
 				link: 'link',
-				email: 'arfechner@gmail.com',
-				phone: '+19734602180',
+				email: '',
+				phone: '',
 				first_name: 'Guest',
 				// voice_pref: 'Mama'
 				// avatar:,
@@ -109,16 +109,13 @@ class App extends React.Component {
   				email: res.data.email,
   				phone: res.data.phone,
   				first_name: res.data.first_name,
-        }
-       })
-
-       this.setState({
-         isGuest: false,
-       })
+        	},
+        	isGuest: false
+       }, function() {
+       			this.addDeliveryMethods();
+      			this.getReadingList();
+       		})
       }
-
-      this.addDeliveryMethods();
-      this.getReadingList();
     })
   }
 
@@ -133,10 +130,10 @@ class App extends React.Component {
   // }
 
 	addDeliveryMethods(){
-		if (this.state.user.email || this.state.isGuest) {
+		if ((this.state.user.email || this.state.isGuest) && exportOptions.methods.length<4) {
     		exportOptions.methods.push({id: "email", method: 'Email It'});
   	}
-		if (this.state.user.phone || this.state.isGuest) {
+		if ((this.state.user.phone || this.state.isGuest) && exportOptions.methods.length<4) {
     		exportOptions.methods.push({id: "phone", method: 'Text It'});
   	}
 	}
@@ -296,6 +293,7 @@ class App extends React.Component {
     this.getCurrentUser();
     this.getTopStoriesSources();
     this.getHeadlines('google-news');
+    this.addDeliveryMethods();
   }
 
   // componentDidMount() {
@@ -354,12 +352,12 @@ class App extends React.Component {
       .catch((err) => console.log('Unable to retrieve headlines', err));
   }
 
-	componentDidMount() {
+	// componentDidMount() {
 		// this.addDeliveryMethods();
 		// this.getReadingList();
 		// this.getTopStoriesSources();
 		// this.getHeadlines('google-news');
-	}
+	// }
 
   onSortEnd ({oldIndex, newIndex}) {
      this.setState({
