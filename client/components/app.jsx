@@ -130,10 +130,10 @@ class App extends React.Component {
   // }
 
 	addDeliveryMethods(){
-		if (this.state.user.email || this.state.isGuest) {
+		if ((this.state.user.email || this.state.isGuest) && exportOptions.methods.length<4) {
     		exportOptions.methods.push({id: "email", method: 'Email It'});
   	}
-		if (this.state.user.phone || this.state.isGuest) {
+		if ((this.state.user.phone || this.state.isGuest) && exportOptions.methods.length<4) {
     		exportOptions.methods.push({id: "phone", method: 'Text It'});
   	}
 	}
@@ -293,6 +293,7 @@ class App extends React.Component {
     this.getCurrentUser();
     this.getTopStoriesSources();
     this.getHeadlines('google-news');
+    this.addDeliveryMethods();
   }
 
   // componentDidMount() {
