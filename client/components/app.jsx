@@ -359,15 +359,6 @@ class App extends React.Component {
 		this.setState({isFiltered: !currentState });
 	}
 
-	// {invokes ajax call to fetch data for the ArticleList component}
-	componentDidMount() {
-		this.addDeliveryMethods();
-		this.getReadingList();
-		this.getTopStoriesSources();
-						// console.log('app.js getReadingList l 42. full db returned: ', res.data;
-    // this.getTopStories();
-	}
-
 	toggleTopStoryAdd() {
 		this.setState({topStoryAdd: false});
 	}
