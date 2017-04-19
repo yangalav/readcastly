@@ -15,16 +15,6 @@ const path = require('path');
 
 module.exports = function(app, express, passport) {
 
-  // app.get('/', isLoggedIn, function(req, res) {
-  //   app.use(express.static(path.join(__dirname, '../client')));
-  //   res.sendFile(path.join(__dirname, '../client/index.html'));
-  // });
-
-  app.get('/guest', function(req, res) {
-    app.use(express.static(path.join(__dirname, '../client')));
-    res.sendFile(path.join(__dirname, '../client/index.html'));
-  });
-
   app.post('/requrl', function(req, res) {
     // console.log('server.js received POST req at /requrl. req.body = ', req.body);
     mercury.parseAndSave(req.body.userId, req.body.requrl, false, function(result) {
@@ -110,25 +100,25 @@ module.exports = function(app, express, passport) {
     res.send(req.body);
   });
 
-  app.get('/api/', isLoggedIn, function(req, res) {
-    console.log('RENDER INDEX')
-    app.use(express.static(path.join(__dirname, '../client')));
-    res.sendFile(path.join(__dirname, '../client/index.html'), {
-      user: req.user,
-    });
-  });
+  // app.get('/api/', isLoggedIn, function(req, res) {
+  //   console.log('RENDER INDEX')
+  //   app.use(express.static(path.join(__dirname, '../client')));
+  //   res.sendFile(path.join(__dirname, '../client/index.html'), {
+  //     user: req.user,
+  //   });
+  // });
 
   app.post('/api/signup',
     passport.authenticate('local-signup', {
-    successRedirect: '/',
-    failureRedirect: '/signup',
+    successRedirect: '/#/app',
+    failureRedirect: '/#/signup',
     failureFlash: true
   }))
 
   app.post('/api/login',
     passport.authenticate('local-login', {
-    successRedirect: '/',
-    failureRedirect: '/signup',
+    successRedirect: '/#/app',
+    failureRedirect: '/#/',
     failureFlash: true
   }))
 

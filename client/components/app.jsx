@@ -60,7 +60,7 @@ class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isGuest: false,
+			isGuest: true,
 			library: [],
 			headlines: [],
 			gettingHeadlines: false,
@@ -70,12 +70,12 @@ class App extends React.Component {
 			failMessage: '',
 			nowPlaying: {url: 'http://www.netprophet.net/charts/charts/Badfinger%20-%20No%20Matter%20What.mp3', title: 'No Matter What'},
 			user:{
-				id: 99,
+				id: null,
 				stream: 'stream',
 				link: 'link',
-				email: 'arfechner@gmail.com',
-				phone: '+19734602180',
-				first_name: 'Andrew',
+				email: '',
+				phone: '',
+				first_name: 'Guest',
 				// voice_pref: 'Mama'
 				// avatar:,
 			},

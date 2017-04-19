@@ -1,30 +1,64 @@
 import React from 'react';
+import axios from 'axios';
+import { hashHistory } from 'react-router'
 import {Grid, Row, Col, FormGroup, FormControl, Button, Carousel} from 'react-bootstrap';
 
 const techLogos = ['../images/amazon-polly.jpg', '../images/Bookshelf.png', '../images/bootstrap-logo.png', '../images/express.png','../images/knex.png', '../images/MySQL-Logo.png', '../images/node-js.png', '../images/nodemailer.png', '../images/Passport.png', '../images/Postlight.png', '../images/react-logo.png', '../images/S3.png', '../images/Twilio_logo.png', '../images/webpack.png']
 
 
 class Splash extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
                   email: '',
                   password: ''
     }
-    // this.handleLogout = this.handleLogout.bind(this);
+
+   this.handleEmailChange = this.handleEmailChange.bind(this);
+   this.handlePasswordChange = this.handlePasswordChange.bind(this);
+
   }
 
   goGuest() {
-    console.log('GUEST');
+    hashHistory.push('/app');
   }
 
   goSignup() {
-    console.log('SIGNUP');
+    hashHistory.push('/signup');
   }
 
-  goLogin() {
-    console.log('LOGIN');
+  goLogin(e) {
+    e.preventDefault();
+    console.log("The email is: " + this.state.email);
+    console.log("The password is: " + this.state.password);
+    axios.post('/api/login', {
+      email: this.state.email,
+      password: this.state.password,
+    })
+    .then((res) => {
+      console.log("post request hahahahahaha" + res);
+      hashHistory.push('/');
+      return;
+    });
   }
+
+  handleEmailChange(e) {
+    this.setState({ email: e.target.value });
+  }
+
+  handlePasswordChange(e) {
+    this.setState({ password: e.target.value })
+  }
+
+  // componentWillMount() {
+  //   //put viswada's function here
+  //   .then((res) => {
+  //     if (res) {
+  //       hashHistory.push('/app');
+  //     }
+  //   })
+  //   .catch((err) => console.log('SPLASH REDIRECT ERROR: ', err));
+  // }
 
   render() {
     return (
@@ -38,8 +72,8 @@ class Splash extends React.Component {
           <div>
           <Col md={6} mdOffset={3}>
             <FormGroup id='username' onSubmit={this.goLogin.bind(this)}>
-              <FormControl name='username' type='text' placeholder="E-mail address" required />
-              <FormControl name='password' type='password' placeholder="Password" required />
+              <FormControl name='username' type='text' placeholder="E-mail address" onChange={this.handleEmailChange} required />
+              <FormControl name='password' type='password' placeholder="Password" onChange={this.handlePasswordChange} required />
               <Button type="submit" bsStyle="success" onClick={!this.state.islogging ? this.goLogin.bind(this) : null}>LOG IN</Button>
             </FormGroup>
           </Col>
