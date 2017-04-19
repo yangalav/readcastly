@@ -58,6 +58,7 @@ class ArticleEntry extends React.Component {
 	// showInfo() {console.log('article:', this.props.article);};
 
 	localAdd() {
+		console.log('getting ', this.props.article.url);
 		this.props.addIt(this.props.article.url);
 	}
 
