@@ -78,7 +78,7 @@ class ArticleEntry extends React.Component {
 			this.props.convertIt(articleObj);
 		}
 	}
-	
+
 	render() {
 		return (
 			<Row>
