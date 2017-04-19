@@ -41,13 +41,13 @@ class SignupForm extends React.Component {
       password: this.state.password,
       firstName: this.state.firstName,
       lastName: this.state.lastName,
-      phone: this.state.phone,
+      phone: '+1'+this.state.phone,
       voicePref: this.state.voicePref,
       avatar: this.state.avatar,
     })
 		.then((res) => {
 			console.log("POST REQUESTTTTTTTTTTTTTTTTTTTTTT" + res);
-      hashHistory.push('/login');
+      hashHistory.push('/app');
       return;
 		});
   }
@@ -94,11 +94,11 @@ class SignupForm extends React.Component {
           Password:<br/>
         <input type="password" name="password" value={this.state.password} onChange={this.handlePasswordChange}/><br/>
           Phone Number:<br/>
-        <input type="text" name="phone" value={this.state.phone} onChange={this.handlePhoneChange}/><br/>
+        <input type="text" name="phone" value={this.state.phone} onChange={this.handlePhoneChange}/>{/*<br/>
           Voice Preference:<br/>
         <input type="text" name="voicePref" value={this.state.voicePref} onChange={this.handleVoicePrefChange}/><br/>
           Avatar:<br/>
-        <input type="url" name="avatar" value={this.state.avatar} onChange={this.handleAvatarChange}/><br/>
+        <input type="url" name="avatar" value={this.state.avatar} onChange={this.handleAvatarChange}/>*/}<br/>
         <Button type="submit" bsStyle="success">Sign Up</Button>
         </form>
         <div>Already have an account? <a href="/#/login">Login here</a></div>

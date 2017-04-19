@@ -69,6 +69,7 @@ class App extends React.Component {
 			headlines: [],
 			gettingHeadlines: false,
 			hasErrored: false,
+			hasLibrary: true,
 			isLoading: false,
 			isConverting: false,
 			failMessage: '',
@@ -94,7 +95,7 @@ class App extends React.Component {
 			showMembersOnly: false,
 			isFiltered: false
 		};
-		
+
 	}
 
   getCurrentUser(){
@@ -148,13 +149,16 @@ class App extends React.Component {
     console.log('this is the user id for libraryyyyy: ' + this.state.user.id)
 		axios.get('/getAll', {params: {userId: this.state.user.id} })
 			.then((res) => {
-				res.data.forEach((article) => {
-					if (article.publication_date) {article.publication_date = this.cleanDate(article.publication_date)};
-					article.est_time = this.cleanTime(article.est_time);
-				});
-
-				this.setState({ isLoading: false, library: (res.data.reverse()).slice(0,20), libraryBackup: res.data });
-				console.log('======GET ALL >>> this.state.library: ', this.state.library);
+				if (res.data !== "empty") {
+					res.data.forEach((article) => {
+						if (article.publication_date) {article.publication_date = this.cleanDate(article.publication_date)};
+						article.est_time = this.cleanTime(article.est_time);
+					});
+					this.setState({ isLoading: false, library: (res.data.reverse()).slice(0,20), libraryBackup: res.data, hasLibrary: true });
+					// console.log('======GET ALL >>> this.state.library: ', this.state.library);
+				} else {
+					this.setState({ isLoading: false, hasLibrary: false});
+				}
 			})
 			.catch((err) => this.setState({ failMessage: ('Unable to retrieve articles'), hasErrored: true }));
 	}
@@ -185,7 +189,6 @@ class App extends React.Component {
 			this.setState({topStoryAddMsg: {'result': "Success!", 'message': "The article has been added to your library"}}, function() {this.setState({topStoryAdd: true})
 			});
 		}
-		console.log(obj);
 		if (!obj.error) {
 			result.unshift(obj)
 		};
@@ -202,7 +205,7 @@ class App extends React.Component {
 		this.setState({ isLoading: true });
 		axios.post('/requrl', {userId: this.state.user.id, requrl: url})
 		.then((res) => {
-			this.setState({ isLoading: false, library: (this.addOne(res.data)) });
+			this.setState({ hasLibrary: true, isLoading: false, library: (this.addOne(res.data)) });
 			return;
 		})
 		.catch((err) => this.setState({ failMessage: (res.data.error || 'Unable to fetch that link'), hasErrored: true }));
@@ -247,6 +250,9 @@ class App extends React.Component {
 		let result = this.state.library;
 		let index = this.findIndex(result, resObj.deleted);
 		result.splice(index, 1);
+		if (result.length === 0) {
+			this.setState({hasLibrary: false});
+		}
 		return result;
 	}
 
@@ -352,7 +358,7 @@ class App extends React.Component {
 	toggleHeadlines() {
 		this.setState({gettingHeadlines: true});
 	}
-	
+
 	toggleFiltered() {
 		let currentState = this.state.isFiltered;
 		console.log('========App.jsx - inside toggleFiltered-PRE: this.state.isFiltered: ', this.state.isFiltered)
@@ -411,7 +417,14 @@ class App extends React.Component {
 					<WhichView isLoading={this.state.isLoading} isFiltered={this.state.isFiltered} toggleLoading={this.toggleLoading.bind(this)} toggleView={this.toggleView.bind(this)} topStoryMode={this.state.topStoryMode} searchForIt={this.filterArticles.bind(this)} showAll={this.libraryShowAll.bind(this)} />
 					{/*this.state.isLoading && <Loading />*/}
 					<ToggleDisplay show={!this.state.topStoryMode}>
+						{!this.state.hasLibrary &&
+							<div id='empty-library'>
+								<h2>Your library is empty!</h2>
+								<h3>Head over to Top Stories mode to grab today's headlines</h3>
+								<h3>or feed your own links into the form above</h3>
+							</div>}
 						<SortableList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} toggleMembersOnly={this.toggleMembersOnly.bind(this)} onSortEnd={this.onSortEnd.bind(this)} addIt={this.postUserLink.bind(this)} />
+						}
 					</ToggleDisplay>
 
 					<ToggleDisplay show={this.state.topStoryMode}>
@@ -450,7 +463,7 @@ export default App;
 
 	// <ReadcastTopstories readcast='Your Read.casts'/>
 	// => TODO: // get player scroll to work. Test text: Last word is "initially". This is a song by the legendary Badfinger, who were on Apple Records. Apple Computer told the Beatles they would never be in music so that settled the court case initially
-  
+
 		// <Title title='Read.Cast.ly'/>
 
 					// <div id="navbar"></div>
