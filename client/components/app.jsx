@@ -122,6 +122,16 @@ class App extends React.Component {
     })
   }
 
+  // showLogoutButton(){
+  //   render() {
+  //     return (
+  //           <div>
+  //               <input type="submit" value="Search" onClick={this.onClick} />
+  //               { this.state.showResults ? <Results /> : null }
+  //           </div>
+  //       );
+  // }
+
 	addDeliveryMethods(){
 		if (this.state.user.email || this.state.isGuest) {
     		exportOptions.methods.push({id: "email", method: 'Email It'});
