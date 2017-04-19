@@ -15,7 +15,7 @@
 	const SortableList = SortableContainer(({ articles, user, exportOptions, deleteIt, convertIt, topStoryMode, isConverting, toggleConvert, isGuest, toggleMembersOnly, addIt}) => (
 	    <ul>
 	      {articles.map((value, index) => (
-	        <SortableItem key={`item-${index}`} index={index} value={value} user={user} exportOptions={exportOptions} deleteIt={deleteIt} convertIt={convertIt} topStoryMode={topStoryMode} isConverting={isConverting} toggleConvert={toggleConvert} isGuest={isGuest} addIt={addIt}/>
+	        <SortableItem key={`item-${index}`} index={index} value={value} user={user} exportOptions={exportOptions} deleteIt={deleteIt} convertIt={convertIt} topStoryMode={topStoryMode} isConverting={isConverting} toggleConvert={toggleConvert} isGuest={isGuest} addIt={addIt} toggleMembersOnly={toggleMembersOnly}/>
 	      ))}
 	    </ul>
 	  ));

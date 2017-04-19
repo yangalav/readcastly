@@ -3,7 +3,6 @@ import { Button } from 'react-bootstrap';
 import axios from 'axios';
 import { hashHistory } from 'react-router';
 
-//blah
 class LogoutButton extends React.Component {
   constructor() {
     super();

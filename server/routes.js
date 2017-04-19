@@ -109,6 +109,7 @@ module.exports = function(app, express, passport) {
   app.get('/api/', isLoggedIn, function(req, res) {
     console.log('RENDER INDEX')
     app.use(express.static(path.join(__dirname, '../client')));
+    // console.log(req.user);
     res.sendFile(path.join(__dirname, '../client/index.html'), {
       user: req.user,
     });
@@ -135,6 +136,10 @@ module.exports = function(app, express, passport) {
     res.end('/login');
   })
 
+  app.get('/api/getUserInfo', function(req, res) {
+    console.log(req.user);
+    res.send(req.user);
+  })
   //route middleware to make sure a user is logged in
   function isLoggedIn(req, res, next) {
     if(req.isAuthenticated())

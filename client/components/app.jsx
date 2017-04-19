@@ -6,10 +6,11 @@ import ToggleDisplay from 'react-toggle-display';
 
 import Title from './Title.jsx';
 import LogoutButton from './LogoutButton.jsx';
+import LoginButton from './LoginButton.jsx';
 import Subtitle from './Subtitle.jsx';
 import WhichView from './WhichView.jsx';
 // import HeaderNavigation from './Navbar.jsx';
-// {import SignupButton from './SignupButton'; }
+import SignupButton from './SignupButton.jsx';
 import SignUpForm from './SignupForm.jsx';
 import TransFormEr from './TransFormer.jsx';
 import SortableList from './ArticleList.jsx';
@@ -62,7 +63,7 @@ class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isGuest: false,
+			isGuest: true,
 			library: [],
 			headlines: [],
 			gettingHeadlines: false,
@@ -77,7 +78,7 @@ class App extends React.Component {
 				link: 'link',
 				email: 'arfechner@gmail.com',
 				phone: '+19734602180',
-				first_name: 'Andrew',
+				first_name: 'Guest',
 				// voice_pref: 'Mama'
 				// avatar:,
 			},
@@ -94,13 +95,42 @@ class App extends React.Component {
 	}
 
   getCurrentUser(){
-    return axios.get('/api/login')
+    console.log('jerry sucks');
+    return axios.get('/api/getUserInfo')
     .then((res) => {
       console.log('Here is the current user data! : ');
       console.log(res.data);
-      return;
-    });
+      if(res.data !== "") {
+        this.setState({
+        user: {
+          id: res.data.id,
+          stream: 'stream',
+  				link: 'link',
+  				email: res.data.email,
+  				phone: res.data.phone,
+  				first_name: res.data.first_name,
+        }
+       })
+
+       this.setState({
+         isGuest: false,
+       })
+      }
+
+      this.addDeliveryMethods();
+      this.getReadingList();
+    })
   }
+
+  // showLogoutButton(){
+  //   render() {
+  //     return (
+  //           <div>
+  //               <input type="submit" value="Search" onClick={this.onClick} />
+  //               { this.state.showResults ? <Results /> : null }
+  //           </div>
+  //       );
+  // }
 
 	addDeliveryMethods(){
 		if (this.state.user.email || this.state.isGuest) {
@@ -113,7 +143,9 @@ class App extends React.Component {
 
 	// {for getting entire article list}
 	getReadingList() {
+    console.log('USER: ', this.state.user)
 		this.setState({ isLoading: true });
+    console.log('this is the user id for libraryyyyy: ' + this.state.user.id)
 		axios.get('/getAll', {params: {userId: this.state.user.id} })
 			.then((res) => {
 				res.data.forEach((article) => {
@@ -251,6 +283,7 @@ class App extends React.Component {
 	}
 
 	getTopStoriesSources() {
+    console.log('GETTING SOURCES')
 		axios.get('https://newsapi.org/v1/sources?language=en')
 			.then((res) => {
 				let options = res.data.sources.filter((source) => source.sortBysAvailable.indexOf("top") !== -1)
@@ -258,6 +291,17 @@ class App extends React.Component {
 			})
 			.catch ((err) => console.log('ERROR GETTING TOP STORIES SOURCES', err))
 	}
+
+  componentWillMount() {
+    this.getCurrentUser();
+    this.getTopStoriesSources();
+    this.getHeadlines('google-news');
+  }
+
+  // componentDidMount() {
+  //   this.getTopStoriesSources();
+  //   this.getHeadlines('google-news');
+  // }
 
 	toggleView() {
 		let currentState = this.state.topStoryMode;
@@ -292,6 +336,7 @@ class App extends React.Component {
 	}
 
 	getHeadlines(source) {
+    console.log('GETTING HEADLINES')
     axios.post('/topStories', {source: source, headlineMode: true})
       .then((res) => {
         res.data.forEach((article) => {
@@ -310,10 +355,10 @@ class App extends React.Component {
   }
 
 	componentDidMount() {
-		this.addDeliveryMethods();
-		this.getReadingList();
-		this.getTopStoriesSources();
-		this.getHeadlines('google-news');
+		// this.addDeliveryMethods();
+		// this.getReadingList();
+		// this.getTopStoriesSources();
+		// this.getHeadlines('google-news');
 	}
 
   onSortEnd ({oldIndex, newIndex}) {
@@ -327,7 +372,9 @@ class App extends React.Component {
 		return(
 			<div className="modal-container">
 			  <br></br>
-				<LogoutButton />
+          { this.state.isGuest ? null : <LogoutButton /> }
+          { this.state.isGuest ? <LoginButton /> : null }
+          { this.state.isGuest ? <SignupButton /> : null }
 				<Subtitle getCurrentUser={this.getCurrentUser.bind(this)} user={this.state.user} subtitle='your reading backlog solved.'/>
 				{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
 				<TransFormEr postIt={this.postUserLink.bind(this)} isLoading={this.state.isLoading} toggleLoading={this.toggleLoading.bind(this)} isGuest={this.state.isGuest} quickStream={this.quickStream.bind(this)} />
