@@ -29,12 +29,12 @@ class FilterBox extends React.Component {
 
 	render() {
 		return(
-			<Form inline onSubmit={!this.props.isLoading ? this.handleSubmit : null}>
-				<Col md={3}>
+			<Form onSubmit={!this.props.isLoading ? this.handleSubmit : null}>
+				<Col sm={4} smOffset={2} xs={6}>
 					<FormControl type="text" id="search-library" placeholder="Search your articles..." value={this.state.value} onChange={this.handleChange} />
 				</Col>
-        <Col md={3}>
-					<Button type="submit" bsStyle="primary" id="search-library-btn" onClick={this.handleSubmit} disabled={this.props.isLoading}>{this.props.isLoading ? 'Loading...' : 'Filter'}</Button>
+				<Col sm={2} xs={6}>
+					<Button type="submit" bsStyle="primary btn-block" id="search-library-btn" onClick={this.handleSubmit} disabled={this.props.isLoading}>{this.props.isLoading ? 'Loading...' : 'Filter'}</Button>
 					{this.props.isFiltered && <Button bsStyle="default" onClick={this.props.showAll.bind(this)} disabled={this.props.isLoading}>Show All</Button>}
 				</Col>
 			</Form>
@@ -49,7 +49,7 @@ export default FilterBox;
 // <<<<<<<<<<<<<<<<<<<<
 	// TODO: move into App.jsx
 
-// App Component, inside render method 
+// App Component, inside render method
 // <FilterBox searchForIt={this.filterArticles.bind(this)} isLoading={this.state.isLoading} toggleLoading={this.toggleLoading.bind(this)} } />
 
 // TODO: ---------------Drop this in (with mods)
@@ -60,17 +60,3 @@ export default FilterBox;
 // import { Button, Col } from 'react-bootstrap';
 
 // <<<<<<<<<<<<<<<<<<<<
-
-
-
-
-
-
-
-
-
-
-
-
-
-
