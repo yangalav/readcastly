@@ -17,6 +17,7 @@ const create = function(articleData,headlineMode,callback) {
         console.log('FOUND ==== ', found.id);
         if (headlineMode) {
           callback(found)
+          exactFind = true;
         }
         return new ArticleUser({article_id: found.attributes.id,user_id: articleData.user_id}).fetch()
           .then(function(alsoFound) {
