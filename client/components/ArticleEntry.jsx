@@ -87,8 +87,7 @@ class ArticleEntry extends React.Component {
 						<img className="article-sampleImage img-responsive img-rounded" src={this.props.article.image} alt="../images/Readcastly-R.jpeg" />
 					</Col>
 					<Col md={7} className="article-info">
-		  			{!this.props.topStoryMode && this.props.article.title && <div className="article-title"><span><a href={this.props.article.url}>{this.props.article.title}</a></span></div>}
-						{this.props.topStoryMode && this.props.article.title && <div className="article-title-TS"><span><a href={this.props.article.url}>{this.props.article.title}</a></span></div>}
+		  			{this.props.article.title && <div className="article-title"><span><a href={this.props.article.url}>{this.props.article.title}</a></span></div>}
 
 		  			{this.props.article.author && <div className="article-author"><span>{this.props.article.author}</span></div>}
 

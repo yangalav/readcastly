@@ -405,13 +405,13 @@ class App extends React.Component {
       console.log('this.state = ', this.state);
 		return(
 			<div className="entirePage">
-				<HeaderNav isGuest={this.state.isGuest} username={this.state.user.first_name} />
+				<HeaderNav isGuest={this.state.isGuest} username={this.state.user.first_name}/>
 				<div className="modal-container">
 			  	<br></br>
           	{/*{ this.state.isGuest ? null : <LogoutButton /> }
           	{ this.state.isGuest ? <LoginButton /> : null }
           	{ this.state.isGuest ? <SignupButton /> : null }*/}
-					{/*<Subtitle getCurrentUser={this.getCurrentUser.bind(this)} user={this.state.user} subtitle='your reading backlog solved.'/>*/}
+					<Subtitle getCurrentUser={this.getCurrentUser.bind(this)} user={this.state.user} subtitle='your reading backlog solved.'/>
 					{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
 					<TransFormEr postIt={this.postUserLink.bind(this)} isLoading={this.state.isLoading} toggleLoading={this.toggleLoading.bind(this)} isGuest={this.state.isGuest} quickStream={this.quickStream.bind(this)} />
 

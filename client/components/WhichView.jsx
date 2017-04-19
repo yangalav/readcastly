@@ -31,7 +31,7 @@ class WhichView extends React.Component {
                 <Col sm={2} xs={6}>
                   <Button bsStyle="primary" block onClick={this.props.toggleView.bind(this)}>Your readcasts</Button>
                 </Col>
-                <FilterBox isLoading={this.props.isLoading} isFiltered={this.props.isFiltered} toggleLoading={this.props.toggleLoading.bind(this)} searchForIt={this.props.searchForIt.bind(this)} showAll={this.props.showAll.bind(this)} />
+                {this.props.hasLibrary && <FilterBox isLoading={this.props.isLoading} isFiltered={this.props.isFiltered} toggleLoading={this.props.toggleLoading.bind(this)} searchForIt={this.props.searchForIt.bind(this)} showAll={this.props.showAll.bind(this)} />}
                </div>)
               }
             <div><br></br></div>
