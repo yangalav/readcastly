@@ -298,7 +298,7 @@ class App extends React.Component {
 			article: articleObject.article
 		};
 		let route = '/'+ articleObject.method; //**************
-		this.setState({lastMethod: articleObject.method, lastUrl: articleObject.article.url});
+		this.setState({lastMethod: articleObject.method, lastUrl: articleObject.article.url, isLoading: true});
 
 		// console.log('FRONT-A->>>EXPORT-OBJ: ', exportObj);  /* MH: DEBUGGING */
 		console.log('ROUTE: ', route);
@@ -307,11 +307,11 @@ class App extends React.Component {
 		.then((res) => {
 			// console.log('FRONT-B->>>RES: ', res.data.url)  /* MH: DEBUGGING */
 			if (articleObject.method === "stream") {
-				this.setState({nowPlaying: {url: res.data.url, title: res.data.title}, isConverting: false});
+				this.setState({nowPlaying: {url: res.data.url, title: res.data.title}, isConverting: false, isLoading: false});
 
 			} else {
 				// console.log('Message successfully sent to ' + res.data.destination + '.');
-				this.setState({lastLink: res.data.url, showConfirm: true, isConverting: false});
+				this.setState({lastLink: res.data.url, showConfirm: true, isConverting: false, isLoading: false});
 			}
 		})
 		.catch((err) => this.setState({ hasErrored: true, failMessage: ('Error in conversion to speech: ' + err)}));
