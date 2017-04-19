@@ -74,6 +74,7 @@ class App extends React.Component {
 			isConverting: false,
 			failMessage: '',
 			nowPlaying: {url: null, title: null},
+      cycle: false, // this is so audio player does not keep replaying a track
 			user:{
 				id: null,
 				stream: 'stream',
@@ -396,9 +397,16 @@ class App extends React.Component {
 	// }
 
   onSortEnd ({oldIndex, newIndex}) {
-     this.setState({
-       library: arrayMove(this.state.library, oldIndex, newIndex),
-     });
+    if(this.state.isGuest || this.state.topStoryMode) {
+      this.setState({
+        library: arrayMove(this.state.headlines, oldIndex, newIndex),
+      });
+    }
+    else {
+        this.setState({
+        library: arrayMove(this.state.library, oldIndex, newIndex),
+        });
+      };
    };
 
 	render() {
@@ -417,14 +425,15 @@ class App extends React.Component {
 
 					<WhichView isLoading={this.state.isLoading} isFiltered={this.state.isFiltered} toggleLoading={this.toggleLoading.bind(this)} toggleView={this.toggleView.bind(this)} topStoryMode={this.state.topStoryMode} searchForIt={this.filterArticles.bind(this)} showAll={this.libraryShowAll.bind(this)} />
 					{/*this.state.isLoading && <Loading />*/}
+
 					<ToggleDisplay show={!this.state.topStoryMode}>
 						{!this.state.hasLibrary &&
 							<div id='empty-library'>
 								<h2>Your library is empty!</h2>
-								<h3>Head over to Top Stories mode to grab today's headlines</h3>
+								<h3>Head over to Top Stories mode to grab recent headlines</h3>
 								<h3>or feed your own links into the form above</h3>
 							</div>}
-						<SortableList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} toggleMembersOnly={this.toggleMembersOnly.bind(this)} onSortEnd={this.onSortEnd.bind(this)} addIt={this.postUserLink.bind(this)} />
+						<SortableList articles={this.state.library} headlines={this.state.headlines} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} toggleMembersOnly={this.toggleMembersOnly.bind(this)} onSortEnd={this.onSortEnd.bind(this)} addIt={this.postUserLink.bind(this)} />
 						}
 					</ToggleDisplay>
 
@@ -446,7 +455,7 @@ class App extends React.Component {
 				</ToggleDisplay>}
 
 				<div id="player_container">
-					<Player track={this.state.nowPlaying}/>
+					<Player track={this.state.nowPlaying} cycle={false}/>
 				</div>
 				{this.state.isLoading &&
           		<div id="loadingOverlay">
