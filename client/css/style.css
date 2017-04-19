@@ -1,5 +1,6 @@
 body {
   background-color: #e0f3ff;
+  padding-top: 90px;
   /*font-family: 'Work Sans', sans-serif;*/
 }
 
@@ -80,15 +81,25 @@ hr {
 
 .article-entry {
   margin-bottom: 10px;
+  padding-left: 0px;
+  padding-right: 0px;
   border-radius: 10px !important;
 }
 
-.article-sampleImage{
-  height: 150px;
+.articleImage {
+  padding: 0px 0px 0px 0px;
+  margin-top: -10px;
+  margin-bottom: -10px
 }
 
-.article-sampleImage-TS{
-  height: 80px;
+.articleImage img {
+  width: 100%;
+  min-height: 260px;
+}
+
+.article-sampleImage{
+  /*height: 150px;*/
+  /*width: 100%;*/
 }
 
 .article-title{
@@ -99,6 +110,15 @@ hr {
 .article-title-TS{
   font: arial;
   font-size: 1.25em;
+}
+
+.article-info {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.article-buttons {
+  padding-top: 10px;
 }
 
 .article-author{

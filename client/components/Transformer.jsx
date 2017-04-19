@@ -33,7 +33,7 @@ class TransFormEr extends React.Component {
 	render() {
 		return (
 			<Grid>
-						<hr/>
+						{/*<hr/>*/}
 				<Row className="transformer">
 					<Form inline onSubmit={!this.props.isLoading ? this.quickStream.bind(this) : null}>
 						<Col md={this.props.isGuest ? 10 : 8}>
