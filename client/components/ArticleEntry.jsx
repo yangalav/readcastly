@@ -81,14 +81,18 @@ class ArticleEntry extends React.Component {
 	}
 
 	render() {
+		if (!this.props.article.image) {
+			this.props.article.image = '../images/readcastly-logo.png';
+		}
+
 		return (
 			<Row>
 				<Col md={12} className="list-group-item article-entry">
-					<Col md={4} className="articleImage">
-						<img className="article-sampleImage img-responsive img-rounded" src={this.props.article.image} alt="../images/Readcastly-R.jpeg" />
+					<Col md={4} className="articleImage" style={{ backgroundImage: `url(${this.props.article.image})`, backgroundSize: 'cover', backgroundPosition: 'center center', minHeight: 290 }} >
+						{/*<img className="article-sampleImage img-responsive img-rounded" src={this.props.article.image} alt="../images/Readcastly-R.jpeg" />*/}
 					</Col>
 					<Col md={6} className="article-info">
-		  			{this.props.article.title && <div className="article-title"><span><a href={this.props.article.url}>{this.props.article.title}</a></span></div>}
+		  			{this.props.article.title && <div className="article-title"><span><a href={this.props.article.url}><b>{this.props.article.title}</b></a></span></div>}
 
 		  			{this.props.article.author && <div className="article-author"><span>{this.props.article.author}</span></div>}
 
@@ -108,7 +112,7 @@ class ArticleEntry extends React.Component {
 						{this.props.article && this.makeVoiceMenu(this.props.exportOptions.voices)}
 						{this.props.article && this.makeExportMenu(this.props.exportOptions.methods)}
 
-						{this.props.article && <Button bsStyle="success" onClick={!this.props.isConverting ? this.export.bind(this) : null} disabled={this.props.isConverting} block>
+						{this.props.article && <Button bsStyle="warning" onClick={!this.props.isConverting ? this.export.bind(this) : null} disabled={this.props.isConverting} block>
 						{this.props.isConverting ? ('Stand by for your Readcast') : `Read To Me! Estimated: ${this.props.article.est_time}`}
 						</Button>}
 					</div>

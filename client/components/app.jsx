@@ -446,9 +446,9 @@ class App extends React.Component {
 						<ToggleDisplay show={!this.state.topStoryMode}>
 							{!this.state.hasLibrary &&
 								<div id='empty-library'>
-									<h2>Your library is empty!</h2>
-									<h3>Head over to Top Stories mode to grab today's headlines</h3>
-									<h3>or feed your own links into the form above</h3>
+									<h2 style={{color: '#70cbce'}}>Your library is empty!</h2>
+									<h3 style={{color: '#e3deeb'}}>Head over to Top Stories mode to grab today's headlines</h3>
+									<h3 style={{color: '#e3deeb'}}>or feed your own links into the form above</h3>
 								</div>}
 							<SortableList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} toggleMembersOnly={this.toggleMembersOnly.bind(this)} onSortEnd={this.onSortEnd.bind(this)} addIt={this.postUserLink.bind(this)} />
 						</ToggleDisplay>

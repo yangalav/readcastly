@@ -25,7 +25,7 @@ class TransFormEr extends React.Component {
 		this.setState({value: ''});
 	}
 
-	quickStream() {
+	streamIt() {
 		this.props.quickStream(this.state.value);
 		this.setState({value: ''});
 	}
@@ -35,16 +35,16 @@ class TransFormEr extends React.Component {
 			<Grid>
 						{/*<hr/>*/}
 				<Row className="transformer">
-					<Form inline onSubmit={!this.props.isLoading ? this.quickStream.bind(this) : null}>
+					<Form inline onSubmit={!this.props.isLoading ? this.streamIt.bind(this) : null}>
 						<Col md={this.props.isGuest ? 10 : 8}>
-							<FormControl type="text" id="add-library-input" placeholder="Enter an article URL" value={this.state.value} onChange={this.handleChange} onSubmit={!this.props.isLoading ? this.quickStream.bind(this) : null}/>
+							<FormControl type="text" id="add-library-input" placeholder="Enter an article URL" value={this.state.value} onChange={this.handleChange} onSubmit={!this.props.isLoading ? this.streamIt.bind(this) : null} required/>
 						</Col>
 						<Col md={2}>
-					    <Button type="submit" bsStyle="success" id="listen-now-btn" >Listen now</Button>
+					    <Button type="submit" bsStyle="warning" id="listen-now-btn" onClick={!this.props.isLoading ? this.streamIt.bind(this) : null}>Listen now</Button>
 						</Col>
-							</Form>
+					</Form>
             <Col md={2}>
-							{!this.props.isGuest && <Button type="submit" bsStyle="default" id="add-library-btn" disabled={this.props.isLoading} onClick={this.addOne}>{this.props.isLoading ? 'Loading...' : 'Add to Library'}</Button>}
+							{!this.props.isGuest && <Button type="submit" bsStyle="warning" id="add-library-btn" disabled={this.props.isLoading} onClick={this.state.value === '' ? null : this.addOne} >Add to Library</Button>}
 						</Col>
 				</Row>
 			</Grid>
