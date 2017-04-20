@@ -24,6 +24,7 @@ import GuestMode from './GuestMode.jsx';
 import isValidUrl from '../helpers/urlValidation.js';
 import { ErrorAlert } from './Alerts.jsx';
 import Loading from 'react-loading';
+import { ToastContainer, toast } from 'react-toastify';
 
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 
@@ -275,11 +276,12 @@ class App extends React.Component {
 // {for deleting a single article}
 	deleteArticle(url) {
     console.log('in app.js l. 214. deleteArticle invoked...');
-		// {this.setState({ isLoading: true });}
+		this.setState({ isLoading: true });
 		axios.post('/deleteOne', { userId: this.state.user.id, url: url })
 		.then((res) => {
-			this.setState({ isLoading: false, library: (this.deleteOne(res.data)) });
-			// {=> TODO: figure out how to alert user that article was deleted}
+			this.setState({library: (this.deleteOne(res.data)) }, function(){
+				this.setState({isLoading: false});
+			});
 		})
 		.catch((err) => this.setState({ hasErrored: true, failMessage: (res.data.error ||'Unable to delete that article') }));
 	}
@@ -308,7 +310,7 @@ class App extends React.Component {
 			// console.log('FRONT-B->>>RES: ', res.data.url)  /* MH: DEBUGGING */
 			if (articleObject.method === "stream") {
 				this.setState({nowPlaying: {url: res.data.url, title: res.data.title}, isConverting: false, isLoading: false});
-
+				this.popToast();
 			} else {
 				// console.log('Message successfully sent to ' + res.data.destination + '.');
 				this.setState({lastLink: res.data.url, showConfirm: true, isConverting: false, isLoading: false});
@@ -322,6 +324,7 @@ class App extends React.Component {
 		axios.post('/quickStream', {url: url})
 		.then((res) => {
 			this.setState({nowPlaying: {url: res.data.url, title: res.data.title}, isLoading: false});
+			this.popToast();
 		})
 	}
 
@@ -426,6 +429,13 @@ class App extends React.Component {
       };
    };
 
+ 	popToast() {
+ 		console.log('POPPING TOAST');
+   	toast('Your ReadCast is available in the player below', {
+   		type: toast.TYPE.SUCCESS
+   	})
+   };
+
 	render() {
 		return(
 			<div className="entirePage">
@@ -470,7 +480,7 @@ class App extends React.Component {
             			<Loading type="spin" color="red" />
           		</div>}
 					</ToggleDisplay>}
-
+					<ToastContainer autoClose={4000} position="bottom-center"/>
 					<div id="player_container">
 						<Player track={this.state.nowPlaying}/>
 					</div>
