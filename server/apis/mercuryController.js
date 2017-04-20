@@ -55,7 +55,9 @@ const parseAndSave = function(userId, url, headlineMode, callback){
     // error if request doesn't go through
     if(error) {
         console.log('routes.js l 20, GET req to Mercury. error! = ', error);
-        res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
+        callback(utils.errors.mercuryTransmission)
+        return;        
+        // res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
       }
     try {
         // console.log('routes.js l24, in try block after Mercury response...');
