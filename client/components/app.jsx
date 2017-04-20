@@ -426,6 +426,13 @@ class App extends React.Component {
    	})
    };
 
+ 	popToast() {
+ 		console.log('POPPING TOAST');
+   	toast('Your ReadCast is available in the player below', {
+   		type: toast.TYPE.SUCCESS
+   	})
+   };
+
 	render() {
 		return(
 			<div className="entirePage">
@@ -447,7 +454,9 @@ class App extends React.Component {
 							{!this.state.hasLibrary &&
 								<div id='empty-library'>
 									<h2>Your library is empty!</h2>
-									<h3>Head over to Top Stories mode to grab todays headlines</h3>
+
+									<h3>Head over to Top Stories mode to grab today's headlines</h3>
+
 									<h3>or feed your own links into the form above</h3>
 								</div>}
 							<SortableList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} toggleMembersOnly={this.toggleMembersOnly.bind(this)} onSortEnd={this.onSortEnd.bind(this)} addIt={this.postUserLink.bind(this)} />
