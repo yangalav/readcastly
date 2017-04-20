@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { hashHistory } from 'react-router'
-import { Button } from 'react-bootstrap';
+import { Button, Form, FormControl, FormGroup, ControlLabel, Col, Row } from 'react-bootstrap';
 import { Collapse } from 'react-collapse';
 // import {Grid, Row, Col, FormGroup, FormControl, Button, Carousel} from 'react-bootstrap';
 
@@ -25,15 +25,7 @@ class Splash extends React.Component {
 
   }
 
-  goGuest() {
-    hashHistory.push('/app');
-  }
-
-  goSignup() {
-    hashHistory.push('/signup');
-  }
-
-  goLogin(e) {
+  handleLogin(e) {
     e.preventDefault();
     console.log("The email is: " + this.state.email);
     console.log("The password is: " + this.state.password);
@@ -66,10 +58,10 @@ class Splash extends React.Component {
     .catch((err) => console.log('SPLASH REDIRECT ERROR: ', err));
   }
 
-  handleLogin(e){
+  handleSignup(e){
     e.preventDefault();
-    console.log('handleddd loginnn');
-    hashHistory.push('/login');
+    console.log('handleddd signuppp');
+    hashHistory.push('/signup');
     return;
   }
 
@@ -80,12 +72,7 @@ class Splash extends React.Component {
     return;
   }
 
-  handleSignup(e){
-    e.preventDefault();
-    console.log('signup collapse');
-    this.setState({ isOpened: true });
-    return;
-  }
+
 
   render() {
     return (
@@ -110,24 +97,37 @@ class Splash extends React.Component {
               <br />
 
 
+              <div className="row">
+                <div>
+                  <div className="row">
+
+                    <Form inline>
+                      <FormGroup bsSize="small" controlId="formInlineName" className="wow fadeInUp">
+                          <FormControl className="customFormWidth" type="text" placeholder="Email" />
+                      </FormGroup>
+                        {'         '}
+                      <FormGroup bsSize="small" controlId="formInlineEmail" className="wow fadeInUp">
+                        <FormControl type="email" placeholder="Password" />
+                      </FormGroup>
+                        {'           '}
+                      <Button bsSize="small" className="btn btn-primary btn-lg scroll wow fadeInUp customLoginButtonSize" onClick={this.handleLogin}>Login</Button>
+                    </Form>
+
+                  </div>
+                </div>
+              </div>
+
 
               <div className="row">
                 <div className="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
                   <div className="row">
 
                     <div className="col-xs-6 text-right wow fadeInUp" data-wow-delay="1s">
-                      <Button className="btn btn-secondary btn-lg scroll" onClick={this.handleSignup}>Signup</Button>
-                      <Collapse isOpened={true || false}>
-                        <div>Random content</div>
-                      </Collapse>
-                  </div>
-
-                    <div className="col-xs-6 text-right wow fadeInUp" data-wow-delay="1s">
-                      <Button className="btn btn-secondary btn-lg scroll" onClick={this.handleLogin}>Login</Button>
+                      <Button className="btn btn-primary btn-lg scroll" onClick={this.handleSignup}>Signup</Button>
                     </div>
 
                     <div className="col-xs-6 text-left wow fadeInUp" data-wow-delay="1.4s">
-                      <Button className="btn btn-primary btn-lg scroll" onClick={this.handleGuestMode}>Explore as guest</Button>
+                      <Button className="btn btn-secondary btn-lg scroll" onClick={this.handleGuestMode}>Explore as guest</Button>
                     </div>
 
                   </div>

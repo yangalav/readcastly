@@ -154,8 +154,9 @@ a:hover, a:focus {
   transition: all 0.35s ease-in-out;
 }
 
-
-
+.customLoginButtonSize {
+  width: 100px;
+}
 
 /*-----------------Margins------------------*/
 .margin-0 {
@@ -582,7 +583,7 @@ footer {
     font-size: 15px;
     height: 60px;
     line-height: 1.42857;
-    padding: 6px 12px;
+    padding: 6px 12px 0 6px;
     transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
 }
 
