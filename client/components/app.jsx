@@ -74,7 +74,7 @@ class App extends React.Component {
 			isLoading: false,
 			isConverting: false,
 			failMessage: '',
-			nowPlaying: {url: 'http://www.netprophet.net/charts/charts/Badfinger%20-%20No%20Matter%20What.mp3', title: 'No Matter What'},
+			nowPlaying: null/*{url: 'http://www.netprophet.net/charts/charts/Badfinger%20-%20No%20Matter%20What.mp3', title: 'No Matter What'}*/,
 			user:{
 				id: null,
 				stream: 'stream',
@@ -387,6 +387,10 @@ class App extends React.Component {
 		this.setState({topStoryAdd: false});
 	}
 
+	hidePlayer() {
+		this.setState({nowPlaying: null});
+	}
+
 	getHeadlines(source) {
     console.log('GETTING HEADLINES')
     axios.post('/topStories', {source: source, headlineMode: true})
@@ -441,7 +445,7 @@ class App extends React.Component {
 
 					<ToggleDisplay show={!this.state.isGuest}>
 
-						<WhichView isLoading={this.state.isLoading} isFiltered={this.state.isFiltered} toggleLoading={this.toggleLoading.bind(this)} toggleView={this.toggleView.bind(this)} topStoryMode={this.state.topStoryMode} searchForIt={this.filterArticles.bind(this)} showAll={this.libraryShowAll.bind(this)} />
+						<WhichView isLoading={this.state.isLoading} isFiltered={this.state.isFiltered} toggleLoading={this.toggleLoading.bind(this)} toggleView={this.toggleView.bind(this)} topStoryMode={this.state.topStoryMode} searchForIt={this.filterArticles.bind(this)} showAll={this.libraryShowAll.bind(this)} hasLibrary={this.state.hasLibrary} />
 						{/*this.state.isLoading && <Loading />*/}
 						<ToggleDisplay show={!this.state.topStoryMode}>
 							{!this.state.hasLibrary &&
@@ -471,9 +475,9 @@ class App extends React.Component {
           		</div>}
 					</ToggleDisplay>}
 					<ToastContainer autoClose={4000} position="bottom-center"/>
-					<div id="player_container">
-						<Player track={this.state.nowPlaying}/>
-					</div>
+					{this.state.nowPlaying && <div id="player_container">
+						<Player track={this.state.nowPlaying} hidePlayer={this.hidePlayer.bind(this)} />
+					</div>}
 					{this.state.isLoading &&
           		<div id="loadingOverlay">
             		<Loading type="spin" color="red" />
