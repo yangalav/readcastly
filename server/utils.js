@@ -34,6 +34,11 @@ const textInspector = function(dbContents) {
   // console.log('------------dbContents[0]: ', dbContents[0] )
   dbContents.forEach(function(entryObj) {
     url = entryObj.url;
+    /* these calls should filter out occurrences of '&hellips; and other hex codes in user's readcast library' */
+    entryObj.excerpt = unescapeHex(entryObj.excerpt);
+    entryObj.title = unescapeHex(entryObj.title); 
+    entryObj.text = unescapeHex(entryObj.text);
+    /* this will check for any remaining hex code offenders, and return them (for logging, etc.) */
     results = entryObj.text.match(pattern);
     // (results === null) ? console.log('---- FOR this URL, results are NULL: ', url) : console.log('-----(utils.js: L-36) One Set of Results: ', results);
     if (results !== null) {
