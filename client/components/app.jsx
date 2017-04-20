@@ -397,9 +397,11 @@ class App extends React.Component {
 	// }
 
   onSortEnd ({oldIndex, newIndex}) {
+    console.log('app.jsx. onSortEnd, l 400');
     if(this.state.isGuest || this.state.topStoryMode) {
+      console.log('app.jsx. in conditional, l 402');
       this.setState({
-        library: arrayMove(this.state.headlines, oldIndex, newIndex),
+        headlines: arrayMove(this.state.headlines, oldIndex, newIndex),
       });
     }
     else {
@@ -433,8 +435,8 @@ class App extends React.Component {
 								<h3>Head over to Top Stories mode to grab recent headlines</h3>
 								<h3>or feed your own links into the form above</h3>
 							</div>}
-						<SortableList articles={this.state.library} headlines={this.state.headlines} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} toggleMembersOnly={this.toggleMembersOnly.bind(this)} onSortEnd={this.onSortEnd.bind(this)} addIt={this.postUserLink.bind(this)} />
-						}
+						<SortableList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} toggleMembersOnly={this.toggleMembersOnly.bind(this)} onSortEnd={this.onSortEnd.bind(this)} addIt={this.postUserLink.bind(this)} />
+
 					</ToggleDisplay>
 
 					<ToggleDisplay show={this.state.topStoryMode}>
@@ -452,7 +454,7 @@ class App extends React.Component {
           		<div id="loadingOverlay">
             		<Loading type="spin" color="red" />
           		</div>}
-				</ToggleDisplay>}
+				</ToggleDisplay>
 
 				<div id="player_container">
 					<Player track={this.state.nowPlaying} cycle={false}/>

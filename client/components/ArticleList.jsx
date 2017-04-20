@@ -9,10 +9,11 @@
 	import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 
 	const SortableItem = SortableElement(({ index, user, value, exportOptions, deleteIt, convertIt, topStoryMode, isConverting, toggleConvert, isGuest, toggleMembersOnly, addIt}) =>
-	  <ArticleEntry key={index} user={user} article={value} exportOptions={exportOptions} deleteIt={deleteIt} convertIt={convertIt} topStoryMode={topStoryMode} isConverting={isConverting} toggleConvert={toggleConvert} isGuest={isGuest} toggleMembersOnly={toggleMembersOnly} addIt={addIt} />
+	
+	  <ArticleEntry key={index} user={user} headline={value} article={value} exportOptions={exportOptions} deleteIt={deleteIt} convertIt={convertIt} topStoryMode={topStoryMode} isConverting={isConverting} toggleConvert={toggleConvert} isGuest={isGuest} toggleMembersOnly={toggleMembersOnly} addIt={addIt} />
 	);
 
-	const SortableList = SortableContainer(({ articles, headlines, user, exportOptions, deleteIt, convertIt, topStoryMode, isConverting, toggleConvert, isGuest, toggleMembersOnly, addIt}) => (
+	const SortableList = SortableContainer(({ articles, user, exportOptions, deleteIt, convertIt, topStoryMode, isConverting, toggleConvert, isGuest, toggleMembersOnly, addIt}) => (
 			<div className="container sortable-items">
 		    <ul>
 		      {articles.map((value, index) => (
