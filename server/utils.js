@@ -104,17 +104,17 @@ const readcastBuilder = function(articleObj) {
 
 // invoked (in mercuryController) when first posting an article / url
 const preStripSpacing = function(textInput) {
-  let headerTag = /(\<)(h[1-6])(\>)(.*?)(\<\/)(h[1-6])(\>)/g;
+  let headerTag = /(\<)(h[1-6])(\>)(.+?)(\<\/)(h[1-6])(\>)/g;
   let breakTag = /(\<br\>)/g;
   let periodTag = /(\.)(\<)/g;
   let parenTag = /(\.)(\<)/g;
   let tagCaps = /\>([A-Z])/g;
   return textInput
-    .replace(headerTag, " $1$2$3\'$4\.\'$5$6$7\n") // e.g., before("</h>") => after(". </h>") // WAITERS
-    .replace(breakTag, ". $1") // e.g., before("<br>") => after(". <br>") // WAITERS
-    .replace(periodTag, "$1 $2") // e.g., before(".<") => after(". <")
-    .replace(parenTag, "$1 $2") // e.g., before(")<") => after(") <")
-    .replace(tagCaps, "\>\. $1") // e.g., before(">A") => after("> A")
+    .replace(headerTag, " $1$2$3\'$4\.\'$5$6$7\n")  /* e.g., before("</h>") => after(". </h>") */
+    .replace(breakTag, ". $1")  /* e.g., before("<br>") => after(". <br>") */
+    .replace(periodTag, "$1 $2") /* e.g., before(".<") => after(". <") */
+    .replace(parenTag, "$1 $2") /* e.g., before(")<") => after(") <") */
+    .replace(tagCaps, "\>\. $1") /* e.g., before(">A") => after("> A") */
 }
 
 // function to convert hexadecimal character codes into their character equivalents;
