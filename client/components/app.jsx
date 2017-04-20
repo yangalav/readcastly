@@ -74,7 +74,7 @@ class App extends React.Component {
 			isLoading: false,
 			isConverting: false,
 			failMessage: '',
-			nowPlaying: null/*{url: 'http://www.netprophet.net/charts/charts/Badfinger%20-%20No%20Matter%20What.mp3', title: 'No Matter What'}*/,
+			nowPlaying: {url: 'http://www.netprophet.net/charts/charts/Badfinger%20-%20No%20Matter%20What.mp3', title: 'No Matter What'},
 			user:{
 				id: null,
 				stream: 'stream',
@@ -387,10 +387,6 @@ class App extends React.Component {
 		this.setState({topStoryAdd: false});
 	}
 
-	hidePlayer() {
-		this.setState({nowPlaying: null});
-	}
-
 	getHeadlines(source) {
     console.log('GETTING HEADLINES')
     axios.post('/topStories', {source: source, headlineMode: true})
@@ -455,7 +451,6 @@ class App extends React.Component {
 									<h3>or feed your own links into the form above</h3>
 								</div>}
 							<SortableList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} toggleMembersOnly={this.toggleMembersOnly.bind(this)} onSortEnd={this.onSortEnd.bind(this)} addIt={this.postUserLink.bind(this)} />
-							}
 						</ToggleDisplay>
 
 						<ToggleDisplay show={this.state.topStoryMode}>
@@ -475,9 +470,9 @@ class App extends React.Component {
           		</div>}
 					</ToggleDisplay>}
 					<ToastContainer autoClose={4000} position="bottom-center"/>
-					{this.state.nowPlaying && <div id="player_container">
-						<Player track={this.state.nowPlaying} hidePlayer={this.hidePlayer.bind(this)} />
-					</div>}
+					<div id="player_container">
+						<Player track={this.state.nowPlaying} />
+					</div>
 					{this.state.isLoading &&
           		<div id="loadingOverlay">
             		<Loading type="spin" color="red" />
