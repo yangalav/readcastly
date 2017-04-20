@@ -4,7 +4,9 @@ const User = require('./database/models/user');
 const errors = {
     hasAlready: {"error": "This article is already in your database"},
     badUrl: {"error": "Sincere apologies from the Read.cast.ly team, but the URL submitted is one of a small number that our service cannot currently handle (such as URLs from LinkedIn Pulse). We will work on this!"}, // this is Mercury parser issue where it won't accept certain URLs
-    mercuryCantParse: {"error": "The URL submitted is malformed. Please check that it does not have any extra characters on the front or back (e.g., a quotation mark) and resubmit the URL."}
+    mercuryCantParse: {"error": "The URL submitted is malformed. Please check that it does not have any extra characters on the front or back (e.g., a quotation mark) and resubmit the URL."},
+    mercuryTransmission: {"error": "An error occurred while transmitting the url to web parser"},
+    mercuryTimeout: {"error": "The requested url could not be parsed within 10 seconds, and timed out"}
 };
 
 const domainExtractor = function(url) {
@@ -32,6 +34,11 @@ const textInspector = function(dbContents) {
   // console.log('------------dbContents[0]: ', dbContents[0] )
   dbContents.forEach(function(entryObj) {
     url = entryObj.url;
+    /* these calls should filter out occurrences of '&hellips; and other hex codes in user's readcast library' */
+    entryObj.excerpt = unescapeHex(entryObj.excerpt);
+    entryObj.title = unescapeHex(entryObj.title); 
+    entryObj.text = unescapeHex(entryObj.text);
+    /* this will check for any remaining hex code offenders, and return them (for logging, etc.) */
     results = entryObj.text.match(pattern);
     // (results === null) ? console.log('---- FOR this URL, results are NULL: ', url) : console.log('-----(utils.js: L-36) One Set of Results: ', results);
     if (results !== null) {
@@ -102,17 +109,17 @@ const readcastBuilder = function(articleObj) {
 
 // invoked (in mercuryController) when first posting an article / url
 const preStripSpacing = function(textInput) {
-  let headerTag = /(\<)(h[1-6])(\>)(.*?)(\<\/)(h[1-6])(\>)/g;
+  let headerTag = /(\<)(h[1-6])(\>)(.+?)(\<\/)(h[1-6])(\>)/g;
   let breakTag = /(\<br\>)/g;
   let periodTag = /(\.)(\<)/g;
   let parenTag = /(\.)(\<)/g;
   let tagCaps = /\>([A-Z])/g;
   return textInput
-    .replace(headerTag, " $1$2$3\'$4\.\'$5$6$7\n") // e.g., before("</h>") => after(". </h>") // WAITERS
-    .replace(breakTag, ". $1") // e.g., before("<br>") => after(". <br>") // WAITERS
-    .replace(periodTag, "$1 $2") // e.g., before(".<") => after(". <")
-    .replace(parenTag, "$1 $2") // e.g., before(")<") => after(") <")
-    .replace(tagCaps, "\>\. $1") // e.g., before(">A") => after("> A")
+    .replace(headerTag, " $1$2$3\'$4\.\'$5$6$7\n")  /* e.g., before("</h>") => after(". </h>") */
+    .replace(breakTag, ". $1")  /* e.g., before("<br>") => after(". <br>") */
+    .replace(periodTag, "$1 $2") /* e.g., before(".<") => after(". <") */
+    .replace(parenTag, "$1 $2") /* e.g., before(")<") => after(") <") */
+    .replace(tagCaps, "\>\. $1") /* e.g., before(">A") => after("> A") */
 }
 
 // function to convert hexadecimal character codes into their character equivalents;

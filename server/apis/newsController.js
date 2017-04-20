@@ -4,6 +4,8 @@ const newsApiSources = require('../database/collections/newsApi.json');
 const Sources = require('../database/collections/sources');
 const Source = require('../database/models/source');
 const mercury = require('./mercuryController');
+const Promise = require('bluebird');
+const utils = require('../utils');
 
 const newsApiImport = function(callback) {
   // newsApiSources.sources.forEach(function(source){
@@ -91,6 +93,13 @@ const topStories = function(source, headlineMode, res) {
             res.send(headlines);
           }
         };
+
+        /* 
+        SEARCHING FOR A PROMISE-BASED SOLUTION TO CODE BELOW, 
+        IN ORDER SET TIMER LIMIT (e.g., 5 seconds) FOR EACH ARTICLE/URL TO RESPOND, 
+        BEFORE SKIPPING IT AND PROCEEDING TO NEXT ARTICLE 
+        */
+
         parsedNewsObj.articles.forEach(function(article) {
           // console.log('ARTICLE BEING PROCESSED === ', article.title);
           mercury.parseAndSave(99, article.url, headlineMode, function(result) {
@@ -98,6 +107,40 @@ const topStories = function(source, headlineMode, res) {
             bundler(result);
           });
         });
+
+        /* UNSUCCESSFUL ATTEMPTS AT PROMISE-BASED SOLUTION */
+
+        /* ATTEMPT: WITH BLUEBIRD .TIMEOUT */
+        // let mercuryParsePromise = Promise.promisify(mercury.parseAndSave);
+        // mercuryParsePromise(99, article.url, headlineMode, function(result) {
+        //     return result;
+        //   })
+        // // })
+        // .timeout(5000)
+        // .then(function(result) {
+        //   bundler(result);
+        // })
+        // .catch(Promise.TimeoutError, function(err) {
+        //   console.log(utils.errors.mercuryTimeout); 
+        // });
+        // continue;
+
+        /* ATTEMPT: WITH BLUEBIRD PROMISE.TRY AND .TIMEOUT */
+        // for (let i = 0; i < parsedNewsObj.length; i++) {
+        //   Promise.try(function(article) {
+        //     return mercury.parseAndSave(99, article.url, headlineMode, function(result) {
+        //       return result;
+        //     })
+        //     .timeout(5000)
+        //     .then(function(result) {
+        //       bundler(result);
+        //     })
+        //     .catch(Promise.TimeoutError, function(err) {
+        //       console.log(utils.errors.mercuryTimeout); 
+        //     });
+        //   });
+        // } 
+
       }
     });
 }
