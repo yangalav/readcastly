@@ -414,18 +414,9 @@ class App extends React.Component {
 	// }
 
   onSortEnd ({oldIndex, newIndex}) {
-    console.log('app.jsx. onSortEnd, l 400');
-    if(this.state.isGuest || this.state.topStoryMode) {
-      console.log('app.jsx. in conditional, l 402');
-      this.setState({
-        headlines: arrayMove(this.state.headlines, oldIndex, newIndex),
-      });
-    }
-    else {
         this.setState({
         library: arrayMove(this.state.library, oldIndex, newIndex),
         });
-      };
    };
 
  	popToast() {
