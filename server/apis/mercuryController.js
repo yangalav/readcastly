@@ -25,7 +25,7 @@ const optionsBuilder = function(url) {
 };
 
 const articleObjFinisher = function(obj,source) {
-  obj.title = source.title;
+  obj.title = utils.unescapeHex(source.title);
   // NOTE: a series of console.log statements that follow (below) track the changes before and after each step in processing the article text
   // console.log('======articleObjFinisher-A -- PRE-STRIP-source.content: ', source.content); /* MH: DEBUGGING */
   // ...put text through the stripper module, to strip away html tags from the article text
@@ -42,7 +42,7 @@ const articleObjFinisher = function(obj,source) {
   obj.author = source.author || "Dave Winfield" // "Author not available";
   obj.publication_date = source.date_published;
   obj.image = source.lead_image_url ||   "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcT8-E0VKkso9wu60MnVZor7_HqEJIAm8DMB6iJGgFvG1m57WHz0";
-  obj.excerpt = source.excerpt;
+  obj.excerpt = utils.unescapeHex(source.excerpt);
   obj.word_count = source.word_count;
   obj.est_time = source.word_count / 145; // based on 145 wpm avg. spoken speech
   obj.domain = source.domain || utils.domainExtractor(obj.url);
