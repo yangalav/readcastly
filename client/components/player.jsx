@@ -1,7 +1,7 @@
 import React from 'react';
 import AudioPlayer from 'react-responsive-audio-player';
 
-const Player = ({track}) => (
+const Player = ({track,hidePlayer}) => (
   <div className="audio-player">
   {
     (track.url === null)

@@ -37,7 +37,7 @@ class TransFormEr extends React.Component {
 				<Row className="transformer">
 					<Form inline onSubmit={!this.props.isLoading ? this.quickStream.bind(this) : null}>
 						<Col md={this.props.isGuest ? 10 : 8}>
-							<FormControl type="text" id="add-library-input" placeholder="Enter an article URL" value={this.state.value} onChange={this.handleChange} />
+							<FormControl type="text" id="add-library-input" placeholder="Enter an article URL" value={this.state.value} onChange={this.handleChange} onSubmit={!this.props.isLoading ? this.quickStream.bind(this) : null}/>
 						</Col>
 						<Col md={2}>
 					    <Button type="submit" bsStyle="success" id="listen-now-btn" >Listen now</Button>
