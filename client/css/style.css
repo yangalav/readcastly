@@ -1,5 +1,6 @@
 body {
   background-color: #e0f3ff;
+  padding-top: 90px;
   /*font-family: 'Work Sans', sans-serif;*/
 }
 
@@ -29,6 +30,16 @@ hr {
 .sortable-items .row {
   padding-right: 15px;
   padding-left: 15px;
+}
+
+.navbar-nav > li > a, .navbar-brand {
+    padding-top:4px !important;
+    padding-bottom:0 !important;
+    height: 50px;
+}
+
+.navbar {
+  min-height:50px !important;
 }
 
 .title {
@@ -80,15 +91,25 @@ hr {
 
 .article-entry {
   margin-bottom: 10px;
+  padding-left: 0px;
+  padding-right: 0px;
   border-radius: 10px !important;
 }
 
-.article-sampleImage{
-  height: 150px;
+.articleImage {
+  padding: 0px 0px 0px 0px;
+  margin-top: -10px;
+  margin-bottom: -10px
 }
 
-.article-sampleImage-TS{
-  height: 80px;
+.articleImage img {
+  width: 100%;
+  min-height: 260px;
+}
+
+.article-sampleImage{
+  /*height: 150px;*/
+  /*width: 100%;*/
 }
 
 .article-title{
@@ -96,9 +117,13 @@ hr {
   font-size: 1.75em;
 }
 
-.article-title-TS{
-  font: arial;
-  font-size: 1.25em;
+.article-info {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.article-buttons {
+  padding-top: 10px;
 }
 
 .article-author{
@@ -126,7 +151,7 @@ hr {
 }
 
 .modal-container .modal, .modal-container .modal-backdrop {
-  position: absolute;
+  position: fixed;
   top: -150px;
 }
 
@@ -140,7 +165,7 @@ hr {
   z-index: 10;
   width: 100%;
   height: 100%;
-  position: absolute;
+  position: fixed;
   top: 400px;
   left: 48%;
 }

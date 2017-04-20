@@ -9,7 +9,7 @@ import LogoutButton from './LogoutButton.jsx';
 import LoginButton from './LoginButton.jsx';
 import Subtitle from './Subtitle.jsx';
 import WhichView from './WhichView.jsx';
-// import HeaderNavigation from './Navbar.jsx';
+import HeaderNav from './Navbar.jsx';
 import SignupButton from './SignupButton.jsx';
 import SignUpForm from './SignupForm.jsx';
 import TransFormEr from './TransFormer.jsx';
@@ -24,6 +24,7 @@ import GuestMode from './GuestMode.jsx';
 import isValidUrl from '../helpers/urlValidation.js';
 import { ErrorAlert } from './Alerts.jsx';
 import Loading from 'react-loading';
+import { ToastContainer, toast } from 'react-toastify';
 
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 
@@ -73,7 +74,7 @@ class App extends React.Component {
 			isLoading: false,
 			isConverting: false,
 			failMessage: '',
-			nowPlaying: {url: 'http://www.netprophet.net/charts/charts/Badfinger%20-%20No%20Matter%20What.mp3', title: 'No Matter What'},
+			nowPlaying: null/*{url: 'http://www.netprophet.net/charts/charts/Badfinger%20-%20No%20Matter%20What.mp3', title: 'No Matter What'}*/,
 			user:{
 				id: null,
 				stream: 'stream',
@@ -177,21 +178,36 @@ class App extends React.Component {
 // {helper function for postUserLink}
 	addOne(obj) {
 		let result = this.state.library;
-		obj.est_time = this.cleanTime(obj.est_time);
-		if (obj.publication_date) {
-			obj.publication_date = this.cleanDate(obj.publication_date);
+		let there = false;
+		result.forEach(function(article) {
+			if (article.url === obj.url) {
+				there = true;
+			}
+		});
+		console.log('THERE? ', there);
+		if (!there) {
+			obj.est_time = this.cleanTime(obj.est_time);
+			if (obj.publication_date) {
+				obj.publication_date = this.cleanDate(obj.publication_date);
+			}
+			if (!obj.error) {
+				result.unshift(obj)
+			};
+			if (this.state.topStoryMode && obj.error) {
+				this.setState({topStoryAddMsg: {'result': "Sorry ...", 'message': obj.error}}, function() {
+					this.setState({topStoryAdd: true})
+				});
+			} else if (this.state.topStoryMode) {
+				this.setState({topStoryAddMsg: {'result': "Success!", 'message': "The article has been added to your library."}}, function() {this.setState({topStoryAdd: true})
+				});
+			}
+		} else {
+			if (this.state.topStoryMode) {
+				this.setState({topStoryAddMsg: {'result': "No need ...", 'message': 'That article is already in your library.'}}, function() {
+					this.setState({topStoryAdd: true})
+				});
+			}
 		}
-		if (this.state.topStoryMode && obj.error) {
-			this.setState({topStoryAddMsg: {'result': "Sorry ...", 'message': obj.error}}, function() {
-				this.setState({topStoryAdd: true})
-			});
-		} else if (this.state.topStoryMode) {
-			this.setState({topStoryAddMsg: {'result': "Success!", 'message': "The article has been added to your library"}}, function() {this.setState({topStoryAdd: true})
-			});
-		}
-		if (!obj.error) {
-			result.unshift(obj)
-		};
 		return result;
 	}
 
@@ -259,11 +275,12 @@ class App extends React.Component {
 // {for deleting a single article}
 	deleteArticle(url) {
     console.log('in app.js l. 214. deleteArticle invoked...');
-		// {this.setState({ isLoading: true });}
+		this.setState({ isLoading: true });
 		axios.post('/deleteOne', { userId: this.state.user.id, url: url })
 		.then((res) => {
-			this.setState({ isLoading: false, library: (this.deleteOne(res.data)) });
-			// {=> TODO: figure out how to alert user that article was deleted}
+			this.setState({library: (this.deleteOne(res.data)) }, function(){
+				this.setState({isLoading: false});
+			});
 		})
 		.catch((err) => this.setState({ hasErrored: true, failMessage: (res.data.error ||'Unable to delete that article') }));
 	}
@@ -282,7 +299,7 @@ class App extends React.Component {
 			article: articleObject.article
 		};
 		let route = '/'+ articleObject.method; //**************
-		this.setState({lastMethod: articleObject.method, lastUrl: articleObject.article.url});
+		this.setState({lastMethod: articleObject.method, lastUrl: articleObject.article.url, isLoading: true});
 
 		// console.log('FRONT-A->>>EXPORT-OBJ: ', exportObj);  /* MH: DEBUGGING */
 		console.log('ROUTE: ', route);
@@ -291,11 +308,11 @@ class App extends React.Component {
 		.then((res) => {
 			// console.log('FRONT-B->>>RES: ', res.data.url)  /* MH: DEBUGGING */
 			if (articleObject.method === "stream") {
-				this.setState({nowPlaying: {url: res.data.url, title: res.data.title}, isConverting: false});
-
+				this.setState({nowPlaying: {url: res.data.url, title: res.data.title}, isConverting: false, isLoading: false});
+				this.popToast();
 			} else {
 				// console.log('Message successfully sent to ' + res.data.destination + '.');
-				this.setState({lastLink: res.data.url, showConfirm: true, isConverting: false});
+				this.setState({lastLink: res.data.url, showConfirm: true, isConverting: false, isLoading: false});
 			}
 		})
 		.catch((err) => this.setState({ hasErrored: true, failMessage: ('Error in conversion to speech: ' + err)}));
@@ -306,6 +323,7 @@ class App extends React.Component {
 		axios.post('/quickStream', {url: url})
 		.then((res) => {
 			this.setState({nowPlaying: {url: res.data.url, title: res.data.title}, isLoading: false});
+			this.popToast();
 		})
 	}
 
@@ -369,6 +387,10 @@ class App extends React.Component {
 		this.setState({topStoryAdd: false});
 	}
 
+	hidePlayer() {
+		this.setState({nowPlaying: null});
+	}
+
 	getHeadlines(source) {
     console.log('GETTING HEADLINES')
     axios.post('/topStories', {source: source, headlineMode: true})
@@ -401,60 +423,69 @@ class App extends React.Component {
      });
    };
 
+ 	popToast() {
+ 		console.log('POPPING TOAST');
+   	toast('Your ReadCast is available in the player below', {
+   		type: toast.TYPE.SUCCESS
+   	})
+   };
+
 	render() {
-      console.log('this.state = ', this.state);
 		return(
-			<div className="modal-container">
-			  <br></br>
-          { this.state.isGuest ? null : <LogoutButton /> }
-          { this.state.isGuest ? <LoginButton /> : null }
-          { this.state.isGuest ? <SignupButton /> : null }
-				<Subtitle getCurrentUser={this.getCurrentUser.bind(this)} user={this.state.user} subtitle='your reading backlog solved.'/>
-				{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}
-				<TransFormEr postIt={this.postUserLink.bind(this)} isLoading={this.state.isLoading} toggleLoading={this.toggleLoading.bind(this)} isGuest={this.state.isGuest} quickStream={this.quickStream.bind(this)} />
+			<div className="entirePage">
+				<HeaderNav isGuest={this.state.isGuest} username={this.state.user.first_name}/>
+				<div className="modal-container">
+			  	{/*<br></br>
+          	{ this.state.isGuest ? null : <LogoutButton /> }
+          	{ this.state.isGuest ? <LoginButton /> : null }
+          	{ this.state.isGuest ? <SignupButton /> : null }*/}
+					{/*<Subtitle getCurrentUser={this.getCurrentUser.bind(this)} user={this.state.user} subtitle='your reading backlog solved.'/>
+					{this.state.hasErrored && <ErrorAlert errorMessage={this.state.failMessage}/>}*/}
+					<TransFormEr postIt={this.postUserLink.bind(this)} isLoading={this.state.isLoading} toggleLoading={this.toggleLoading.bind(this)} isGuest={this.state.isGuest} quickStream={this.quickStream.bind(this)} />
 
-				<ToggleDisplay show={!this.state.isGuest}>
+					<ToggleDisplay show={!this.state.isGuest}>
 
-					<WhichView isLoading={this.state.isLoading} isFiltered={this.state.isFiltered} toggleLoading={this.toggleLoading.bind(this)} toggleView={this.toggleView.bind(this)} topStoryMode={this.state.topStoryMode} searchForIt={this.filterArticles.bind(this)} showAll={this.libraryShowAll.bind(this)} />
-					{/*this.state.isLoading && <Loading />*/}
-					<ToggleDisplay show={!this.state.topStoryMode}>
-						{!this.state.hasLibrary &&
-							<div id='empty-library'>
-								<h2>Your library is empty!</h2>
-								<h3>Head over to Top Stories mode to grab today's headlines</h3>
-								<h3>or feed your own links into the form above</h3>
-							</div>}
-						<SortableList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} toggleMembersOnly={this.toggleMembersOnly.bind(this)} onSortEnd={this.onSortEnd.bind(this)} addIt={this.postUserLink.bind(this)} />
-						}
+						<WhichView isLoading={this.state.isLoading} isFiltered={this.state.isFiltered} toggleLoading={this.toggleLoading.bind(this)} toggleView={this.toggleView.bind(this)} topStoryMode={this.state.topStoryMode} searchForIt={this.filterArticles.bind(this)} showAll={this.libraryShowAll.bind(this)} hasLibrary={this.state.hasLibrary} />
+						{/*this.state.isLoading && <Loading />*/}
+						<ToggleDisplay show={!this.state.topStoryMode}>
+							{!this.state.hasLibrary &&
+								<div id='empty-library'>
+									<h2>Your library is empty!</h2>
+									<h3>Head over to Top Stories mode to grab today's headlines</h3>
+									<h3>or feed your own links into the form above</h3>
+								</div>}
+							<SortableList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} toggleMembersOnly={this.toggleMembersOnly.bind(this)} onSortEnd={this.onSortEnd.bind(this)} addIt={this.postUserLink.bind(this)} />
+							}
+						</ToggleDisplay>
+
+						<ToggleDisplay show={this.state.topStoryMode}>
+							<TopStories user={this.state.user} isGuest={this.state.isGuest} cleanDate={this.cleanDate.bind(this)} cleanTime={this.cleanTime.bind(this)} topStoriesSources={this.state.topStoriesSources} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} toggleMembersOnly={this.toggleMembersOnly.bind(this)} addIt={this.postUserLink.bind(this)} headlines={this.state.headlines} toggleHeadlines={this.toggleHeadlines.bind(this)} getHeadlines={this.getHeadlines.bind(this)} />
+							{this.state.gettingHeadlines &&
+          				<div id="loadingOverlay">
+            				<Loading type="spin" color="red" />
+          				</div>}
+						</ToggleDisplay>
 					</ToggleDisplay>
 
-					<ToggleDisplay show={this.state.topStoryMode}>
-						<TopStories user={this.state.user} isGuest={this.state.isGuest} cleanDate={this.cleanDate.bind(this)} cleanTime={this.cleanTime.bind(this)} topStoriesSources={this.state.topStoriesSources} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} toggleMembersOnly={this.toggleMembersOnly.bind(this)} addIt={this.postUserLink.bind(this)} headlines={this.state.headlines} toggleHeadlines={this.toggleHeadlines.bind(this)} getHeadlines={this.getHeadlines.bind(this)} />
-						{this.state.gettingHeadlines &&
+					<ToggleDisplay show={this.state.isGuest}>
+							<GuestMode isGuest={this.state.isGuest} cleanDate={this.cleanDate.bind(this)} cleanTime={this.cleanTime.bind(this)} topStoriesSources={this.state.topStoriesSources} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} toggleMembersOnly={this.toggleMembersOnly.bind(this)} addIt={this.postUserLink.bind(this)} headlines={this.state.headlines} toggleHeadlines={this.toggleHeadlines.bind(this)} getHeadlines={this.getHeadlines.bind(this)} />
+							{this.state.gettingHeadlines &&
           			<div id="loadingOverlay">
             			<Loading type="spin" color="red" />
-          			</div>}
-					</ToggleDisplay>
-				</ToggleDisplay>
-
-				<ToggleDisplay show={this.state.isGuest}>
-						<GuestMode isGuest={this.state.isGuest} cleanDate={this.cleanDate.bind(this)} cleanTime={this.cleanTime.bind(this)} topStoriesSources={this.state.topStoriesSources} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} toggleMembersOnly={this.toggleMembersOnly.bind(this)} addIt={this.postUserLink.bind(this)} headlines={this.state.headlines} toggleHeadlines={this.toggleHeadlines.bind(this)} getHeadlines={this.getHeadlines.bind(this)} />
-						{this.state.gettingHeadlines &&
+          		</div>}
+					</ToggleDisplay>}
+					<ToastContainer autoClose={4000} position="bottom-center"/>
+					{this.state.nowPlaying && <div id="player_container">
+						<Player track={this.state.nowPlaying} hidePlayer={this.hidePlayer.bind(this)} />
+					</div>}
+					{this.state.isLoading &&
           		<div id="loadingOverlay">
             		<Loading type="spin" color="red" />
           		</div>}
-				</ToggleDisplay>}
-
-				<div id="player_container">
-					<Player track={this.state.nowPlaying}/>
+					<Confirm deleteArticle={this.deleteArticle.bind(this)} user={this.state.user} method={this.state.lastMethod} link={this.state.lastLink} toggleConfirm={this.toggleConfirm.bind(this)} url={this.state.lastUrl} showConfirm={this.state.showConfirm} isGuest={this.state.isGuest}/>
+					<TopStoryAdd showModal={this.state.topStoryAdd} toggleTopStoryAdd={this.toggleTopStoryAdd.bind(this)} toggleView={this.toggleView.bind(this)} topStoryAddMsg={this.state.topStoryAddMsg} />
+					<MembersOnly showMembersOnly={this.state.showMembersOnly} toggleMembersOnly={this.toggleMembersOnly.bind(this)} />
 				</div>
-				{this.state.isLoading &&
-          		<div id="loadingOverlay">
-            		<Loading type="spin" color="red" />
-          		</div>}
-				<Confirm deleteArticle={this.deleteArticle.bind(this)} user={this.state.user} method={this.state.lastMethod} link={this.state.lastLink} toggleConfirm={this.toggleConfirm.bind(this)} url={this.state.lastUrl} showConfirm={this.state.showConfirm} isGuest={this.state.isGuest}/>
-				<TopStoryAdd showModal={this.state.topStoryAdd} toggleTopStoryAdd={this.toggleTopStoryAdd.bind(this)} toggleView={this.toggleView.bind(this)} topStoryAddMsg={this.state.topStoryAddMsg} />
-				<MembersOnly showMembersOnly={this.state.showMembersOnly} toggleMembersOnly={this.toggleMembersOnly.bind(this)} />
 			</div>
 		);
 	}
