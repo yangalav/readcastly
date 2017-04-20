@@ -74,7 +74,7 @@ class App extends React.Component {
 			isLoading: false,
 			isConverting: false,
 			failMessage: '',
-			nowPlaying: {url: 'http://www.netprophet.net/charts/charts/Badfinger%20-%20No%20Matter%20What.mp3', title: 'No Matter What'},
+			nowPlaying: {url: null, title: null},
 			user:{
 				id: null,
 				stream: 'stream',
@@ -414,9 +414,16 @@ class App extends React.Component {
 	// }
 
   onSortEnd ({oldIndex, newIndex}) {
-     this.setState({
-       library: arrayMove(this.state.library, oldIndex, newIndex),
-     });
+        this.setState({
+        library: arrayMove(this.state.library, oldIndex, newIndex),
+        });
+   };
+
+ 	popToast() {
+ 		console.log('POPPING TOAST');
+   	toast('Your ReadCast is available in the player below', {
+   		type: toast.TYPE.SUCCESS
+   	})
    };
 
  	popToast() {
@@ -447,7 +454,9 @@ class App extends React.Component {
 							{!this.state.hasLibrary &&
 								<div id='empty-library'>
 									<h2>Your library is empty!</h2>
+
 									<h3>Head over to Top Stories mode to grab today's headlines</h3>
+
 									<h3>or feed your own links into the form above</h3>
 								</div>}
 							<SortableList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} toggleMembersOnly={this.toggleMembersOnly.bind(this)} onSortEnd={this.onSortEnd.bind(this)} addIt={this.postUserLink.bind(this)} />

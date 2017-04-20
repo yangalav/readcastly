@@ -87,7 +87,7 @@ const textToSpeech = (req, res, callback) => {
   // remove any leading white-spaces and carriage-returns from string input
   let text = pollyHelpers.strHeadCleaner(convertedTextIn);
   log(line, 'BACK-D-textToSpeech: typeof TEXT>>>: ', typeof text)  /* FOR DEBUGGING */
-  
+
   // turn string into array, in order to count words total
   var roughWords = text.split(" ");
   var words = pollyHelpers.arrHeadCleaner(roughWords);
@@ -104,14 +104,14 @@ const textToSpeech = (req, res, callback) => {
   log(line, 'BACK-E-TEXT-ARRAY: >>>>>>>>> ', textArray); // LOTS /* FOR DEBUGGING */
   log(line, 'BACK-E-textToSpeech: voiceId: ', voiceId, ' text: ', text, ' filename: ', filename) /* FOR DEBUGGING */
 
-  // ...make (multiple) asynchronous calls, managed with Promise.all, 
+  // ...make (multiple) asynchronous calls, managed with Promise.all,
   Promise.all(textArray.map(function(item) {
     log('\nONE ITEM being mapped to generatePollyAudio call: ==> ', item) // LOTS /* FOR DEBUGGING */
     // ... SEE #2 (ABOVE): to feed segments of text into polly, generating audio data for each of them
     return generatePollyAudio(item, voiceId)
   }))
   // ...audios is passed as an array of buffer objects
-  .then(function(audios) { 
+  .then(function(audios) {
     log(line, 'BACK-F-textToSpeech >>>PC1')  /* FOR DEBUGGING */
     log(line, 'audios[0].AudioStream instanceof Buffer ', audios[0].AudioStream instanceof Buffer) /* FOR DEBUGGING */
     log(line, 'AUDIOS: [0] ', audios[0])  /* FOR DEBUGGING */
@@ -119,9 +119,9 @@ const textToSpeech = (req, res, callback) => {
   })
   .then(function(audioStreams) {
     log(line, 'BACK-G-textToSpeech >>PC2 ', audioStreams) // Array of Buffers  /* MH: DEBUGGING */
-    // ...Concatenate multiple audio buffers into single buffer object 
+    // ...Concatenate multiple audio buffers into single buffer object
     // ...using Node.js method => Buffer.concat(arrayOfBuffers, totalLengthOfBuffers)
-    return (Buffer.concat(audioStreams, audioStreams.reduce((len, a) => len + a.length, 0))) 
+    return (Buffer.concat(audioStreams, audioStreams.reduce((len, a) => len + a.length, 0)))
   })
   // ...SEE #5 (ABOVE): save unifiedBuffer to s3 as mp3 file
   .then(function(unifiedBuffer) { /* Note: unifiedBuffer is a Buffer object */
