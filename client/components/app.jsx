@@ -59,7 +59,6 @@ const exportOptions = {
   }
 
 let randomId = 10**9;
-const welcomeMsg = [{url: 'https://s3.amazonaws.com/readcastly-user-files/readcastly-welcome-part01.mp3', displayText: 'Welcome to ReadCast.ly!'}, {url: 'https://s3.amazonaws.com/readcastly-user-files/readcastly-welcome-part02.mp3', displayText: 'Welcome to ReadCast.ly (continued)'}];
 
 class App extends React.Component {
 	constructor(props) {
@@ -75,7 +74,7 @@ class App extends React.Component {
 			isLoading: false,
 			isConverting: false,
 			failMessage: '',
-			nowPlaying: [{url: null, title: null}],
+			nowPlaying: {url: null, title: null},
 			user:{
 				id: null,
 				stream: 'stream',
@@ -116,8 +115,7 @@ class App extends React.Component {
   				phone: res.data.phone,
   				first_name: res.data.first_name,
         	},
-        	isGuest: false,
-        	nowPlaying: [{url:null, title: 'Feed Me Stories!'}]
+        	isGuest: false
        }, function() {
        			this.addDeliveryMethods();
       			this.getReadingList();
@@ -310,7 +308,7 @@ class App extends React.Component {
 		.then((res) => {
 			// console.log('FRONT-B->>>RES: ', res.data.url)  /* MH: DEBUGGING */
 			if (articleObject.method === "stream") {
-				this.setState({nowPlaying: [{url: res.data.url, title: res.data.title}], isConverting: false, isLoading: false});
+				this.setState({nowPlaying: {url: res.data.url, title: res.data.title}, isConverting: false, isLoading: false});
 				this.popToast();
 			} else {
 				// console.log('Message successfully sent to ' + res.data.destination + '.');
@@ -324,7 +322,7 @@ class App extends React.Component {
 		this.toggleLoading();
 		axios.post('/quickStream', {url: url})
 		.then((res) => {
-			this.setState({nowPlaying: [{url: res.data.url, title: res.data.title}], isLoading: false});
+			this.setState({nowPlaying: {url: res.data.url, title: res.data.title}, isLoading: false});
 			this.popToast();
 		})
 	}
@@ -346,11 +344,10 @@ class App extends React.Component {
     this.addDeliveryMethods();
   }
 
-  componentDidMount() {
-    if (isGuest) {
-    	this.setState({nowPlaying: welcomeMsg});
-    }
-  }
+  // componentDidMount() {
+  //   this.getTopStoriesSources();
+  //   this.getHeadlines('google-news');
+  // }
 
 	toggleView() {
 		let currentState = this.state.topStoryMode;
@@ -451,7 +448,7 @@ class App extends React.Component {
 								<div id='empty-library'>
 									<h2 style={{color: '#70cbce'}}>Your library is empty!</h2>
 									<h3 style={{color: '#e3deeb'}}>Head over to Top Stories mode to grab today's headlines</h3>
-									<h3 style={{color: '#e3deeb'}}>or feed your own links into the form above</h3>
+									<h3 style={{color: '#70cbce'}}>or feed your own links into the form above</h3>
 								</div>}
 							<SortableList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} toggleMembersOnly={this.toggleMembersOnly.bind(this)} onSortEnd={this.onSortEnd.bind(this)} addIt={this.postUserLink.bind(this)} />
 						</ToggleDisplay>
@@ -474,7 +471,7 @@ class App extends React.Component {
 					</ToggleDisplay>}
 					<ToastContainer autoClose={4000} position="bottom-center"/>
 					<div id="player_container">
-						<Player track={this.state.nowPlaying} isGuest={this.state.isGuest} />
+						<Player track={this.state.nowPlaying} />
 					</div>
 					{this.state.isLoading &&
           		<div id="loadingOverlay">
