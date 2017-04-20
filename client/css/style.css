@@ -1,5 +1,5 @@
-body {
-  background-color: #e0f3ff;
+.entire-page {
+  background: linear-gradient(#3b356a,#6f6da8);
   padding-top: 90px;
   /*font-family: 'Work Sans', sans-serif;*/
 }
@@ -9,6 +9,10 @@ hr {
   background: #077ac6;
   /*background: #ad1111;*/
   width: 50%;
+}
+
+.btn .btn-success {
+  background-color: #6d3f96 !important!
 }
 
 .row {
@@ -40,6 +44,22 @@ hr {
 
 .navbar {
   min-height:50px !important;
+  background-color: #70cbce;
+  color: white;
+  border: none;
+}
+
+.navbar-text {
+  color: white !important;
+}
+
+.navbar-btn {
+  background-color: #70cbce;
+  color: white;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+  background: white; /* Change color for horizontal lines */
 }
 
 .title {
@@ -62,13 +82,29 @@ hr {
 .urlInput {
   min-width: 600px;
   width: auto;
-  border-radius: 10px !important;
+  border-radius: 6px !important;
 }
 
 .transformer-input {
 	font-weight: normal;
 	padding-left: 5px;
 }
+
+#add-library-input {
+  background-color: #e3deeb;
+}
+
+#sourceSelect {
+  background-color: #e3deeb;
+}
+
+#search-library {
+  background-color: #e3deeb;
+}
+
+/*.btn .btn-default #add-library-button {
+  background-color: #e3deeb !important;
+}*/
 
 .readcasts-topstories {
   text-align: center;
@@ -77,6 +113,11 @@ hr {
 
 .spinner {
   align-content: center;
+}
+
+.already-there {
+  background-color: #e3deeb !important;
+  color: #70cbce !important;
 }
 
 #empty-library {
@@ -93,7 +134,8 @@ hr {
   margin-bottom: 10px;
   padding-left: 0px;
   padding-right: 0px;
-  border-radius: 10px !important;
+  border-radius: 6px !important;
+  background-color: #e3deeb;
 }
 
 .articleImage {
@@ -112,9 +154,10 @@ hr {
   /*width: 100%;*/
 }
 
-.article-title{
+.article-title a {
   font: arial;
   font-size: 1.75em;
+  color: #559b9e !important;
 }
 
 .article-info {
@@ -247,6 +290,14 @@ hr {
 .carousel-indicators li {
     visibility: hidden;
 }
+
+.list-group-item {
+  border: 0;
+  border-radius: 0 !important;
+}
+
+
+
 
 /*.voice-chooser {
   width: 130px;

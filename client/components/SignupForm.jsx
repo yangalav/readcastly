@@ -29,13 +29,13 @@ class SignupForm extends React.Component {
 
   handleSignUp(e) {
     e.preventDefault();
-    console.log("The email is: " + this.state.email);
-    console.log("The password is: " + this.state.password);
-    console.log("The first name is: " + this.state.firstName);
-    console.log("The last name is: " + this.state.lastName);
-    console.log("The phone is: " + this.state.phone);
-    console.log("The voice pref is: " + this.state.voicePref);
-    console.log("The avatar is: " + this.state.avatar);
+    // console.log("The email is: " + this.state.email);
+    // console.log("The password is: " + this.state.password);
+    // console.log("The first name is: " + this.state.firstName);
+    // console.log("The last name is: " + this.state.lastName);
+    // console.log("The phone is: " + this.state.phone);
+    // console.log("The voice pref is: " + this.state.voicePref);
+    // console.log("The avatar is: " + this.state.avatar);
     axios.post('/api/signup', {
       email: this.state.email,
       password: this.state.password,
@@ -83,7 +83,7 @@ class SignupForm extends React.Component {
 
   render() {
     return (
-      <div>
+      <div id="signup-page">
         <form onSubmit={this.handleSignUp}>
           First Name:<br/>
         <input type="text" name="firstName" value={this.state.firstName} onChange={this.handleFirstNameChange}/><br/>
