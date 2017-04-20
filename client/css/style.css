@@ -1,5 +1,5 @@
 body {
-  background-color: #e0f3ff;
+  background-color: #6d3f96;
   padding-top: 90px;
   /*font-family: 'Work Sans', sans-serif;*/
 }
@@ -9,6 +9,10 @@ hr {
   background: #077ac6;
   /*background: #ad1111;*/
   width: 50%;
+}
+
+.btn .btn-success {
+  background-color: #6d3f96 !important!
 }
 
 .row {
@@ -40,6 +44,22 @@ hr {
 
 .navbar {
   min-height:50px !important;
+  background-color: #70cbce;
+  color: white;
+  border: none;
+}
+
+.navbar-text {
+  color: white !important;
+}
+
+.navbar-btn {
+  background-color: #70cbce;
+  color: white;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+  background: white; /* Change color for horizontal lines */
 }
 
 .title {
@@ -112,9 +132,10 @@ hr {
   /*width: 100%;*/
 }
 
-.article-title{
+.article-title a {
   font: arial;
   font-size: 1.75em;
+  color: #70cbce !important;
 }
 
 .article-info {

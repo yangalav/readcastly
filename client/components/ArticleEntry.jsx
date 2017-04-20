@@ -84,10 +84,10 @@ class ArticleEntry extends React.Component {
 		return (
 			<Row>
 				<Col md={12} className="list-group-item article-entry">
-					<Col md={3} className="articleImage">
+					<Col md={4} className="articleImage">
 						<img className="article-sampleImage img-responsive img-rounded" src={this.props.article.image} alt="../images/Readcastly-R.jpeg" />
 					</Col>
-					<Col md={7} className="article-info">
+					<Col md={6} className="article-info">
 		  			{this.props.article.title && <div className="article-title"><span><a href={this.props.article.url}>{this.props.article.title}</a></span></div>}
 
 		  			{this.props.article.author && <div className="article-author"><span>{this.props.article.author}</span></div>}

@@ -331,7 +331,7 @@ class App extends React.Component {
     console.log('GETTING SOURCES')
 		axios.get('https://newsapi.org/v1/sources?language=en')
 			.then((res) => {
-				let options = res.data.sources.filter((source) => source.sortBysAvailable.indexOf("top") !== -1)
+				let options = res.data.sources.filter((source) => source.sortBysAvailable.indexOf("top") !== -1 && source.id !=="financial-times")
 				this.setState({topStoriesSources: options})
 			})
 			.catch ((err) => console.log('ERROR GETTING TOP STORIES SOURCES', err))

@@ -29,10 +29,10 @@ class HeaderNav extends React.Component {
 
   render() {
     return(
-      <Navbar fixedTop fluid collapseOnSelect>
+      <Navbar fixedTop fluid collapseOnSelect id="headernav">
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="#"><img style={{paddingTop: "5px"}} src="../images/readcastly-full-15pct.png" /></a>
+            <a href="#"><img style={{paddingTop: "5px"}} src="../images/readcastly-full-white-15pct.png" /></a>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
