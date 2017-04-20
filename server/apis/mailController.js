@@ -13,11 +13,11 @@ let transporter = nodemailer.createTransport({
 });
 
 const bodyMaker = function(article) {
-    let body = 'Here is your Readcast of "' + article.title + '"';
+    let body = 'Here is your ReadCast of "' + article.title + '"';
     if (article.author) {
         body += ', by ' + article.author;
     }
-    body += ', from ' + article.source_name + ".  Thank you for using Readcast.ly.  We're never gonna give you up.";
+    body += ', from ' + article.source_name + ".  Thank you for using ReadCast.ly.  We're never gonna give you up.";
     return body;
 };
 

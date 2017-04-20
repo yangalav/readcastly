@@ -34,8 +34,8 @@ class FilterBox extends React.Component {
 					<FormControl type="text" id="search-library" placeholder="Search your articles..." value={this.state.value} onChange={this.handleChange} />
 				</Col>
 				<Col sm={2} xs={6}>
-					<Button type="submit" bsStyle="primary" block id="search-library-btn" onClick={this.handleSubmit} disabled={this.props.isLoading}>{this.props.isLoading ? 'Loading...' : 'Filter'}</Button>
-					{this.props.isFiltered && <Button bsStyle="default" onClick={this.props.showAll.bind(this)} disabled={this.props.isLoading}>Show All</Button>}
+					<Button type="submit" bsStyle="warning" block id="search-library-btn" onClick={this.handleSubmit} disabled={this.props.isLoading}>Filter</Button>
+					{this.props.isFiltered && <Button bsStyle="warning" onClick={this.props.showAll.bind(this)} disabled={this.props.isLoading}>Show All</Button>}
 				</Col>
 			</Form>
 		);

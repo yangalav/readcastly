@@ -6,7 +6,7 @@ const client = new twilio.RestClient(process.env.TWILIO_SID, process.env.TWILIO_
 
 const textIt = function(phone,title,url,callback) {
   client.messages.create({
-      body: 'Readcast.ly presents "' + title + '": ' + url,
+      body: 'ReadCast.ly presents "' + title + '": ' + url,
       to: phone,
       from: process.env.TWILIO_NUMBER,
     }, function(err, message) {
