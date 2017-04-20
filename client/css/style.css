@@ -1,4 +1,4 @@
-body {
+.entire-page {
   background: linear-gradient(#3b356a,#6f6da8);
   padding-top: 90px;
   /*font-family: 'Work Sans', sans-serif;*/
@@ -105,9 +105,6 @@ hr {
 /*.btn .btn-default #add-library-button {
   background-color: #e3deeb !important;
 }*/
-#empty-library h2 h3{
-  color: #70cbce;
-}
 
 .readcasts-topstories {
   text-align: center;
