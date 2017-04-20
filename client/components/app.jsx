@@ -74,7 +74,7 @@ class App extends React.Component {
 			isLoading: false,
 			isConverting: false,
 			failMessage: '',
-			nowPlaying: {url: 'http://www.netprophet.net/charts/charts/Badfinger%20-%20No%20Matter%20What.mp3', title: 'No Matter What'},
+			nowPlaying: {url: null, title: null},
 			user:{
 				id: null,
 				stream: 'stream',
