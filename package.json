@@ -4,7 +4,8 @@
   "description": "",
   "main": "./server/server.js",
   "scripts": {
-    "webpack": "webpack -w"
+    "webpack": "webpack -w",
+    "start": "npm run webpack"
   },
   "repository": {
     "type": "git",
