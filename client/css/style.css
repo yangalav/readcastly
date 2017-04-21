@@ -37,6 +37,7 @@ hr {
 }
 
 
+
 .row {
   padding-bottom: 20px;
 }
@@ -114,6 +115,7 @@ hr {
 
 #add-library-input {
   background-color: #e3deeb;
+  border-radius: 4px !important;
 }
 
 #sourceSelect {
@@ -210,7 +212,7 @@ hr {
 
 #add-library-input, #add-library-btn, #listen-now-btn {
   width: 100%;
-  border-radius: 50px;
+
 }
 
 .modal-container {

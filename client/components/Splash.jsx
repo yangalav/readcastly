@@ -77,7 +77,11 @@ class Splash extends React.Component {
   render() {
     return (
     <div>
-
+     <link rel="stylesheet" href="css/font-awesome.min.css"/>
+     <link rel="stylesheet" href="css/animate.css"/>
+     <link href='http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900|Montserrat:400,700' rel='stylesheet' type='text/css'/>
+     <script src="js/modernizr-2.7.1.js"></script>
+     <link rel="stylesheet" href="css/main.css"/>
       <header>
         <div className="container">
           <div className="row">
@@ -198,16 +202,51 @@ class Splash extends React.Component {
           <div className="row margin-40">
             <div className="col-sm-8 col-sm-offset-2 text-center">
               <h2 className="white">Meet the Team</h2>
-              <p className="white">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra orci ut.</p>
+              <p className="white">ReadCastly was conceived, architected and built in 4 weeks as the thesis product of four full-stack software engineers at Hack Reactor in New York City. The app converts URLs to natural-language "readcasts" using the artificial intelligence services of Amazon's Polly (advanced deep-learning technologies to synthesize speech).
+
+ReadCastly employs 4 APIs to pull data from 70 news sources globally, parse the text, convert to mp3 audio and then store and stream from Amazon S3. Registered users can also choose to receive the audio via URL, email or text message.
+
+The team also wrote custom algorithms to further cleanse the text and ensure a quality listening experience, and they built a flexible SQL database that enables powerful relational look-ups between users and their preferences, articles and news sources and audio file distribution methods. </p>
             </div>
           </div>
 
-          <div className="row margin-50">
+          <div>
 
-            <div className="col-sm-4 wow fadeInUp" data-wow-delay="1s">
+            <div className="wow fadeInUp" data-wow-delay="1s">
               <br />
                 <div className="wow fadeInUp teamImg" data-wow-delay="1s">
                   <img className="teamImg" src="images/team.JPG"/>
+                </div>
+            </div>
+
+            <div className="wow fadeInUp" className="teamImg" data-wow-delay="1s">
+              <p className="white"> </p>
+              <p className="white"> </p>
+              <p className="white"> </p>
+              <p className="white">Andrew Fechner</p>
+              <p className="white">Michiya Hibino</p>
+              <p className="white">John Packel</p>
+              <p className="white">Viswada Yangala</p>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <section id="tech" className="pad-lg">
+        <div className="container">
+          <div className="row margin-40">
+            <div className="col-sm-8 col-sm-offset-2 text-center">
+            </div>
+          </div>
+
+          <div >
+
+            <div className="wow fadeInUp" data-wow-delay="1s">
+              <br />
+                <div className="wow fadeInUp teamImg" data-wow-delay="1s">
+                  <img className="teamImg" src="images/techStack.png"/>
                 </div>
             </div>
 
@@ -215,6 +254,7 @@ class Splash extends React.Component {
 
         </div>
       </section>
+
 
     </div>
     );
