@@ -36,12 +36,12 @@ const articleObjFinisher = function(obj,source) {
   // console.log('======articleObjFinisher-C -- POST-Unescaped-strippedUnescapedText: ', strippedUnescapedText); /* MH: DEBUGGING */
   // ...put strippedUnescapedText through another function to fix spacing issues
 
-  obj.text = utils.postStripSpacing( strippedUnescapedText );   
+  obj.text = utils.postStripSpacing( strippedUnescapedText );
   // console.log('======articleObjFinisher-D -- postStripSpacing: ', obj.text); /* MH: DEBUGGING */
 
   obj.author = source.author || "Dave Winfield" // "Author not available";
   obj.publication_date = source.date_published;
-  obj.image = source.lead_image_url ||   "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcT8-E0VKkso9wu60MnVZor7_HqEJIAm8DMB6iJGgFvG1m57WHz0";
+  obj.image = source.lead_image_url ||   "https://s3.amazonaws.com/readcastly-user-files/readcastly-logo.png";
   obj.excerpt = utils.unescapeHex(source.excerpt);
   obj.word_count = source.word_count;
   obj.est_time = source.word_count / 145; // based on 145 wpm avg. spoken speech
@@ -56,7 +56,7 @@ const parseAndSave = function(userId, url, headlineMode, callback){
     if(error) {
         console.log('routes.js l 20, GET req to Mercury. error! = ', error);
         callback(utils.errors.mercuryTransmission)
-        return;        
+        return;
         // res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
       }
     try {
@@ -77,7 +77,7 @@ const parseAndSave = function(userId, url, headlineMode, callback){
     if (parsedBody.error) {
       callback(utils.errors.badUrl);
       return;
-    } 
+    }
     // additional errors...
     if (parsedBody.errorMessage) {
       console.log('Error-Message: ', parsedBody.errorMessage);

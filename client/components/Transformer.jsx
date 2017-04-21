@@ -27,7 +27,6 @@ class TransFormEr extends React.Component {
 
 	streamIt() {
 		this.props.quickStream(this.state.value);
-		this.setState({value: ''});
 	}
 
 	render() {
@@ -40,7 +39,7 @@ class TransFormEr extends React.Component {
 							<FormControl type="text" id="add-library-input" placeholder="Enter an article URL" value={this.state.value} onChange={this.handleChange} onSubmit={!this.props.isLoading ? this.streamIt.bind(this) : null} required/>
 						</Col>
 						<Col md={2}>
-					    <Button type="submit" bsStyle="warning" id="listen-now-btn" onClick={!this.props.isLoading ? this.streamIt.bind(this) : null}>Listen now</Button>
+					    <Button type="submit" bsStyle="warning" id="listen-now-btn" onClick={!this.props.isLoading && this.state.value !== '' ? this.streamIt.bind(this) : null}>Listen now</Button>
 						</Col>
 					</Form>
             <Col md={2}>

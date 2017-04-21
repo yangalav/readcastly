@@ -92,7 +92,7 @@ class ArticleEntry extends React.Component {
 						{/*<img className="article-sampleImage img-responsive img-rounded" src={this.props.article.image} alt="../images/Readcastly-R.jpeg" />*/}
 					</Col>
 					<Col md={6} className="article-info">
-		  			{this.props.article.title && <div className="article-title"><span><a href={this.props.article.url}><b>{this.props.article.title}</b></a></span></div>}
+		  			{this.props.article.title && <div className="article-title"><span><b>{this.props.article.title}</b></span></div>}
 
 		  			{this.props.article.author && <div className="article-author"><span>{this.props.article.author}</span></div>}
 
@@ -104,7 +104,7 @@ class ArticleEntry extends React.Component {
 		  			{this.props.article.excerpt && <div className="article-excerpt"><span>Excerpt: </span><span>{this.props.article.excerpt }</span></div>}
 						{this.props.article.description && <div className="article-excerpt"><span>Description: </span><span>{this.props.article.description }</span></div>}
 
-		  			{!this.props.topStoryMode && !this.props.isGuest && <Button bsStyle="danger" bsSize="xsmall" onClick={() => this.props.deleteIt(this.props.article.url)}>Remove From Library</Button>}
+		  			{!this.props.topStoryMode && !this.props.isGuest && <Button id="remove-button" bsStyle="danger" bsSize="xsmall" onClick={() => this.props.deleteIt(this.props.article.url)}>Remove From Library</Button>}
 		  			{(this.props.topStoryMode || this.props.isGuest) && <Button bsStyle="warning" bsSize="xsmall" onClick={this.props.isGuest ? this.props.toggleMembersOnly.bind(this) : this.localAdd.bind(this)}>Add to Library</Button>}
 		  		</Col>
 		  	<Col md={2} className="article-buttons">

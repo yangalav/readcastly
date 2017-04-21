@@ -5,6 +5,7 @@ import { hashHistory } from 'react-router';
 
 let errors={
               email: 'Please enter a valid e-mail address',
+              duplicate: 'An account with that e-mail address already exists',
               password: 'Please make sure your passwords match',
               phone: 'Please enter a valid 10-digit phone number'
             };
@@ -50,7 +51,7 @@ class SignupForm extends React.Component {
     // console.log("The voice pref is: " + this.state.voicePref);
     // console.log("The avatar is: " + this.state.avatar);
     axios.post('/api/signup', {
-      email: this.state.email,
+      email: this.state.email.toLowerCase(),
       password: this.state.password,
       firstName: this.state.firstName,
       lastName: this.state.lastName,
@@ -65,11 +66,7 @@ class SignupForm extends React.Component {
 		});
   }
 
-  verify(e) {
-    if (this.emailChecker() === false) {
-      this.setState({alert: true});
-      return;
-    }
+  stage2(e) {
     if (this.passwordChecker() === false) {
       this.setState({alert: true});
       return;
@@ -90,6 +87,26 @@ class SignupForm extends React.Component {
       return false;
     }
     return;
+  }
+
+  verify() {
+    if (this.emailChecker() === false) {
+      this.setState({alert: true});
+      return;
+    } else {
+      axios.post('/emailCheck', {email: this.state.email.toLowerCase()})
+        .then((res) => {
+          console.log('email checking res.data', res.data )
+          if (res.data.found) {
+            this.setState({error: 'duplicate', errormsg: errors.duplicate}, function() {
+              this.setState({alert: true});
+            });
+          } else {
+          this.stage2();
+          }
+        })
+        .catch((err) => console.log('error checking existing email == ', err))
+    }
   }
 
   passwordChecker() {
@@ -148,7 +165,7 @@ class SignupForm extends React.Component {
 
   close() {
     this.setState({alert: false});
-    if (this.state.error === 'email') {this.setState({email: ''})}
+    if (this.state.error === 'email' || this.state.error === 'duplicate') {this.setState({email: ''})}
     if (this.state.error === 'password') {this.setState({password: '', password2: ''})}
     if (this.state.error === 'phone') {this.setState({phone: ''})}
   }
@@ -209,7 +226,7 @@ class SignupForm extends React.Component {
           container={this}
           aria-labelledby="contained-modal-title"
         >
-          <Modal.Header closeButton>
+          <Modal.Header>
             <Modal.Title id="contained-modal-title">Sorry ...</Modal.Title>
           </Modal.Header>
             <Modal.Body>{this.state.errormsg}</Modal.Body>

@@ -29,6 +29,13 @@ const findByEmail = function(email) {
     });
 };
 
+const checkEmail = function(email,callback) {
+  return findByEmail(email)
+    .then((result) => {
+      return (result.length === 0) ? callback({found: false}) : callback({found: true});
+    })
+    .catch((err) => console.log('email checking error ==== ', err));
+}
 
 const addUser = function(email,password,firstName,lastName,phone,voicePref,avatar) {
   console.log('adding ' + email + ' and ' + password);
@@ -61,5 +68,6 @@ const addUser = function(email,password,firstName,lastName,phone,voicePref,avata
 module.exports= {
   findById,
   findByEmail,
-  addUser
+  addUser,
+  checkEmail
 };
