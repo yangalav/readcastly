@@ -29,8 +29,8 @@ class TopStories extends React.Component {
         <Row>
           <Col md={12} >
             <div className="source-chooser">
-              <FormGroup controlId="sourceSelect">
-                <FormControl componentClass="select" value={this.state.source} onChange={this.handleSourceChange.bind(this)} placeholder="banana">
+              <FormGroup id="sourceSelect" >
+                <FormControl id="sourceSelect" componentClass="select" value={this.state.source} onChange={this.handleSourceChange.bind(this)} placeholder="banana">
                 <option value="banana">Choose a News Source</option>
                 {sources.map((source,i) => (<option key={i} value={source.id} data={source.name}>{source.name}</option>))}
                 </FormControl>
