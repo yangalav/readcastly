@@ -1,7 +1,17 @@
 import React from 'react';
-import { Grid, Row, Col, Jumbotron, FormGroup, ControlLabel, InputGroup, FormControl, Button } from 'react-bootstrap';
+import { Grid, Row, Col, Jumbotron, FormGroup, ControlLabel, InputGroup, FormControl, Button, Modal } from 'react-bootstrap';
 import axios from 'axios';
 import { hashHistory } from 'react-router';
+
+let errors={
+              email: 'Please enter a valid e-mail address',
+              password: 'Please make sure your passwords match',
+              phone: 'Please enter a valid 10-digit phone number'
+            };
+
+let validnums = {'0':true, '1':true, '2':true, '3':true, '4': true, '5':true, '6':true, '7':true, '8':true, '9':true};
+
+let cleanPhone = '';
 
 class SignupForm extends React.Component {
   constructor() {
@@ -11,16 +21,20 @@ class SignupForm extends React.Component {
       firstName: '',
       email: '',
       password: '',
+      password2: '',
       lastName: '',
       phone: '',
       voicePref: '',
       avatar: '',
+      error: '',
+      alert: false
     };
 
     this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
     this.handleLastNameChange = this.handleLastNameChange.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.handlePassword2Change = this.handlePassword2Change.bind(this);
     this.handlePhoneChange = this.handlePhoneChange.bind(this);
     this.handleVoicePrefChange = this.handleVoicePrefChange.bind(this);
     this.handleAvatarChange = this.handleAvatarChange.bind(this);
@@ -41,15 +55,60 @@ class SignupForm extends React.Component {
       password: this.state.password,
       firstName: this.state.firstName,
       lastName: this.state.lastName,
-      phone: '+1'+this.state.phone,
+      phone: '+1'+cleanPhone,
       voicePref: this.state.voicePref,
       avatar: this.state.avatar,
     })
 		.then((res) => {
 			console.log("POST REQUESTTTTTTTTTTTTTTTTTTTTTT" + res);
-      hashHistory.push('/app');
+      hashHistory.push('/');
       return;
 		});
+  }
+
+  verify(e) {
+    if (this.emailChecker() === false) {
+      this.setState({alert: true});
+      return;
+    }
+    if (this.passwordChecker() === false) {
+      this.setState({alert: true});
+      return;
+    }
+    if (this.phoneChecker() === false) {
+      this.setState({alert: true});
+      return;
+    }
+    this.handleSignUp(e);
+  }
+
+  emailChecker() {
+    const emarray = this.state.email.split('');
+    const len = emarray.length
+    const ats = emarray.filter(char => char==='@').length;
+    if (ats !== 1 || (emarray[len-3] !== '.' && emarray[len-4] !== '.')) {
+      this.setState({error: errors.email, email: ''});
+      return false;
+    }
+    return;
+  }
+
+  passwordChecker() {
+    if (this.state.password !== this.state.password2) {
+      this.setState({error: errors.password, password: ''});
+      return false;
+    }
+    return;
+  }
+
+  phoneChecker() {
+    cleanPhone = this.state.phone.split('').filter(char => validnums[char]);
+    if (cleanPhone.length !== 10 || cleanPhone[0] === '1') {
+      this.setState({error: errors.phone, phone: ''});
+      return false;
+    }
+    cleanPhone = cleanPhone.join('');
+    return;
   }
 
   handleFirstNameChange(e) {
@@ -69,6 +128,10 @@ class SignupForm extends React.Component {
     this.setState({ password: e.target.value });
   }
 
+  handlePassword2Change(e) {
+    this.setState({ password2: e.target.value });
+  }
+
   handlePhoneChange(e) {
     this.setState({ phone: e.target.value });
   }
@@ -81,48 +144,55 @@ class SignupForm extends React.Component {
     this.setState({ avatar: e.target.value });
   }
 
+  close() {
+    this.setState({alert: false});
+    if (this.state.error === 'email') {this.setState({email: ''})}
+    if (this.state.error === 'password') {this.setState({password: '', password2: ''})}
+    if (this.state.error === 'phone') {this.setState({phone: ''})}
+  }
+
   render() {
     return (
-      <div id="signup-page">
+      <div id="signup-page" className="modal-container">
       <Grid>
         <Row>
           <Col md={6} mdOffset={3}>
             <Jumbotron id="signup-jumbo">
               <img id="signup-logo" src='../images/readcastly-full-50pct.png' className="center-block" />
               <form>
-                <FormGroup bsSize="lg">
+                <FormGroup bsSize="lg" onSubmit={this.verify.bind(this)} >
                   <ControlLabel className="signup-label">E-mail Address</ControlLabel>
                   <InputGroup>
                     <InputGroup.Addon style={{backgroundColor: '#70cbce'}}><span className="glyphicon glyphicon-envelope" aria-hidden="true"></span></InputGroup.Addon>
-                    <FormControl type="text" placeholder="Required" required />
+                    <FormControl type="text" placeholder="Required" value={this.state.email} onChange={this.handleEmailChange} required />
                   </InputGroup>
                   <ControlLabel className="signup-label">First Name</ControlLabel>
                   <InputGroup>
                     <InputGroup.Addon style={{backgroundColor: '#70cbce'}}><span className="glyphicon glyphicon-user" aria-hidden="true"></span></InputGroup.Addon>
-                    <FormControl type="text" placeholder="Required" required />
+                    <FormControl type="text" placeholder="Required" value={this.state.firstName} onChange={this.handleFirstNameChange} required />
                   </InputGroup>
                   <ControlLabel className="signup-label">Last Name</ControlLabel>
                   <InputGroup>
                     <InputGroup.Addon style={{backgroundColor: '#70cbce'}}><span className="glyphicon glyphicon-user" aria-hidden="true"></span></InputGroup.Addon>
-                    <FormControl type="text" placeholder="Optional" required />
+                    <FormControl type="text" placeholder="Optional" value={this.state.lastName} onChange={this.handleLastNameChange}/>
                   </InputGroup>
                   <ControlLabel className="signup-label">Password</ControlLabel>
                   <InputGroup>
                     <InputGroup.Addon style={{backgroundColor: '#70cbce'}}><span className="glyphicon glyphicon-lock" aria-hidden="true"></span></InputGroup.Addon>
-                    <FormControl type="password" placeholder="Required" required />
+                    <FormControl type="password" placeholder="Required" value={this.state.password} onChange={this.handlePasswordChange} required />
                   </InputGroup>
                   <ControlLabel className="signup-label">Verify Password</ControlLabel>
                   <InputGroup>
                     <InputGroup.Addon style={{backgroundColor: '#70cbce'}}><span className="glyphicon glyphicon-lock" aria-hidden="true"></span></InputGroup.Addon>
-                    <FormControl type="password" placeholder="Required" required />
+                    <FormControl type="password" placeholder="Required" value={this.state.password2} onChange={this.handlePassword2Change} required />
                   </InputGroup>
-                  <ControlLabel  className="signup-label">Phone (to receive links to ReadCasts via text)</ControlLabel>
+                  <ControlLabel  className="signup-label">Phone (if you want to receive links to ReadCasts via text)</ControlLabel>
                   <InputGroup>
                     <InputGroup.Addon style={{backgroundColor: '#70cbce'}}><span className="glyphicon glyphicon-phone-alt" aria-hidden="true"></span></InputGroup.Addon>
-                    <FormControl type="text" placeholder="Optional" required />
+                    <FormControl type="text" placeholder="Optional (10 digits required)" value={this.state.phone} onChange={this.handlePhoneChange} />
                   </InputGroup>
                   <br />
-                  <Button bsStyle="warning" type="submit" onClick={this.handleSignUp.bind(this)} block>Join Us!</Button>
+                  <Button bsStyle="warning" type="submit" onClick={this.verify.bind(this)} block>Join Us!</Button>
                 </FormGroup>
               </form>
             <div>Already have an account? <a href="/#/">Login here</a></div>
@@ -130,6 +200,22 @@ class SignupForm extends React.Component {
         </Col>
       </Row>
       </Grid>
+      <div style={{height: 200}}>
+        <Modal
+          show={this.state.alert}
+          onHide={this.close.bind(this)}
+          container={this}
+          aria-labelledby="contained-modal-title"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title">Sorry ...</Modal.Title>
+          </Modal.Header>
+            <Modal.Body>{this.state.error}</Modal.Body>
+          <Modal.Footer>
+            <Button bsStyle="warning" onClick={this.close.bind(this)}>Close</Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
     </div>
     );
   }
