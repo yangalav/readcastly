@@ -25,7 +25,7 @@ const optionsBuilder = function(url) {
 };
 
 const articleObjFinisher = function(obj,source) {
-  obj.title = source.title;
+  obj.title = utils.unescapeHex(source.title);
   // NOTE: a series of console.log statements that follow (below) track the changes before and after each step in processing the article text
   // console.log('======articleObjFinisher-A -- PRE-STRIP-source.content: ', source.content); /* MH: DEBUGGING */
   // ...put text through the stripper module, to strip away html tags from the article text
@@ -42,7 +42,7 @@ const articleObjFinisher = function(obj,source) {
   obj.author = source.author || "Dave Winfield" // "Author not available";
   obj.publication_date = source.date_published;
   obj.image = source.lead_image_url ||   "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcT8-E0VKkso9wu60MnVZor7_HqEJIAm8DMB6iJGgFvG1m57WHz0";
-  obj.excerpt = source.excerpt;
+  obj.excerpt = utils.unescapeHex(source.excerpt);
   obj.word_count = source.word_count;
   obj.est_time = source.word_count / 145; // based on 145 wpm avg. spoken speech
   obj.domain = source.domain || utils.domainExtractor(obj.url);
@@ -55,25 +55,34 @@ const parseAndSave = function(userId, url, headlineMode, callback){
     // error if request doesn't go through
     if(error) {
         console.log('routes.js l 20, GET req to Mercury. error! = ', error);
-        res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
+        callback(utils.errors.mercuryTransmission)
+        return;        
+        // res.status(400).send('Dang; error retrieving parsed text of url from Mercury...');
       }
     try {
         // console.log('routes.js l24, in try block after Mercury response...');
         var parsedBody = JSON.parse(body);
         // console.log('======MERC-CONTROLLER-...result: parsedBody = ', parsedBody); //***
-        if(parsedBody === null) {
+        if(!parsedBody.content) { //  === null
           callback(utils.errors.mercuryCantParse);
           return;
         }
         // error if mercury responds eith error
       } catch (parseError) {
         console.log('routes.js l28, in catch block, try block not able to parse Mercury response. parseError = ', parseError, '\n\n');
-        // var parsedBody;
         callback(utils.errors.mercuryCantParse);
         return;
       }
+
     if (parsedBody.error) {
       callback(utils.errors.badUrl);
+      return;
+    } 
+    // additional errors...
+    if (parsedBody.errorMessage) {
+      console.log('Error-Message: ', parsedBody.errorMessage);
+      return;
+
     } else {
 
       // console.log('=======PARSEDBODY A-PRE=======>>>: ', parsedBody); /* MH: DEBUGGING */
@@ -82,7 +91,7 @@ const parseAndSave = function(userId, url, headlineMode, callback){
       // ...call utils method to address spacing issues in html, before sending it to stripper module
       parsedBody.content = utils.preStripSpacing(parsedBody.content);
       // console.log('=======PARSEDBODY B-Spaced =======>>>: ', parsedBody); /* MH: DEBUGGING */
-      console.log('=======PARSEDBODY.content B.1 =======typeof >>>: ', typeof parsedBody.content); /* MH: DEBUGGING */
+      // console.log('=======PARSEDBODY.content B.1 =======typeof >>>: ', typeof parsedBody.content); /* MH: DEBUGGING */
 
       // ...send article through articleObjFinisher method, above
       article = articleObjFinisher(article, parsedBody);
