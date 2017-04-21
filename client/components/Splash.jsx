@@ -166,7 +166,7 @@ class Splash extends React.Component {
                     <img width={900} height={500} alt="900x500" className='logo-carousel img-responsive center-block' src="/images/readcast1.png"/>
                   </Carousel.Item>
                   <Carousel.Item className='logo-carousel'>
-                    <img width={900} height={500} alt="900x500" className='logo-carousel img-responsive center-block iphone' src="/images/screenshot1.png"/>
+                    <img width={900} height={500} alt="900x500" className='logo-carousel img-responsive center-block iphone' src="/images/readcastiphone.png"/>
                   </Carousel.Item>
                 </Carousel>
               </Row>
