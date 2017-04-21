@@ -1,11 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { hashHistory } from 'react-router'
-<<<<<<< HEAD
 import { Button, Form, FormControl, FormGroup, ControlLabel, Col, Row, Carousel } from 'react-bootstrap';
-=======
-import { Button, Form, FormControl, FormGroup, ControlLabel, Col, Row } from 'react-bootstrap';
->>>>>>> 77d7da0e48e8a95ee01d31063f4137192b564e4a
 import { Collapse } from 'react-collapse';
 // import {Grid, Row, Col, FormGroup, FormControl, Button, Carousel} from 'react-bootstrap';
 
