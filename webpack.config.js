@@ -2,9 +2,9 @@ const webpack = require('webpack');
 const path = require('path');
 
 const config = {
-  entry: './client/index.jsx',
+  entry: '/client/index.jsx',
   output: {
-    path: path.resolve(__dirname, 'client/build'),
+    path: path.resolve(__dirname, './client/build'),
     filename: 'app.bundle.js',
   },
   devtool: 'inline-source-map',
@@ -24,3 +24,4 @@ const config = {
 };
 
 module.exports = config;
+//
