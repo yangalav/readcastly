@@ -461,7 +461,7 @@ class App extends React.Component {
 							<TopStories user={this.state.user} isGuest={this.state.isGuest} cleanDate={this.cleanDate.bind(this)} cleanTime={this.cleanTime.bind(this)} topStoriesSources={this.state.topStoriesSources} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} toggleMembersOnly={this.toggleMembersOnly.bind(this)} addIt={this.postUserLink.bind(this)} headlines={this.state.headlines} toggleHeadlines={this.toggleHeadlines.bind(this)} getHeadlines={this.getHeadlines.bind(this)} />
 							{this.state.gettingHeadlines &&
           				<div id="loadingOverlay">
-            				<Loading type="spin" color="red" />
+            				<Loading type="spin" color="#70cbce" />
           				</div>}
 						</ToggleDisplay>
 					</ToggleDisplay>
@@ -470,7 +470,7 @@ class App extends React.Component {
 							<GuestMode isGuest={this.state.isGuest} cleanDate={this.cleanDate.bind(this)} cleanTime={this.cleanTime.bind(this)} topStoriesSources={this.state.topStoriesSources} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} toggleMembersOnly={this.toggleMembersOnly.bind(this)} addIt={this.postUserLink.bind(this)} headlines={this.state.headlines} toggleHeadlines={this.toggleHeadlines.bind(this)} getHeadlines={this.getHeadlines.bind(this)} />
 							{this.state.gettingHeadlines &&
           			<div id="loadingOverlay">
-            			<Loading type="spin" color="red" />
+            			<Loading type="spin" color="#70cbce" />
           		</div>}
 					</ToggleDisplay>}
 					<ToastContainer autoClose={4000} position="bottom-center"/>
@@ -479,7 +479,7 @@ class App extends React.Component {
 					</div>
 					{this.state.isLoading &&
           		<div id="loadingOverlay">
-            		<Loading type="spin" color="red" />
+            		<Loading type="spin" color="#70cbce" />
           		</div>}
 					<Confirm deleteArticle={this.deleteArticle.bind(this)} user={this.state.user} method={this.state.lastMethod} link={this.state.lastLink} toggleConfirm={this.toggleConfirm.bind(this)} url={this.state.lastUrl} showConfirm={this.state.showConfirm} isGuest={this.state.isGuest}/>
 					<TopStoryAdd showModal={this.state.topStoryAdd} toggleTopStoryAdd={this.toggleTopStoryAdd.bind(this)} toggleView={this.toggleView.bind(this)} topStoryAddMsg={this.state.topStoryAddMsg} />
