@@ -592,7 +592,7 @@ footer {
     color: #929496;
     display: block;
     font-size: 15px;
-    height: 0px;
+    height: 60px;
     line-height: 1.42857;
     padding: 6px 12px 0 6px;
     transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
