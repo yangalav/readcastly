@@ -96,6 +96,7 @@ hr {
 
 #sourceSelect {
   background-color: #e3deeb;
+  border-radius: 50px;
 }
 
 #search-library {
@@ -187,6 +188,7 @@ hr {
 
 #add-library-input, #add-library-btn, #listen-now-btn {
   width: 100%;
+  border-radius: 50px;
 }
 
 .modal-container {
@@ -278,8 +280,8 @@ hr {
 
 .logo-carousel img {
   width: auto;
-  height: 120px;
-  max-height: 120px;
+  height: 500px;
+  max-height: 500px;
 }
 
 .right.carousel-control, .left.carousel-control {

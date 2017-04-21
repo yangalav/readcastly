@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { hashHistory } from 'react-router'
-import { Button, Form, FormControl, FormGroup, ControlLabel, Col, Row } from 'react-bootstrap';
+import { Button, Form, FormControl, FormGroup, ControlLabel, Col, Row, Carousel } from 'react-bootstrap';
 import { Collapse } from 'react-collapse';
 // import {Grid, Row, Col, FormGroup, FormControl, Button, Carousel} from 'react-bootstrap';
 
@@ -92,8 +92,7 @@ class Splash extends React.Component {
 
               <h1 className="wow fadeIn">Welcome to Readcast.ly</h1>
               <br />
-              <p className="lead wow fadeIn" data-wow-delay="0.5s">Lorem ipsum dolor sit amet, consectetur adipis. <br />
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit sit dol mi arlna.</p>
+              <p className="lead wow fadeIn" data-wow-delay="0.5s">Stream your news articles effortlessly</p>
               <br />
 
 
@@ -101,16 +100,16 @@ class Splash extends React.Component {
                 <div>
                   <div className="row">
 
-                    <Form inline>
+                    <Form inline onSubmit={this.handleLogin}>
                       <FormGroup bsSize="small" controlId="formInlineName" className="wow fadeInUp">
-                          <FormControl className="customFormWidth" type="text" placeholder="Email" />
+                          <FormControl className="customFormWidth" type="email" value={this.state.email} onChange={this.handleEmailChange} placeholder="Email" />
                       </FormGroup>
                         {'         '}
                       <FormGroup bsSize="small" controlId="formInlineEmail" className="wow fadeInUp">
-                        <FormControl type="email" placeholder="Password" />
+                        <FormControl type="password" value={this.state.password} onChange={this.handlePasswordChange} placeholder="Password" />
                       </FormGroup>
                         {'           '}
-                      <Button bsSize="small" className="btn btn-primary btn-lg scroll wow fadeInUp customLoginButtonSize" onClick={this.handleLogin}>Login</Button>
+                      <Button type="submit" bsSize="small" className="btn btn-primary btn-lg scroll wow fadeInUp customLoginButtonSize">Login</Button>
                     </Form>
 
                   </div>
@@ -140,18 +139,35 @@ class Splash extends React.Component {
         </div>
       </header>
 
+      <div className="mouse-icon hidden-xs">
+  				<div className="scroll"></div>
+  		</div>
+
       <section id="be-the-first" className="pad-xl">
         <div className="container">
           <div className="row">
             <div className="col-sm-8 col-sm-offset-2 text-center margin-30 wow fadeIn" data-wow-delay="0.6s">
-              <h2>Blah</h2>
-              <p className="lead">Lorem ipsum dolor sit amet, consectetur adipis.</p>
+              <h2>Create a Readcast</h2>
+              <p className="lead">Pick an article, drop in the link, relax and listen</p>
             </div>
           </div>
 
-          <div className="iphone wow fadeInUp" data-wow-delay="1s">
-            <img src="images/screenshot1.png"/>
+          <div data-wow-delay="1s">
+              <Row>
+                <Carousel data-ride="carousel" interval={2000}>
+                  <Carousel.Item className='logo-carousel'>
+                    <img width={2000} height={1000} alt="400x1000" className='logo-carousel img-responsive center-block iphone' src="/images/screenshot1.png"/>
+                  </Carousel.Item>
+                  <Carousel.Item className='logo-carousel'>
+                    <img width={900} height={500} alt="900x500" className='logo-carousel img-responsive center-block' src="/images/screenshot1.png"/>
+                  </Carousel.Item>
+                  <Carousel.Item className='logo-carousel'>
+                    <img width={900} height={500} alt="900x500" className='logo-carousel img-responsive center-block' src="/images/screenshot1.png"/>
+                  </Carousel.Item>
+                </Carousel>
+              </Row>
           </div>
+
         </div>
       </section>
 
@@ -174,6 +190,29 @@ class Splash extends React.Component {
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra orci ut est facilisis, eu elementum mi volutpat. Pellentesque ac tristique nisi.</p>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section id="pricing" className="pad-lg">
+        <div className="container">
+          <div className="row margin-40">
+            <div className="col-sm-8 col-sm-offset-2 text-center">
+              <h2 className="white">Meet the Team</h2>
+              <p className="white">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra orci ut.</p>
+            </div>
+          </div>
+
+          <div className="row margin-50">
+
+            <div className="col-sm-4 wow fadeInUp" data-wow-delay="1s">
+              <br />
+                <div className="wow fadeInUp teamImg" data-wow-delay="1s">
+                  <img className="teamImg" src="images/team.JPG"/>
+                </div>
+            </div>
+
+          </div>
+
         </div>
       </section>
 
