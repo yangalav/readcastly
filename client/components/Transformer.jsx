@@ -37,7 +37,7 @@ class TransFormEr extends React.Component {
 				<Row className="transformer">
 					<Form inline onSubmit={!this.props.isLoading ? this.streamIt.bind(this) : null}>
 						<Col md={this.props.isGuest ? 10 : 8}>
-							<FormGroup bsSize="small" id="add-library-input">
+							<FormGroup id="add-library-input">
 							  <FormControl type="text" id="add-library-input" placeholder="Enter an article URL" value={this.state.value} onChange={this.handleChange} onSubmit={!this.props.isLoading ? this.streamIt.bind(this) : null} required/>
               </FormGroup>
 					</Col>
