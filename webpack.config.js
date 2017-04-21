@@ -4,7 +4,7 @@ const path = require('path');
 const config = {
   entry: './client/index.jsx',
   output: {
-    path: path.resolve(__dirname, 'client/build'),
+    path: path.join(__dirname, 'client/build'),
     filename: 'app.bundle.js',
   },
   devtool: 'inline-source-map',
