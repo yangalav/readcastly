@@ -1,7 +1,6 @@
 // Readcast vs Top stories selector component
 
 import React from 'react';
-import Switch from 'react-bootstrap-switch';
 import { Button, Col, Row } from 'react-bootstrap';
 import FilterBox from './FilterBox.jsx';
 

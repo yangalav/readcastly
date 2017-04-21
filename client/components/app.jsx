@@ -319,12 +319,16 @@ class App extends React.Component {
 	}
 
 	quickStream(url) {
-		this.toggleLoading();
-		axios.post('/quickStream', {url: url})
-		.then((res) => {
-			this.setState({nowPlaying: {url: res.data.url, title: res.data.title}, isLoading: false});
-			this.popToast();
-		})
+		if (url === 'namesake') {
+			this.setState({nowPlaying: {url: "http://dora-robo.com/muzyka/70's-80's-90's%20/Rick%20Astley%20-%20Never%20Gonna%20Give%20You%20Up.mp3", title: "IT'S A PUN.  THE NAME OF OUR SITE IS A PUN.  GET IT?"}});
+		} else {
+			this.toggleLoading();
+			axios.post('/quickStream', {url: url})
+			.then((res) => {
+				this.setState({nowPlaying: {url: res.data.url, title: res.data.title}, isLoading: false});
+				this.popToast();
+			})
+		}
 	}
 
 	getTopStoriesSources() {
@@ -448,7 +452,7 @@ class App extends React.Component {
 								<div id='empty-library'>
 									<h2 style={{color: '#70cbce'}}>Your library is empty!</h2>
 									<h3 style={{color: '#e3deeb'}}>Head over to Top Stories mode to grab today's headlines</h3>
-									<h3 style={{color: '#70cbce'}}>or feed your own links into the form above</h3>
+									<h3 style={{color: '#e3deeb'}}>or feed your own links into the form above</h3>
 								</div>}
 							<SortableList articles={this.state.library} user={this.state.user} deleteIt={this.deleteArticle.bind(this)} convertIt={this.convertArticle.bind(this)} exportOptions={exportOptions} topStoryMode={this.state.topStoryMode} toggleConvert={this.toggleConvert.bind(this)} isConverting={this.state.isConverting} isGuest={this.state.isGuest} toggleMembersOnly={this.toggleMembersOnly.bind(this)} onSortEnd={this.onSortEnd.bind(this)} addIt={this.postUserLink.bind(this)} />
 						</ToggleDisplay>
