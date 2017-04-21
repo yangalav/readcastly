@@ -43,7 +43,7 @@ class HeaderNav extends React.Component {
           <Nav pullRight>
             {this.props.isGuest && <NavItem eventKey={1} href='/#/signup'><button style={{marginTop: "6px"}}type="button" className="btn btn-default navbar-btn" onClick={this.goSignup.bind(this)} >Sign Up!</button></NavItem>}
             {this.props.isGuest && <NavItem eventKey={2} href='/'><button style={{marginTop: "6px"}} type="button" className="btn btn-default navbar-btn" onClick={this.goSplash.bind(this)} >Log In</button></NavItem>}
-            {!this.props.isGuest && <NavItem eventKey={3} href='/signup'><button style={{marginTop: "6px"}} type="button" className="btn btn-default navbar-btn" onClick={this.goSignup.bind(this)} >Update User Info</button></NavItem>}
+            {/*{!this.props.isGuest && <NavItem eventKey={3} href='/signup'><button style={{marginTop: "6px"}} type="button" className="btn btn-default navbar-btn" onClick={this.goSignup.bind(this)} >Update User Info</button></NavItem>}*/}
             {!this.props.isGuest && <NavItem eventKey={4}><button style={{marginTop: "6px"}} type="button" className="btn btn-default navbar-btn" onClick={this.handleLogout.bind(this)} >Logout</button></NavItem>}
           </Nav>
         </Navbar.Collapse>
