@@ -6,7 +6,8 @@ const errors = {
     badUrl: {"error": "Sincere apologies from the Read.cast.ly team, but the URL submitted is one of a small number that our service cannot currently handle (such as URLs from LinkedIn Pulse). We will work on this!"}, // this is Mercury parser issue where it won't accept certain URLs
     mercuryCantParse: {"error": "The URL submitted is malformed. Please check that it does not have any extra characters on the front or back (e.g., a quotation mark) and resubmit the URL."},
     mercuryTransmission: {"error": "An error occurred while transmitting the url to web parser"},
-    mercuryTimeout: {"error": "The requested url could not be parsed within 10 seconds, and timed out"}
+    mercuryTimeout: {"error": "The requested url could not be parsed within 10 seconds, and timed out"},
+    audioStreamError: {"error": "Our system is having problems processing that article"}    
 };
 
 const domainExtractor = function(url) {
