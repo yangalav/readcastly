@@ -74,7 +74,7 @@ class App extends React.Component {
 			isLoading: false,
 			isConverting: false,
 			failMessage: '',
-			nowPlaying: {url: null, title: null},
+			nowPlaying: null,
 			user:{
 				id: null,
 				stream: 'stream',
@@ -320,7 +320,7 @@ class App extends React.Component {
 
 	quickStream(url) {
 		if (url === 'namesake') {
-			this.setState({nowPlaying: {url: "http://dora-robo.com/muzyka/70's-80's-90's%20/Rick%20Astley%20-%20Never%20Gonna%20Give%20You%20Up.mp3", title: "IT'S A PUN.  THE NAME OF OUR SITE IS A PUN.  GET IT?"}});
+			this.setState({nowPlaying: {url: "http://dora-robo.com/muzyka/70's-80's-90's%20/Rick%20Astley%20-%20Never%20Gonna%20Give%20You%20Up.mp3", title: "THINK ABOUT IT. #punlife"}});
 		} else {
 			this.toggleLoading();
 			axios.post('/quickStream', {url: url})
@@ -391,6 +391,10 @@ class App extends React.Component {
 		this.setState({topStoryAdd: false});
 	}
 
+	hidePlayer() {
+		this.setState({nowPlaying: null});
+	}
+
 	getHeadlines(source) {
     console.log('GETTING HEADLINES')
     axios.post('/topStories', {source: source, headlineMode: true})
@@ -429,6 +433,12 @@ class App extends React.Component {
    		type: toast.TYPE.SUCCESS
    	})
    };
+
+  popWelcome() {
+  	toast("Welcome to ReadCast.ly.  There's a welcome message waiting for you in the player below!"), {
+  		type: toast.TYPE.DEFAULT
+  	}
+  }
 
 	render() {
 		return(
@@ -473,10 +483,10 @@ class App extends React.Component {
             			<Loading type="spin" color="#70cbce" />
           		</div>}
 					</ToggleDisplay>}
-					<ToastContainer autoClose={4000} position="bottom-center"/>
-					<div id="player_container">
-						<Player track={this.state.nowPlaying} />
-					</div>
+					<ToastContainer autoClose={4000} position="bottom-center" style={{color:"#e3deeb"}}/>
+					{this.state.nowPlaying && <div id="player_container">
+						<Player track={this.state.nowPlaying} hidePlayer={this.hidePlayer.bind(this)} />
+					</div>}
 					{this.state.isLoading &&
           		<div id="loadingOverlay">
             		<Loading type="spin" color="#70cbce" />
