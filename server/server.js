@@ -34,7 +34,7 @@ const jsonParser = bodyParser.json();
   require('./authRoutes.js')(app, passport);
 
 
-var port = process.env.PORT || 8050;
+var port = process.env.PORT || 8080;
 
 app.listen(port, function() {
   console.log("Readcastly server listening intently on port: ", port);
