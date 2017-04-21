@@ -89,7 +89,7 @@ class SignupForm extends React.Component {
     return;
   }
 
-  verify() {
+  verify(e) {
     if (this.emailChecker() === false) {
       this.setState({alert: true});
       return;
@@ -102,7 +102,7 @@ class SignupForm extends React.Component {
               this.setState({alert: true});
             });
           } else {
-          this.stage2();
+          this.stage2(e);
           }
         })
         .catch((err) => console.log('error checking existing email == ', err))

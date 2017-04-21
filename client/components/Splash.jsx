@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { hashHistory } from 'react-router'
-import { Button, Form, FormControl, FormGroup, ControlLabel, Col, Row } from 'react-bootstrap';
+import { Button, Form, FormControl, FormGroup, ControlLabel, Col, Row, Carousel } from 'react-bootstrap';
 import { Collapse } from 'react-collapse';
 // import {Grid, Row, Col, FormGroup, FormControl, Button, Carousel} from 'react-bootstrap';
 
@@ -77,7 +77,11 @@ class Splash extends React.Component {
   render() {
     return (
     <div>
-
+     <link rel="stylesheet" href="css/font-awesome.min.css"/>
+     <link rel="stylesheet" href="css/animate.css"/>
+     <link href='http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900|Montserrat:400,700' rel='stylesheet' type='text/css'/>
+     <script src="js/modernizr-2.7.1.js"></script>
+     <link rel="stylesheet" href="css/main.css"/>
       <header>
         <div className="container">
           <div className="row">
@@ -92,8 +96,7 @@ class Splash extends React.Component {
 
               <h1 className="wow fadeIn">Welcome to Readcast.ly</h1>
               <br />
-              <p className="lead wow fadeIn" data-wow-delay="0.5s">Lorem ipsum dolor sit amet, consectetur adipis. <br />
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit sit dol mi arlna.</p>
+              <p className="lead wow fadeIn" data-wow-delay="0.5s">Stream your news articles effortlessly</p>
               <br />
 
 
@@ -101,16 +104,16 @@ class Splash extends React.Component {
                 <div>
                   <div className="row">
 
-                    <Form inline>
+                    <Form inline onSubmit={this.handleLogin}>
                       <FormGroup bsSize="small" controlId="formInlineName" className="wow fadeInUp">
-                          <FormControl className="customFormWidth" type="text" placeholder="Email" />
+                          <FormControl type="email" style={{ width: 180 }} value={this.state.email} onChange={this.handleEmailChange} placeholder="Email" />
                       </FormGroup>
                         {'         '}
                       <FormGroup bsSize="small" controlId="formInlineEmail" className="wow fadeInUp">
-                        <FormControl type="email" placeholder="Password" />
+                        <FormControl type="password" style={{ width: 180 }} value={this.state.password} onChange={this.handlePasswordChange} placeholder="Password" />
                       </FormGroup>
                         {'           '}
-                      <Button bsSize="small" className="btn btn-primary btn-lg scroll wow fadeInUp customLoginButtonSize" onClick={this.handleLogin}>Login</Button>
+                      <Button type="submit" bsSize="small" className="btn btn-primary btn-lg scroll wow fadeInUp customLoginButtonSize">Login</Button>
                     </Form>
 
                   </div>
@@ -123,7 +126,7 @@ class Splash extends React.Component {
                   <div className="row">
 
                     <div className="col-xs-6 text-right wow fadeInUp" data-wow-delay="1s">
-                      <Button className="btn btn-primary btn-lg scroll" onClick={this.handleSignup}>Signup</Button>
+                      <Button className="btn btn-primary btn-lg scroll" style={{ width: 200 }} onClick={this.handleSignup}>Signup</Button>
                     </div>
 
                     <div className="col-xs-6 text-left wow fadeInUp" data-wow-delay="1.4s">
@@ -140,18 +143,35 @@ class Splash extends React.Component {
         </div>
       </header>
 
+      <div className="mouse-icon hidden-xs">
+  				<div className="scroll"></div>
+  		</div>
+
       <section id="be-the-first" className="pad-xl">
         <div className="container">
           <div className="row">
             <div className="col-sm-8 col-sm-offset-2 text-center margin-30 wow fadeIn" data-wow-delay="0.6s">
-              <h2>Blah</h2>
-              <p className="lead">Lorem ipsum dolor sit amet, consectetur adipis.</p>
+              <h2>Create a Readcast</h2>
+              <p className="lead">Pick an article, drop in the link, relax and listen</p>
             </div>
           </div>
 
-          <div className="iphone wow fadeInUp" data-wow-delay="1s">
-            <img src="images/screenshot1.png"/>
+          <div className="wow fadeInUp" data-wow-delay="1s">
+              <Row>
+                <Carousel data-ride="carousel" interval={2000}>
+                  <Carousel.Item className='logo-carousel'>
+                    <img width={900} height={500} alt="900x500" className='logo-carousel img-responsive center-block' src="/images/modalscreenshot.png"/>
+                  </Carousel.Item>
+                  <Carousel.Item className='logo-carousel'>
+                    <img width={900} height={500} alt="900x500" className='logo-carousel img-responsive center-block' src="/images/readcast1.png"/>
+                  </Carousel.Item>
+                  <Carousel.Item className='logo-carousel'>
+                    <img width={900} height={500} alt="900x500" className='logo-carousel img-responsive center-block iphone' src="/images/screenshot1.png"/>
+                  </Carousel.Item>
+                </Carousel>
+              </Row>
           </div>
+
         </div>
       </section>
 
@@ -160,22 +180,81 @@ class Splash extends React.Component {
           <div className="row">
             <div className="col-sm-4 wow fadeIn" data-wow-delay="0.4s">
               <hr className="line purple"/>
-              <h3>Blurb 1</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra orci ut est facilisis, eu elementum mi volutpat. Pellentesque ac tristique nisi.</p>
+              <h3>Hear Your ReadCasts</h3>
+              <p>Drop a URL in the text box or click on 'Add to Library' in the Top stories mode and ReadCastly will read the article to you with its player at the bottom of the screen. Choose from 16 different voices, with global accents. ReadCastly can also give you a link to the readcast - or send it to you via email or text. Have lots of readcasts in your queue? Use the search box to filter your results.</p>
             </div>
             <div className="col-sm-4 wow fadeIn" data-wow-delay="0.8s">
               <hr  className="line blue"/>
-              <h3>Blurb 2</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra orci ut est facilisis, eu elementum mi volutpat. Pellentesque ac tristique nisi.</p>
+              <h3>Trending News</h3>
+              <p>Have you used ReadCastly so much that you no longer have a backlog of articles? Just click the Top stories button and choose from hundreds of stories in our list of 70 news sources from a wide variety of genres including technology, news, business, pop culture, sports, the arts and international. Add as many of them to your library as you like, and they will be available to you as readcasts.</p>
             </div>
             <div className="col-sm-4 wow fadeIn" data-wow-delay="1.2s">
               <hr  className="line yellow"/>
-              <h3>Blurb 3</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra orci ut est facilisis, eu elementum mi volutpat. Pellentesque ac tristique nisi.</p>
+              <h3>Stream, Text, Email</h3>
+              <p>While you can browse stories in ReadCastly's guest mode and stream readcasts, to get the full experience please register. By providing your email and a password you can save readcasts in your library. If you choose to include a mobile number as well, you will have the option of texting yourself a link to any readcast.</p>
             </div>
           </div>
         </div>
       </section>
+
+      <section id="pricing" className="pad-lg">
+        <div className="container">
+          <div className="row margin-40">
+            <div className="col-sm-8 col-sm-offset-2 text-center">
+              <h2 className="white">Meet the Team</h2>
+              <p className="white">ReadCastly was conceived, architected and built in 4 weeks as the thesis product of four full-stack software engineers at Hack Reactor in New York City. The app converts URLs to natural-language "readcasts" using the artificial intelligence services of Amazon's Polly (advanced deep-learning technologies to synthesize speech).
+
+ReadCastly employs 4 APIs to pull data from 70 news sources globally, parse the text, convert to mp3 audio and then store and stream from Amazon S3. Registered users can also choose to receive the audio via URL, email or text message.
+
+The team also wrote custom algorithms to further cleanse the text and ensure a quality listening experience, and they built a flexible SQL database that enables powerful relational look-ups between users and their preferences, articles and news sources and audio file distribution methods. </p>
+            </div>
+          </div>
+
+          <div>
+
+            <div className="wow fadeInUp" data-wow-delay="1s">
+              <br />
+                <div className="wow fadeInUp teamImg" data-wow-delay="1s">
+                  <img className="teamImg" src="images/team.JPG"/>
+                </div>
+            </div>
+
+            <div className="wow fadeInUp" className="teamImg" data-wow-delay="1s">
+              <p className="white"> </p>
+              <p className="white"> </p>
+              <p className="white"> </p>
+              <p className="white">Andrew Fechner</p>
+              <p className="white">Michiya Hibino</p>
+              <p className="white">John Packel</p>
+              <p className="white">Viswada Yangala</p>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <section id="tech" className="pad-lg">
+        <div className="container">
+          <div className="row margin-40">
+            <div className="col-sm-8 col-sm-offset-2 text-center">
+            </div>
+          </div>
+
+          <div >
+
+            <div className="wow fadeInUp" data-wow-delay="1s">
+              <br />
+                <div className="wow fadeInUp teamImg" data-wow-delay="1s">
+                  <img className="teamImg" src="images/techStack.png"/>
+                </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
 
     </div>
     );
