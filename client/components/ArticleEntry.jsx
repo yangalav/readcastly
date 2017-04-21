@@ -92,7 +92,7 @@ class ArticleEntry extends React.Component {
 						{/*<img className="article-sampleImage img-responsive img-rounded" src={this.props.article.image} alt="../images/Readcastly-R.jpeg" />*/}
 					</Col>
 					<Col md={6} className="article-info">
-		  			{this.props.article.title && <div className="article-title"><span><a target="_blank" href={this.props.article.url}><b>{this.props.article.title}</b></a></span></div>}
+		  			{this.props.article.title && <div className="article-title"><span><a href={this.props.article.url}><b>{this.props.article.title}</b></a></span></div>}
 
 		  			{this.props.article.author && <div className="article-author"><span>{this.props.article.author}</span></div>}
 
