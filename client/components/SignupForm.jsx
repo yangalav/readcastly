@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Grid, Row, Col, Jumbotron, FormGroup, ControlLabel, InputGroup, FormControl, Button } from 'react-bootstrap';
 import axios from 'axios';
 import { hashHistory } from 'react-router';
 
@@ -84,27 +84,75 @@ class SignupForm extends React.Component {
   render() {
     return (
       <div id="signup-page">
-        <form onSubmit={this.handleSignUp}>
-          First Name:<br/>
-        <input type="text" name="firstName" value={this.state.firstName} onChange={this.handleFirstNameChange}/><br/>
-          Last Name:<br/>
-        <input type="text" name="lastName" value={this.state.lastName} onChange={this.handleLastNameChange}/><br/>
-          E-mail:<br/>
-        <input type="email" name="email" value={this.state.email} onChange={this.handleEmailChange}/><br/>
-          Password:<br/>
-        <input type="password" name="password" value={this.state.password} onChange={this.handlePasswordChange}/><br/>
-          Phone Number:<br/>
-        <input type="text" name="phone" value={this.state.phone} onChange={this.handlePhoneChange}/>{/*<br/>
-          Voice Preference:<br/>
-        <input type="text" name="voicePref" value={this.state.voicePref} onChange={this.handleVoicePrefChange}/><br/>
-          Avatar:<br/>
-        <input type="url" name="avatar" value={this.state.avatar} onChange={this.handleAvatarChange}/>*/}<br/>
-        <Button type="submit" bsStyle="success">Sign Up</Button>
-        </form>
-        <div>Already have an account? <a href="/#/login">Login here</a></div>
-      </div>
-  	);
+      <Grid>
+        <Row>
+          <Col md={6} mdOffset={3}>
+            <Jumbotron id="signup-jumbo">
+              <img id="signup-logo" src='../images/readcastly-full-50pct.png' className="center-block" />
+              <form>
+                <FormGroup bsSize="lg">
+                  <ControlLabel className="signup-label">E-mail Address</ControlLabel>
+                  <InputGroup>
+                    <InputGroup.Addon style={{backgroundColor: '#70cbce'}}><span className="glyphicon glyphicon-envelope" aria-hidden="true"></span></InputGroup.Addon>
+                    <FormControl type="text" placeholder="Required" required />
+                  </InputGroup>
+                  <ControlLabel className="signup-label">First Name</ControlLabel>
+                  <InputGroup>
+                    <InputGroup.Addon style={{backgroundColor: '#70cbce'}}><span className="glyphicon glyphicon-user" aria-hidden="true"></span></InputGroup.Addon>
+                    <FormControl type="text" placeholder="Required" required />
+                  </InputGroup>
+                  <ControlLabel className="signup-label">Last Name</ControlLabel>
+                  <InputGroup>
+                    <InputGroup.Addon style={{backgroundColor: '#70cbce'}}><span className="glyphicon glyphicon-user" aria-hidden="true"></span></InputGroup.Addon>
+                    <FormControl type="text" placeholder="Optional" required />
+                  </InputGroup>
+                  <ControlLabel className="signup-label">Password</ControlLabel>
+                  <InputGroup>
+                    <InputGroup.Addon style={{backgroundColor: '#70cbce'}}><span className="glyphicon glyphicon-lock" aria-hidden="true"></span></InputGroup.Addon>
+                    <FormControl type="password" placeholder="Required" required />
+                  </InputGroup>
+                  <ControlLabel className="signup-label">Verify Password</ControlLabel>
+                  <InputGroup>
+                    <InputGroup.Addon style={{backgroundColor: '#70cbce'}}><span className="glyphicon glyphicon-lock" aria-hidden="true"></span></InputGroup.Addon>
+                    <FormControl type="password" placeholder="Required" required />
+                  </InputGroup>
+                  <ControlLabel  className="signup-label">Phone (to receive links to ReadCasts via text)</ControlLabel>
+                  <InputGroup>
+                    <InputGroup.Addon style={{backgroundColor: '#70cbce'}}><span className="glyphicon glyphicon-phone-alt" aria-hidden="true"></span></InputGroup.Addon>
+                    <FormControl type="text" placeholder="Optional" required />
+                  </InputGroup>
+                  <br />
+                  <Button bsStyle="warning" type="submit" onClick={this.handleSignUp.bind(this)} block>Join Us!</Button>
+                </FormGroup>
+              </form>
+            <div>Already have an account? <a href="/#/">Login here</a></div>
+          </Jumbotron>
+        </Col>
+      </Row>
+      </Grid>
+    </div>
+    );
   }
 }
 
 export default SignupForm;
+
+{/*}
+              <form onSubmit={this.handleSignUp}>
+                First Name:<br/>
+              <input type="text" name="firstName" value={this.state.firstName} onChange={this.handleFirstNameChange}/><br/>
+                Last Name:<br/>
+              <input type="text" name="lastName" value={this.state.lastName} onChange={this.handleLastNameChange}/><br/>
+                E-mail:<br/>
+              <input type="email" name="email" value={this.state.email} onChange={this.handleEmailChange}/><br/>
+                Password:<br/>
+              <input type="password" name="password" value={this.state.password} onChange={this.handlePasswordChange}/><br/>
+                Phone Number:<br/>
+              <input type="text" name="phone" value={this.state.phone} onChange={this.handlePhoneChange}/>{/*<br/>
+                Voice Preference:<br/>
+              <input type="text" name="voicePref" value={this.state.voicePref} onChange={this.handleVoicePrefChange}/><br/>
+                Avatar:<br/>
+              <input type="url" name="avatar" value={this.state.avatar} onChange={this.handleAvatarChange}/>*/}{/*<br/>
+              <Button type="submit" bsStyle="success">Sign Up</Button>
+              </form>
+*/}
