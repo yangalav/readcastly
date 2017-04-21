@@ -9,9 +9,7 @@ let errors={
               phone: 'Please enter a valid 10-digit phone number'
             };
 
-let validnums = {'0':true, '1':true, '2':true, '3':true, '4': true, '5':true, '6':true, '7':true, '8':true, '9':true};
-
-let cleanPhone = '';
+const validnums = {'0':true, '1':true, '2':true, '3':true, '4': true, '5':true, '6':true, '7':true, '8':true, '9':true};
 
 class SignupForm extends React.Component {
   constructor() {
@@ -27,6 +25,7 @@ class SignupForm extends React.Component {
       voicePref: '',
       avatar: '',
       error: '',
+      errormsg: '',
       alert: false
     };
 
@@ -55,7 +54,7 @@ class SignupForm extends React.Component {
       password: this.state.password,
       firstName: this.state.firstName,
       lastName: this.state.lastName,
-      phone: '+1'+cleanPhone,
+      phone: this.state.phone,
       voicePref: this.state.voicePref,
       avatar: this.state.avatar,
     })
@@ -87,7 +86,7 @@ class SignupForm extends React.Component {
     const len = emarray.length
     const ats = emarray.filter(char => char==='@').length;
     if (ats !== 1 || (emarray[len-3] !== '.' && emarray[len-4] !== '.')) {
-      this.setState({error: errors.email, email: ''});
+      this.setState({error: 'email', errormsg: errors.email});
       return false;
     }
     return;
@@ -95,19 +94,22 @@ class SignupForm extends React.Component {
 
   passwordChecker() {
     if (this.state.password !== this.state.password2) {
-      this.setState({error: errors.password, password: ''});
+      this.setState({error: 'password', errormsg: errors.password});
       return false;
     }
     return;
   }
 
   phoneChecker() {
-    cleanPhone = this.state.phone.split('').filter(char => validnums[char]);
+    if (this.state.phone === '') {
+      return;
+    }
+    let cleanPhone = this.state.phone.split('').filter(char => validnums[char]);
     if (cleanPhone.length !== 10 || cleanPhone[0] === '1') {
-      this.setState({error: errors.phone, phone: ''});
+      this.setState({error: 'phone', errormsg: errors.phone});
       return false;
     }
-    cleanPhone = cleanPhone.join('');
+    this.setState({phone: '+1' + cleanPhone.join('')});
     return;
   }
 
@@ -210,7 +212,7 @@ class SignupForm extends React.Component {
           <Modal.Header closeButton>
             <Modal.Title id="contained-modal-title">Sorry ...</Modal.Title>
           </Modal.Header>
-            <Modal.Body>{this.state.error}</Modal.Body>
+            <Modal.Body>{this.state.errormsg}</Modal.Body>
           <Modal.Footer>
             <Button bsStyle="warning" onClick={this.close.bind(this)}>Close</Button>
           </Modal.Footer>
