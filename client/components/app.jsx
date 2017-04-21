@@ -434,12 +434,6 @@ class App extends React.Component {
    	})
    };
 
-  popWelcome() {
-  	toast("Welcome to ReadCast.ly.  There's a welcome message waiting for you in the player below!"), {
-  		type: toast.TYPE.DEFAULT
-  	}
-  }
-
 	render() {
 		return(
 			<div className="entire-page">
