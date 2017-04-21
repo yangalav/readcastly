@@ -44,7 +44,7 @@ class TransFormEr extends React.Component {
 						</Col>
 					</Form>
             <Col md={2}>
-							{!this.props.isGuest && <Button type="submit" bsStyle="warning" id="add-library-btn" disabled={this.props.isLoading} onClick={this.state.value === '' ? null : this.addOne} >Add to Library</Button>}
+							{!this.props.isGuest && <Button type="submit" bsStyle="warning" id="add-library-btn" onClick={this.state.value === '' ? null : this.addOne} >Add to Library</Button>}
 						</Col>
 				</Row>
 			</Grid>
