@@ -8,7 +8,6 @@ const config = {
     filename: 'app.bundle.js',
   },
   devtool: 'inline-source-map',
-
   module: {
     rules: [
       {
