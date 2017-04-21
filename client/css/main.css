@@ -132,7 +132,7 @@ a:hover, a:focus {
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active {
-  background-color: #8be2e5;
+  background-color: #0288d1;
   color: #ffffff;
   -webkit-transition: all 0.35s ease-in-out;
   -moz-transition: all 0.35s ease-in-out;
@@ -371,7 +371,7 @@ header {
 
 
 #be-the-first {
-  background: url(../images/be-the-first-bg.jpg) #231f20 no-repeat center center fixed;
+  background: url(../images/backkk2.png) #231f20 no-repeat center center fixed;
   min-height: 200px;
   -webkit-background-size: cover;
   -moz-background-size: cover;
