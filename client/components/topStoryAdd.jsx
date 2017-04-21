@@ -21,13 +21,13 @@ class TopStoryAdd extends React.Component {
           container={this}
           aria-labelledby="contained-modal-title"
         >
-          <Modal.Header closeButton>
+          <Modal.Header>
             <Modal.Title id="contained-modal-title">{this.props.topStoryAddMsg.result}</Modal.Title>
           </Modal.Header>
           <Modal.Body>{this.props.topStoryAddMsg.message}</Modal.Body>
           <Modal.Footer>
             <Button bsStyle="warning" onClick={redirect}>Go to your library</Button>
-            <Button bsStyle="success" onClick={close}>Close</Button>
+            <Button className= "modal-close" bsStyle="success" onClick={close}>Close</Button>
           </Modal.Footer>
         </Modal>
       </div>

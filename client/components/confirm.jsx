@@ -23,7 +23,7 @@ class Confirm extends React.Component {
           container={this}
           aria-labelledby="contained-modal-title"
         >
-          <Modal.Header closeButton>
+          <Modal.Header>
             <Modal.Title id="contained-modal-title">Success!</Modal.Title>
           </Modal.Header>
           {this.props.method === 'link' ?
@@ -32,7 +32,7 @@ class Confirm extends React.Component {
           }
           <Modal.Footer>
             {!this.props.isGuest && <Button bsStyle="danger" onClick={deleteClose}>Remove article from library</Button>}
-            <Button bsStyle="success" onClick={close}>Close</Button>
+            <Button className="modal-close" bsStyle="success" onClick={close}>Close</Button>
           </Modal.Footer>
         </Modal>
       </div>

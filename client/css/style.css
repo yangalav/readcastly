@@ -14,6 +14,15 @@
   /*font-family: 'Work Sans', sans-serif;*/
 }
 
+body {
+  background: linear-gradient(#3b356a,#6f6da8);
+  top:0;
+  left: 0;
+  width:100%;
+  height:100%;
+  /*font-family: 'Work Sans', sans-serif;*/
+}
+
 #signup-jumbo {
   padding: 30px;
   margin-top: 30px;
@@ -202,12 +211,26 @@ hr {
 
 }
 
+.btn-danger {
+  background-color: #e03183 !important;
+  border-color: #e03183 !important;
+}
+
+.modal-close {
+  background-color: #70cbce !important;
+  border-color: #70cbce !important;
+}
+
 #logo {
   align-content: center;
 }
 
 #add-library-input, #add-library-btn, #listen-now-btn {
   width: 100%;
+}
+
+.modal-content {
+  background-color: #e3deeb !important;
 }
 
 .modal-container {
@@ -222,7 +245,6 @@ hr {
 .modal-dialog {
   position: relative;
   top: 200px;
-
 }
 
 #loadingOverlay {

@@ -2,6 +2,7 @@ require('dotenv').config();
 const request = require('request');
 const bodyParser = require('body-parser');
 const Articles = require('./database/controllers/articlesController');
+const Users = require('./database/controllers/usersController');
 const utils = require('./utils.js');
 const mercury = require('./apis/mercuryController');
 const news = require('./apis/newsController');
@@ -92,6 +93,12 @@ module.exports = function(app, express, passport) {
 
   app.post('/topStories', function(req,res) {
     news.topStories(req.body.source, req.body.headlineMode, res);
+  });
+
+  app.post('/emailCheck', function(req,res) {
+    Users.checkEmail(req.body.email, function(result) {
+      res.send(result)
+    });
   });
 
   app.get('/api/signup', function(req,res) {

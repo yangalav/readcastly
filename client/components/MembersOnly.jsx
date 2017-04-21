@@ -18,7 +18,7 @@ class MembersOnly extends React.Component {
 
   signIn() {
     this.close();
-    hashHistory.push('/login');
+    hashHistory.push('/');
   }
 
   render () {
@@ -30,14 +30,14 @@ class MembersOnly extends React.Component {
           container={this}
           aria-labelledby="contained-modal-title"
         >
-          <Modal.Header closeButton>
+          <Modal.Header>
             <Modal.Title id="contained-modal-title">Intrigued?</Modal.Title>
           </Modal.Header>
           <Modal.Body>That feature is only available to registered users.  Sign in or join our ranks by clicking the buttons below!</Modal.Body>
           <Modal.Footer>
             <Button bsStyle="danger" onClick={this.signUp.bind(this)}>Sign Up</Button>
             <Button bsStyle="warning" onClick={this.signIn.bind(this)}>Sign In</Button>
-            <Button bsStyle="success" onClick={this.close.bind(this)}>Close</Button>
+            <Button className="modal-close" bsStyle="success" onClick={this.close.bind(this)}>Close</Button>
           </Modal.Footer>
         </Modal>
       </div>
