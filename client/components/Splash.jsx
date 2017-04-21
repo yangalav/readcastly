@@ -102,11 +102,11 @@ class Splash extends React.Component {
 
                     <Form inline onSubmit={this.handleLogin}>
                       <FormGroup bsSize="small" controlId="formInlineName" className="wow fadeInUp">
-                          <FormControl className="customFormWidth" type="email" value={this.state.email} onChange={this.handleEmailChange} placeholder="Email" />
+                          <FormControl type="email" style={{ width: 180 }} value={this.state.email} onChange={this.handleEmailChange} placeholder="Email" />
                       </FormGroup>
                         {'         '}
                       <FormGroup bsSize="small" controlId="formInlineEmail" className="wow fadeInUp">
-                        <FormControl type="password" value={this.state.password} onChange={this.handlePasswordChange} placeholder="Password" />
+                        <FormControl type="password" style={{ width: 180 }} value={this.state.password} onChange={this.handlePasswordChange} placeholder="Password" />
                       </FormGroup>
                         {'           '}
                       <Button type="submit" bsSize="small" className="btn btn-primary btn-lg scroll wow fadeInUp customLoginButtonSize">Login</Button>
@@ -122,7 +122,7 @@ class Splash extends React.Component {
                   <div className="row">
 
                     <div className="col-xs-6 text-right wow fadeInUp" data-wow-delay="1s">
-                      <Button className="btn btn-primary btn-lg scroll" onClick={this.handleSignup}>Signup</Button>
+                      <Button className="btn btn-primary btn-lg scroll" style={{ width: 200 }} onClick={this.handleSignup}>Signup</Button>
                     </div>
 
                     <div className="col-xs-6 text-left wow fadeInUp" data-wow-delay="1.4s">
@@ -156,7 +156,7 @@ class Splash extends React.Component {
               <Row>
                 <Carousel data-ride="carousel" interval={2000}>
                   <Carousel.Item className='logo-carousel'>
-                    <img width={2000} height={1000} alt="400x1000" className='logo-carousel img-responsive center-block' src="/images/modalscreenshot.png"/>
+                    <img width={900} height={500} alt="900x500" className='logo-carousel img-responsive center-block' src="/images/modalscreenshot.png"/>
                   </Carousel.Item>
                   <Carousel.Item className='logo-carousel'>
                     <img width={900} height={500} alt="900x500" className='logo-carousel img-responsive center-block' src="/images/readcast1.png"/>

@@ -155,7 +155,12 @@ a:hover, a:focus {
 }
 
 .customLoginButtonSize {
-  width: 100px;
+  width: 200px;
+  height: 30px;
+}
+
+.customFormWidth {
+  width: 100%
 }
 
 /*-----------------Margins------------------*/
@@ -372,7 +377,8 @@ header {
 
 #be-the-first {
   background: url(../images/backkk2.png) #231f20 no-repeat center center fixed;
-  min-height: 200px;
+  min-height: 650px;
+  max-height: 650px;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -586,7 +592,7 @@ footer {
     color: #929496;
     display: block;
     font-size: 15px;
-    height: 60px;
+    height: 0px;
     line-height: 1.42857;
     padding: 6px 12px 0 6px;
     transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
