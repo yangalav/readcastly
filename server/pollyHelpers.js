@@ -25,8 +25,8 @@ const chopper = (arr, text, maxWords) => {
   if (palabras.length > maxWords){
     x = 0;
     while(x < palabras.length) {
-      result.push(text.match(/^(?:\w+\W+){0,230}/g).join(" "));
-      var check = text.split(/^(?:\w+\W+){230}/g);
+      result.push(text.match(/^(?:\w+\W+){0,200}/g).join(" "));
+      var check = text.split(/^(?:\w+\W+){200}/g);
       var y = 0;
       check.forEach(function(element) {
         if(element === "") check.splice(y, 1);

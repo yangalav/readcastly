@@ -1,4 +1,4 @@
-/* pollyController.js: for interacting with Amazon Polly API */
+/* pollyController.js: for interacting with Amazon Polly API */ // 4/21
 
 // 1. Load AWS-SDK; set config variables; create a Polly Instance;
 require('dotenv').config();
@@ -16,8 +16,11 @@ const log = console.log; /* FOR DEBUGGING */
 const line = '========='; /* FOR DEBUGGING */
 
 // 2. Function that generates Audio Stream by making API call to Polly; => returns a promise object
-const generatePollyAudio = (text, voiceId) => {
-  log ('INSIDE generatePollyAudio')  /* FOR DEBUGGING */
+const generatePollyAudio = (text, voiceId, res) => {
+  log ('\n\n', line, 'INSIDE generatePollyAudio')  /* FOR DEBUGGING */
+  log(line, 'text: ', text)
+  log(line, 'voiceId: ', voiceId)
+  // log(line, 'res: ', res)
   const params = {
     Text: text,
     TextType: 'text',
@@ -31,10 +34,13 @@ const generatePollyAudio = (text, voiceId) => {
   .then( data => {
     log('>INSIDE generatePollyAudio-PC')  /* FOR DEBUGGING */
     log('>DATA.AudioStream instanceof Buffer: ', data.AudioStream instanceof Buffer)  /* FOR DEBUGGING */
+    log('XXXX data: ', data);
     if (data.AudioStream instanceof Buffer) return data
   })
-  .catch(err => {
-    console.error('AudioStream is not a Buffer.')
+  .catch(error => {
+    // console.log(error.message);
+    console.error('AudioStream is not a Buffer. ', error.message)
+    res.send(utils.errors.audioStreamError)
   })
 };
 
@@ -71,6 +77,7 @@ const writeAudioStreamToS3 = ( audioStream, filename ) => {
 // Note: callback is passed in and invoked at the bottom of the promise chain
 const textToSpeech = (req, res, callback) => {
   log(line, 'BACK-B-pollyController-textToSpeech')  /* FOR DEBUGGING */
+  log(line, 'req.body.payload: ', req.body.payload)  /* FOR DEBUGGING */
 
   // Extract needed info from request object
   const articleTitle = req.body.payload.article.title;
@@ -89,33 +96,49 @@ const textToSpeech = (req, res, callback) => {
   log(line, 'BACK-D-textToSpeech: typeof TEXT>>>: ', typeof text)  /* FOR DEBUGGING */
 
   // turn string into array, in order to count words total
-  var roughWords = text.split(" ");
-  var words = pollyHelpers.arrHeadCleaner(roughWords);
-  log(line, 'BACK-D2-textToSpeech: WORDS>>>: ', words); // LOTS  /* FOR DEBUGGING */
-  log(line, 'BACK-D2-words.length: ', words.length);  /* FOR DEBUGGING */
+  var allText = articleTitle + '. ' + text;
+  var allTextArray = allText.split(" ");
+
+  // var roughWords = text.split(" ");
+  // var roughTitle = articleTitle.split(" ");
+  // roughTitle[roughTitle.length-1] = roughTitle[roughTitle.length-1] + '.';
+  // var roughText = roughTitle.concat(roughWords);
+  // var words = pollyHelpers.arrHeadCleaner(roughText);
+  // log(line, 'BACK-D2-textToSpeech: WORDS>>>: ', words); // LOTS  /* FOR DEBUGGING */
+  // log(line, 'BACK-D2-words.length: ', words.length);  /* FOR DEBUGGING */
+
+  log(line, 'BACK-D2-textToSpeech: allText>>>: ', allText); // LOTS  /* FOR DEBUGGING */
+  log(line, 'BACK-D2-textToSpeech: allTextArray>>>: ', allTextArray); // LOTS  /* FOR DEBUGGING */
+  log(line, 'BACK-D2-allTextArray.length: ', allTextArray.length);  /* FOR DEBUGGING */
+
+
 
   // ...Check length of desired text to send to Polly; If longer than 230 words, break up into subarrays.
-  var textArray = pollyHelpers.chopper(words, text, 230);
+  var textArray = pollyHelpers.chopper(allTextArray, allText, 200);
+  // var textArray = pollyHelpers.chopper(words, text, 230);  
 
   // ... clean the title, then add it to the front of textArray.
   var titleText = pollyHelpers.strHeadCleaner(articleTitle);
-  textArray[0] = titleText + '. ' + textArray[0];
+  // textArray = textArray.unshift(titleText + '.')
+  // textArray[0] = titleText + '. ' + textArray[0];
 
   log(line, 'BACK-E-TEXT-ARRAY: >>>>>>>>> ', textArray); // LOTS /* FOR DEBUGGING */
-  log(line, 'BACK-E-textToSpeech: voiceId: ', voiceId, ' text: ', text, ' filename: ', filename) /* FOR DEBUGGING */
+  log('\n', line, 'BACK-E-LENGTH: ', textArray.length);
+  // log(line, 'BACK-E-textToSpeech: voiceId: ', voiceId, ' text: ', text, ' filename: ', filename) // LOTS /* FOR DEBUGGING */
 
   // ...make (multiple) asynchronous calls, managed with Promise.all,
   Promise.all(textArray.map(function(item) {
-    log('\nONE ITEM being mapped to generatePollyAudio call: ==> ', item) // LOTS /* FOR DEBUGGING */
+    // log('\nONE ITEM being mapped to generatePollyAudio call: ==> ', item) // LOTS /* FOR DEBUGGING */
     // ... SEE #2 (ABOVE): to feed segments of text into polly, generating audio data for each of them
-    return generatePollyAudio(item, voiceId)
+    return generatePollyAudio(item, voiceId, res)
   }))
   // ...audios is passed as an array of buffer objects
   .then(function(audios) {
     log(line, 'BACK-F-textToSpeech >>>PC1')  /* FOR DEBUGGING */
-    log(line, 'audios[0].AudioStream instanceof Buffer ', audios[0].AudioStream instanceof Buffer) /* FOR DEBUGGING */
-    log(line, 'AUDIOS: [0] ', audios[0])  /* FOR DEBUGGING */
-    return Promise.all(audios.map(a => a.AudioStream))
+    // log(line, 'audios[0].AudioStream instanceof Buffer ', audios[0].AudioStream instanceof Buffer) /* FOR DEBUGGING */
+    log(line, '>>> {audios} <<<: ', audios)
+    // log(line, 'AUDIOS: [0] ', audios[0])  /* FOR DEBUGGING */
+    return Promise.all(audios.map(a => a.AudioStream || null))
   })
   .then(function(audioStreams) {
     log(line, 'BACK-G-textToSpeech >>PC2 ', audioStreams) // Array of Buffers  /* MH: DEBUGGING */
