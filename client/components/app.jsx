@@ -319,12 +319,16 @@ class App extends React.Component {
 	}
 
 	quickStream(url) {
-		this.toggleLoading();
-		axios.post('/quickStream', {url: url})
-		.then((res) => {
-			this.setState({nowPlaying: {url: res.data.url, title: res.data.title}, isLoading: false});
-			this.popToast();
-		})
+		if (url === 'namesake') {
+			this.setState({nowPlaying: {url: "http://dora-robo.com/muzyka/70's-80's-90's%20/Rick%20Astley%20-%20Never%20Gonna%20Give%20You%20Up.mp3", title: "IT'S A PUN.  THE NAME OF OUR SITE IS A PUN.  GET IT?"}});
+		} else {
+			this.toggleLoading();
+			axios.post('/quickStream', {url: url})
+			.then((res) => {
+				this.setState({nowPlaying: {url: res.data.url, title: res.data.title}, isLoading: false});
+				this.popToast();
+			})
+		}
 	}
 
 	getTopStoriesSources() {

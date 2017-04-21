@@ -188,7 +188,7 @@ class SignupForm extends React.Component {
                     <InputGroup.Addon style={{backgroundColor: '#70cbce'}}><span className="glyphicon glyphicon-lock" aria-hidden="true"></span></InputGroup.Addon>
                     <FormControl type="password" placeholder="Required" value={this.state.password2} onChange={this.handlePassword2Change} required />
                   </InputGroup>
-                  <ControlLabel  className="signup-label">Phone (if you want to receive links to ReadCasts via text)</ControlLabel>
+                  <ControlLabel  className="signup-label">Phone (To receive ReadCasts via text)</ControlLabel>
                   <InputGroup>
                     <InputGroup.Addon style={{backgroundColor: '#70cbce'}}><span className="glyphicon glyphicon-phone-alt" aria-hidden="true"></span></InputGroup.Addon>
                     <FormControl type="text" placeholder="Optional (10 digits required)" value={this.state.phone} onChange={this.handlePhoneChange} />
